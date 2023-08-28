@@ -169,7 +169,6 @@
         headers: myHeaders,
     }).then(async response => {
         let data = await response.json();
-        console.log(data)
         if(data.resultCode === "success") {
             character = data.data.character;
             items = data.data.items;
