@@ -1,7 +1,8 @@
 <style>
 </style>
 <div>
-    search
+    <Searchbar/>
 </div>
 <script>
+    import Searchbar from "../../component/Searchbar.svelte";
 </script>

@@ -80,6 +80,7 @@
     }
 </style>
 <div class="main">
+    <Searchbar/>
     {#await data}
         <p>...Loading</p>
     {:then data}
@@ -145,6 +146,7 @@
 <script>
     import {params} from "@roxi/routify";
     import {calculate_option, nvl, option_parse, uc} from "../../js/common";
+    import Searchbar from "../../component/Searchbar.svelte";
 
     const name = decodeURIComponent($params.name);
     const myHeaders = new Headers();
@@ -196,7 +198,6 @@
                 }else if(max == luk){
                     main = "LUK";
                 }
-
             }
         }
 
