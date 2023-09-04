@@ -25,7 +25,7 @@
         height: 100%;
         position: absolute;
         background: black;
-        opacity: 0.3;
+        opacity: 0.7;
     }
     .header{
         height: 80px;
@@ -49,6 +49,14 @@
         background: #292c35;
         color: #b8b8b8;
     }
+    @media (max-width: 1200px) {
+        .header{
+            height: 48px;
+        }
+        .footer{
+            height: 64px;
+        }
+    }
 </style>
 <div class="header">
     메이플 캐릭터 검색
@@ -59,7 +67,7 @@
     <slot/>
 </div>
 <div class="footer">
-    Copyright © 2023 asdfghjkkl11
+    <span>Copyright © 2023 asdfghjkkl11</span>
 </div>
 <script>
 </script>

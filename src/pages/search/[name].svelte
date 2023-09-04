@@ -1,20 +1,40 @@
 <style>
     .main{
+        padding: 8px;
         display: flex;
         flex-direction: column;
+        align-items: center;
+        gap: 16px;
+        color: white;
+        overflow-x: hidden;
+        overflow-y: scroll;
+        box-sizing: border-box;
     }
     .character{
-        display: flex;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
         flex-direction: column;
         font-size: 14px;
     }
+    .character > div{
+        min-width: 140px;
+        padding: 4px 8px;
+        box-shadow: 1px 1px 0 0 #eeeeee,inset 1px 1px 0 0 #eeeeee;
+        box-sizing: border-box;
+    }
     .items{
-        display: flex;
-        flex-direction: column;
+        display: grid;
+        grid-template-columns: 1fr;
     }
     .cashitems{
         display: flex;
         flex-direction: column;
+    }
+    .grid-col-2{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        grid-column: span 2 / auto;
     }
     .character-img-wrapper{
         width: 120px;
@@ -67,16 +87,21 @@
         min-width: 80px;
     }
     .blue{
-        color: skyblue;
+        color: #99e6fe;
     }
     .purple{
-        color: purple;
+        color: #e198ff;
     }
     .yellow{
-        color: #E3D04D;
+        color: #ffdf00;
     }
     .green{
-        color: green;
+        color: lime;
+    }
+    @media (max-width: 1200px) {
+        .main {
+            height: calc(100vh - 112px);
+        }
     }
 </style>
 <div class="main">
@@ -87,26 +112,37 @@
         <div class="character">
             {#if character}
                 {#if character.name !== ""}
-                    <div class="character-img-wrapper">
-                        <img class="character-img" src="{character.image}">
+                    <div class="grid-col-2">
+                        <div class="character-img-wrapper">
+                            <img class="character-img" src="{character.image}">
+                        </div>
                     </div>
-                    <div>{character.name}</div>
                     <div>{character.level}</div>
+                    <div>{character.name}</div>
+                    <div>{character["월드"]}</div>
                     <div>{character["직업"]}</div>
-                    <div>스탯공격력: {character["스탯공격력"][0]} ~ {character["스탯공격력"][1]}</div>
-                    <div>STR: {character["STR"]}</div>
-                    <div>DEX: {character["DEX"]}</div>
-                    <div>INT: {character["INT"]}</div>
-                    <div>LUK: {character["LUK"]}</div>
-                    <div>보스공격력: {character["보스공격력"]}</div>
-                    <div>방어율무시: {character["방어율무시"]}</div>
-                    <div>크리티컬 데미지: {character["크리티컬 데미지"]}</div>
+                    <div>스탯공격력</div>
+                    <div>{character["스탯공격력"][1]}</div>
+                    <div>STR</div>
+                    <div>{character["STR"]}</div>
+                    <div>DEX</div>
+                    <div>{character["DEX"]}</div>
+                    <div>INT</div>
+                    <div>{character["INT"]}</div>
+                    <div>LUK</div>
+                    <div>{character["LUK"]}</div>
+                    <div>보스공격력</div>
+                    <div>{character["보스공격력"]}</div>
+                    <div>방어율무시</div>
+                    <div>{character["방어율무시"]}</div>
+                    <div>크리티컬 데미지</div>
+                    <div>{character["크리티컬 데미지"]}</div>
                 {/if}
             {/if}
         </div>
         <div class="items">
             {#each items as item, i}
-                <div class="item">
+                <div class="item" style="order: {itemOrder[i]}">
                     <div class="item-img-wrapper">
                         <img class="item-img" src="{item.image}">
                     </div>
@@ -118,7 +154,7 @@
                                 <div class="item-main-cube">
                                     <div class='{grade_mapper[item["잠재옵션"]["grade"]]}'>잠재</div>
                                     {#each item["잠재옵션"]["option"] as option, j}
-                                        <div class='cube {grade_mapper[item["잠재옵션"]["grade"]]}'>{nvl(option[0])}: {nvl(option[1])}</div>
+                                        <div class='cube {grade_mapper[item["잠재옵션"]["grade"]]}'>{nvl(option[0])}{(nvl(option[1])!=="")?": " + nvl(option[1]):""}</div>
                                     {/each}
                                 </div>
                             {/if}
@@ -128,7 +164,7 @@
                                 <div class="item-additional-cube">
                                     <div class='{grade_mapper[item["에디셔널 잠재옵션"]["grade"]]}'>에디</div>
                                     {#each item["에디셔널 잠재옵션"]["option"] as option, j}
-                                        <div class='cube {grade_mapper[item["에디셔널 잠재옵션"]["grade"]]}'>{nvl(option[0])}: {nvl(option[1])}</div>
+                                        <div class='cube {grade_mapper[item["에디셔널 잠재옵션"]["grade"]]}'>{nvl(option[0])}{(nvl(option[1])!=="")?": " + nvl(option[1]):""}</div>
                                     {/each}
                                 </div>
                             {/if}
@@ -145,7 +181,7 @@
 </div>
 <script>
     import {params} from "@roxi/routify";
-    import {calculate_option, nvl, option_parse, uc} from "../../js/common";
+    import {calculate_option, get_idb, nvl, option_parse, set_idb, uc} from "../../js/common";
     import Searchbar from "../../component/Searchbar.svelte";
 
     const name = decodeURIComponent($params.name);
@@ -155,7 +191,7 @@
     let character = {};
     let items = [];
     let cashItems = [];
-    let itemOrder = [];
+    let itemOrder = [20,4,1,19,16,14,22,18,15,13,12,23,17,2,5,7,3,21,11,6,8,9,10,24,25];
     let main = "STR";
     let grade_mapper = {
         "레어": "blue",
@@ -163,22 +199,7 @@
         "유니크": "yellow",
         "레전드리": "green",
     }
-    $: data = fetch("https://mapleserver.asdfghjkkl11.com/maple/getCharacter",{
-        "method": "POST",
-        "body": JSON.stringify({
-            "ID": name
-        }),
-        headers: myHeaders,
-    }).then(async response => {
-        let data = await response.json();
-        if(data.resultCode === "success") {
-            character = data.data.character;
-            items = data.data.items;
-            cashItems = data.data.cashItems;
-        }else{
-            throw new Error(data.error.message);
-        }
-    });
+    $: data = get_data();
 
     $:{
         if(character){
@@ -222,5 +243,38 @@
                 }
             }
         }
+    }
+
+    async function get_data(){
+        let cache = await get_idb(name);
+        if(cache){
+            let time = new Date().getTime() - cache.time;
+            if(time < 300000){
+                character = cache.data.character;
+                items = cache.data.items;
+                cashItems = cache.data.cashItems;
+                return "";
+            }
+        }
+        return fetch("https://mapleserver.asdfghjkkl11.com/maple/getCharacter",{
+            "method": "POST",
+            "body": JSON.stringify({
+                "ID": name
+            }),
+            headers: myHeaders,
+        }).then(async response => {
+            let data = await response.json();
+            if(data.resultCode === "success") {
+                character = data.data.character;
+                items = data.data.items;
+                cashItems = data.data.cashItems;
+                await set_idb(name,{
+                    data: data.data,
+                    time: new Date().getTime()
+                });
+            }else{
+                throw new Error(data.error.message);
+            }
+        });
     }
 </script>

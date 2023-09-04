@@ -1,3 +1,5 @@
+import { openDB } from 'idb';
+
 export function nvl(text, rText) {
     if (text == null || text == undefined) text = "";
     if (rText != null && text == "") text = rText;
@@ -22,6 +24,8 @@ export function option_parse(option){
             option[1] = option[1].split("(")[0];
         } else if (option[0].includes("스킬 사용 가능")) {
             option[0] = option[0].split(" 스킬 사용 가능")[0];
+        } else if (option[0].includes("확률로")) {
+            option[0] = option[0].split("확률로 ")[1];
         }
     }
     return option;
@@ -53,4 +57,26 @@ export function calculate_option(item, main){
     }
 
     return (option > 0)?option+"급":"";
+}
+
+const dbPromise = openDB('maple_search', 1, {
+    upgrade(db) {
+        db.createObjectStore('search');
+    },
+});
+
+export async function get_idb(key) {
+    return (await dbPromise).get('search', key);
+}
+export async function set_idb(key, val) {
+    return (await dbPromise).put('search', val, key);
+}
+export async function del_idb(key) {
+    return (await dbPromise).delete('search', key);
+}
+export async function clear_idb() {
+    return (await dbPromise).clear('search');
+}
+export async function keys_idb() {
+    return (await dbPromise).getAllKeys('search');
 }
