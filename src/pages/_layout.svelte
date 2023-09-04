@@ -1,6 +1,8 @@
 <style>
     .body{
         width: 100%;
+        height: 100%;
+        min-height: calc(100vh - 144px);
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -28,6 +30,7 @@
     .wrap{
         width: 100%;
         height: 100%;
+        overflow-x: hidden;
         overflow-y: auto;
     }
     .header{
@@ -44,7 +47,7 @@
         flex-shrink: 0;
     }
     .footer{
-        height: 120px;
+        height: 64px;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -58,13 +61,8 @@
         .header{
             height: 48px;
         }
-        .footer{
-            height: 64px;
-        }
         .body {
             height: calc(100vh - 112px);
-            overflow-x: hidden;
-            overflow-y: auto;
         }
     }
 </style>

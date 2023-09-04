@@ -1,8 +1,11 @@
 <style>
     .main{
+        width: 100%;
+        min-width: 340px;
         padding: 16px;
         display: flex;
         flex-direction: column;
+        align-items: center;
         gap: 16px;
     }
     .main > span{
