@@ -1,5 +1,6 @@
 <style>
     .main{
+        width: 100%;
         padding: 8px;
         display: flex;
         flex-direction: column;
@@ -7,8 +8,17 @@
         gap: 16px;
         color: white;
         overflow-x: hidden;
-        overflow-y: scroll;
+        overflow-y: auto;
         box-sizing: border-box;
+    }
+    .main::-webkit-scrollbar {
+        width: 10px;
+    }
+    .main::-webkit-scrollbar-thumb {
+        background-color: #2f3542;
+    }
+    .main::-webkit-scrollbar-track {
+        background-color: grey;
     }
     .character{
         display: grid;
