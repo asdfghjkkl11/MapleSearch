@@ -1,5 +1,5 @@
 <style>
-    .main{
+    .body{
         width: 100%;
         height: 100%;
         flex: 1;
@@ -18,6 +18,14 @@
         background-size: cover;
         z-index: -999;
         opacity: 0.7;
+    }
+    .bg::after {
+        content: "";
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        background: black;
+        opacity: 0.3;
     }
     .header{
         height: 80px;
@@ -45,7 +53,7 @@
 <div class="header">
     메이플 캐릭터 검색
 </div>
-<div class="main">
+<div class="body">
     <div class="bg">
     </div>
     <slot/>
