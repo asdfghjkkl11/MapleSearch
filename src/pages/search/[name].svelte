@@ -1,24 +1,14 @@
 <style>
     .main{
         width: 100%;
+        min-width: 340px;
         padding: 8px;
         display: flex;
         flex-direction: column;
         align-items: center;
         gap: 16px;
         color: white;
-        overflow-x: hidden;
-        overflow-y: auto;
         box-sizing: border-box;
-    }
-    .main::-webkit-scrollbar {
-        width: 10px;
-    }
-    .main::-webkit-scrollbar-thumb {
-        background-color: #2f3542;
-    }
-    .main::-webkit-scrollbar-track {
-        background-color: grey;
     }
     .character{
         display: grid;
@@ -60,13 +50,14 @@
         left: -50px;
     }
     .item{
-        padding: 4px;
+        padding: 8px;
         display: flex;
         align-items: center;
         flex-wrap: wrap;
         gap: 4px;
         font-size: 14px;
         box-shadow: inset 0 -1px 0 0 #cdcdcd;
+        box-sizing: border-box;
     }
     .item > div{
         flex-shrink: 0;
@@ -108,9 +99,9 @@
     .green{
         color: lime;
     }
-    @media (max-width: 1200px) {
-        .main {
-            height: calc(100vh - 112px);
+    @media (max-width: 720px) {
+        .item {
+            width: 340px;
         }
     }
 </style>

@@ -11,6 +11,8 @@ export function option_parse(option){
             option[0] = "보공";
         } else if (option[0] == "몬스터 방어율 무시") {
             option[0] = "방무";
+        } else if (option[0] == "크리티컬 데미지") {
+            option[0] = "크뎀";
         } else if (option[0] == "아이템 드롭률") {
             option[0] = "아획";
         } else if (option[0] == "메소 획득량") {
@@ -26,6 +28,8 @@ export function option_parse(option){
             option[0] = option[0].split(" 스킬 사용 가능")[0];
         } else if (option[0].includes("확률로")) {
             option[0] = option[0].split("확률로 ")[1];
+        } else if (option[0].includes("최대")) {
+            option[0] = option[0].replace("최대","");
         }
     }
     return option;

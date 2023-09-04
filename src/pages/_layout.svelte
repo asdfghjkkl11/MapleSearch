@@ -1,23 +1,21 @@
 <style>
     .body{
         width: 100%;
-        height: 100%;
-        flex: 1;
         display: flex;
         flex-direction: column;
         align-items: center;
         position: relative;
     }
     .bg{
-        width: 100%;
-        height: 100%;
+        min-width: 100%;
+        min-height: 100%;
         position: absolute;
         background-image: url("/image/wallpaperbetter.jpg");
         background-position: center;
         background-repeat: no-repeat;
         background-size: cover;
         z-index: -999;
-        opacity: 0.7;
+        opacity: 0.9;
     }
     .bg::after {
         content: "";
@@ -26,6 +24,11 @@
         position: absolute;
         background: black;
         opacity: 0.7;
+    }
+    .wrap{
+        width: 100%;
+        height: 100%;
+        overflow-y: auto;
     }
     .header{
         height: 80px;
@@ -38,6 +41,7 @@
         background: #292c35;
         color: #fff;
         box-sizing: border-box;
+        flex-shrink: 0;
     }
     .footer{
         height: 120px;
@@ -48,6 +52,7 @@
         gap: 8px;
         background: #292c35;
         color: #b8b8b8;
+        flex-shrink: 0;
     }
     @media (max-width: 1200px) {
         .header{
@@ -55,6 +60,11 @@
         }
         .footer{
             height: 64px;
+        }
+        .body {
+            height: calc(100vh - 112px);
+            overflow-x: hidden;
+            overflow-y: auto;
         }
     }
 </style>
@@ -64,7 +74,9 @@
 <div class="body">
     <div class="bg">
     </div>
-    <slot/>
+    <div class="wrap">
+        <slot/>
+    </div>
 </div>
 <div class="footer">
     <span>Copyright © 2023 asdfghjkkl11</span>
