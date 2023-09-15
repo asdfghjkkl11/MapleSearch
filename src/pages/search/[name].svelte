@@ -588,6 +588,7 @@
     }
 
     async function getData(){
+        /*
         let cache = await get_idb(name);
         if(cache){
             let time = new Date().getTime() - cache.time;
@@ -598,6 +599,7 @@
                 return "";
             }
         }
+        */
         return getDataFromServer();
     }
 
