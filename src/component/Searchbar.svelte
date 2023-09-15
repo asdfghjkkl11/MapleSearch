@@ -42,9 +42,13 @@
     </button>
 </div>
 <script>
-    import {goto} from "@roxi/routify";
+    import {afterPageLoad, goto} from "@roxi/routify";
 
     let name = "";
+
+    $afterPageLoad(()=>{
+        name = "";
+    })
 
     function key_down(e){
         if(e.keyCode == 13){
