@@ -317,6 +317,8 @@
                         <div>{character["직업"]}</div>
                         <div>스탯공격력</div>
                         <div>{character["스탯공격력"][1]}</div>
+                        <div>HP</div>
+                        <div>{character["HP"]}</div>
                         <div>STR</div>
                         <div>{character["STR"]}</div>
                         <div>DEX</div>
