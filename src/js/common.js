@@ -24,12 +24,14 @@ export function option_parse(option){
         } else if (option[0] == "모든 스킬의 재사용 대기시간") {
             option[0] = "쿨감";
             option[1] = option[1].split("(")[0];
+        } else if (option[0].includes("캐릭터 기준 9레벨 당")) {
+            option[0] = option[0].replace("캐릭터 기준 ", "");
         } else if (option[0].includes("스킬 사용 가능")) {
             option[0] = option[0].split(" 스킬 사용 가능")[0];
         } else if (option[0].includes("확률로")) {
             option[0] = option[0].split("확률로 ")[1];
         } else if (option[0].includes("최대")) {
-            option[0] = option[0].replace("최대","");
+            option[0] = option[0].replace("최대", "");
         }
     }
     return option;
