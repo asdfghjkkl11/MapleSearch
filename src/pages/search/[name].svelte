@@ -305,14 +305,14 @@
         {:then data}
             <div class="character">
                 {#if character}
-                    {#if character.name !== ""}
+                    {#if character["name"] !== ""}
                         <div class="grid-col-2">
                             <div class="character-img-wrapper">
-                                <img class="character-img" src="{character.image}">
+                                <img class="character-img" src="{character['image']}">
                             </div>
                         </div>
-                        <div>{character.level}</div>
-                        <div>{character.name}</div>
+                        <div>{character["level"]}</div>
+                        <div>{character["name"]}</div>
                         <div>{character["월드"]}</div>
                         <div>{character["직업"]}</div>
                         <div>스탯공격력</div>
@@ -356,14 +356,14 @@
                         {#each items as item, i}
                             <div class="item" style="order: {itemOrder1[i]}">
                                 <div class="item-img-wrapper">
-                                    <img class="item-img" src="{item.image}">
+                                    <img class="item-img" src="{item['image']}">
                                 </div>
                                 <div class="item-name" on:click={clickItem(item)}>
                                     <span>
                                         {#if nvl(item.starforce) !== ""}
                                             <span class="star">★{item.starforce.replace("성 강화","")}</span>
                                         {/if}
-                                        <span>{item.name}</span>
+                                        <span>{item["name"]}{(item["seed"] !== "")?` ${item["seed"]}레벨`:""}</span>
                                     </span>
                                 </div>
                                 <div class="item-cls">
@@ -399,7 +399,7 @@
                         {#each items as item, i}
                             <div class="item" style="order: {itemOrder2[i]}">
                                 <div class="item-img-wrapper" on:click={clickItem(item)}>
-                                    <img class="item-img" src="{item.image}">
+                                    <img class="item-img" src="{item['image']}">
                                 </div>
                             </div>
                         {/each}
@@ -425,7 +425,7 @@
                 {#if nvl(selectedItem?.starforce) !== ""}
                     <span class="star">★{selectedItem?.starforce?.replace("성 강화","")}</span>
                 {/if}
-                <span>{selectedItem.name}</span>
+                <span>{selectedItem["name"]}{(selectedItem["seed"] !== "")?` ${selectedItem["seed"]}레벨`:""}</span>
             </span>
             <button class="btn-close" on:click={modalClose}>
                 <i class="close-icon"></i>
@@ -434,13 +434,13 @@
         <div class="modal-body">
             <div class="item-main-info">
                 <div class="item-img-wrapper">
-                    <img class="item-img" src="{selectedItem.image}">
+                    <img class="item-img" src="{selectedItem['image']}">
                 </div>
                 <div class="item-info">
                     {#if (selectedItem["soul"])}
                         <span>{selectedItem["soul"]}</span>
                     {/if}
-                    <span>{selectedItem["name"]}</span>
+                    <span>{selectedItem["name"]}{(selectedItem["seed"] !== "")?` ${selectedItem["seed"]}레벨`:""}</span>
                     <span>{selectedItem["starforce"]}</span>
                     <span>level: {selectedItem["level"]}</span>
                 </div>
@@ -566,6 +566,7 @@
 
         if(items) {
             for (let i = 0; i < items.length; i++) {
+                console.log(items[i]["seed"])
                 let a = items[i]["잠재옵션"];
                 let b = items[i]["에디셔널 잠재옵션"];
 
