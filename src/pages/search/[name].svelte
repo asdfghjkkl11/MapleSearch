@@ -516,11 +516,11 @@
     </div>
 </div>
 <script>
-    import {params} from "@roxi/routify";
+    import {params,afterPageLoad} from "@roxi/routify";
     import {calculate_option, get_idb, nvl, option_parse, set_idb, uc} from "../../js/common";
     import Searchbar from "../../component/Searchbar.svelte";
 
-    const name = decodeURIComponent($params.name);
+    let name = decodeURIComponent($params.name);
     const myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
 
@@ -588,7 +588,6 @@
     }
 
     async function getData(){
-        /*
         let cache = await get_idb(name);
         if(cache){
             let time = new Date().getTime() - cache.time;
@@ -599,9 +598,13 @@
                 return "";
             }
         }
-        */
         return getDataFromServer();
     }
+
+    $afterPageLoad(()=>{
+        name = decodeURIComponent($params.name);
+        data = getData();
+    })
 
     async function getDataFromServer(){
         return fetch("https://mapleserver.asdfghjkkl11.com/maple/getCharacter",{
