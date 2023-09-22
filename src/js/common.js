@@ -41,7 +41,7 @@ export function uc(str) {
     return nvl(str).replace(/[^\d.]+/g, '');
 }
 
-export function calculate_option(item, main){
+export function calculate_option(item, main, cls){
     let option = 0;
     let attack = (main === "INT")?"마력":"공격력";
 
@@ -52,17 +52,55 @@ export function calculate_option(item, main){
         return "";
     }
 
-    if(item[main]) {
-        option += Number(nvl(item[main][2],0));
-    }
-    if(item["올스탯"]) {
-        option += Number(nvl(item["올스탯"][2],0).replace("%","")) * 10;
-    }
-    if(item[attack]) {
-        option += Number(nvl(item[attack][2],0)) * 5;
-    }
+    if(cls.includes("제논")){
+        if (item["STR"]) {
+            option += Number(nvl(item["STR"][2], 0));
+        }
+        if (item["DEX"]) {
+            option += Number(nvl(item["DEX"][2], 0));
+        }
+        if (item["LUK"]) {
+            option += Number(nvl(item["LUK"][2], 0));
+        }
+        if (item["올스탯"]) {
+            option += Number(nvl(item["올스탯"][2], 0).replace("%", "")) * 10;
+        }
+        if (item[attack]) {
+            option += Number(nvl(item[attack][2], 0)) * 7;
+        }
+        if (option > 0) {
+            option /= 2;
+            option = Math.floor(option);
+        }
 
-    return (option > 0)?option+"급":"";
+        let res = (option > 0) ? option + "급" : "";
+
+        return res;
+    }else {
+        if (item[main]) {
+            option += Number(nvl(item[main][2], 0));
+        }
+        if (item["올스탯"]) {
+            option += Number(nvl(item["올스탯"][2], 0).replace("%", "")) * 10;
+        }
+        if (item[attack]) {
+            option += Number(nvl(item[attack][2], 0)) * 5;
+        }
+
+        let res = (option > 0) ? option + "급" : "";
+
+        if(cls.includes("데몬어벤져")){
+            if (item["MaxHP"]) {
+                let hp = Number(nvl(item["MaxHP"][2], 0)) / item["level"];
+                if(hp > 0) {
+                    hp = 5 - ((hp - 9)/3);
+                    res += ` HP${hp}추`;
+                }
+            }
+        }
+
+        return res;
+    }
 }
 
 const dbPromise = openDB('maple_search', 1, {

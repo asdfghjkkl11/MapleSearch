@@ -92,10 +92,10 @@
         font-size: 13px;
     }
     .item-name{
-        width: 240px;
         height: 32px;
         display: flex;
         align-items: center;
+        flex: 1;
         cursor: pointer;
     }
     .item-cls{
@@ -367,7 +367,7 @@
                                     </span>
                                 </div>
                                 <div class="item-cls">
-                                    <span>{calculate_option(item,main)}</span>
+                                    <span>{calculate_option(item,main,character["직업"])}</span>
                                 </div>
                                 <div class="item-cube">
                                     {#if item["잠재옵션"]}
