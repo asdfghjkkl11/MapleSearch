@@ -277,6 +277,10 @@
         display: flex;
         flex-direction: column;
     }
+    .link{
+        font-size: 16px;
+        color: #99e6fe;
+    }
     @media (max-width: 1630px) {
         .item {
             width: 360px;
@@ -313,106 +317,119 @@
                         </div>
                         <div>{character["level"]}</div>
                         <div>{character["name"]}</div>
-                        <div>{character["월드"]}</div>
-                        <div>{character["직업"]}</div>
-                        <div>스탯공격력</div>
-                        <div>{character["스탯공격력"][1]}</div>
-                        <div>HP</div>
-                        <div>{character["HP"]}</div>
-                        <div>STR</div>
-                        <div>{character["STR"]}</div>
-                        <div>DEX</div>
-                        <div>{character["DEX"]}</div>
-                        <div>INT</div>
-                        <div>{character["INT"]}</div>
-                        <div>LUK</div>
-                        <div>{character["LUK"]}</div>
-                        <div>보스공격력</div>
-                        <div>{character["보스공격력"]}</div>
-                        <div>방어율무시</div>
-                        <div>{character["방어율무시"]}</div>
-                        <div>크리티컬 데미지</div>
-                        <div>{character["크리티컬 데미지"]}</div>
-                        <div class="ability">
-                            <span class='{gradeMapper[character["어빌리티"]["grade"]]}'>{character["어빌리티"]["grade"]} 어빌리티</span>
-                            <span>{character["어빌리티"]["value"][0]}</span>
-                            <span>{character["어빌리티"]["value"][1]}</span>
-                            <span>{character["어빌리티"]["value"][2]}</span>
-                        </div>
+                        {#if character["월드"]}
+                            <div>{character["월드"]}</div>
+                            <div>{character["직업"]}</div>
+                            <div>스탯공격력</div>
+                            <div>{character["스탯공격력"][1]}</div>
+                            <div>HP</div>
+                            <div>{character["HP"]}</div>
+                            <div>STR</div>
+                            <div>{character["STR"]}</div>
+                            <div>DEX</div>
+                            <div>{character["DEX"]}</div>
+                            <div>INT</div>
+                            <div>{character["INT"]}</div>
+                            <div>LUK</div>
+                            <div>{character["LUK"]}</div>
+                            <div>보스공격력</div>
+                            <div>{character["보스공격력"]}</div>
+                            <div>방어율무시</div>
+                            <div>{character["방어율무시"]}</div>
+                            <div>크리티컬 데미지</div>
+                            <div>{character["크리티컬 데미지"]}</div>
+                            <div class="ability">
+                                <span class='{gradeMapper[character["어빌리티"]["grade"]]}'>{character["어빌리티"]["grade"]} 어빌리티</span>
+                                <span>{character["어빌리티"]["value"][0]}</span>
+                                <span>{character["어빌리티"]["value"][1]}</span>
+                                <span>{character["어빌리티"]["value"][2]}</span>
+                            </div>
+                        {:else}
+                            <div style="grid-column: span 2 / auto;">
+                                <span>메이플 공식홈페이지 - 마이메이플 - 캐릭터정보 공개설정에서<br>공개설정을해야 조회됩니다.</span>
+                            </div>
+                            <div style="grid-column: span 2 / auto;">
+                                <a class="link" href="https://maplestory.nexon.com/MyMaple/Account/Character/Visibility" target="_blank">홈페이지 이동</a>
+                            </div>
+                        {/if}
                     {/if}
                 {/if}
             </div>
-            <div class="item-list">
-                <div class="btn-area">
-                    <button class="btn" on:click={refresh}>
-                        <i class="reload-icon"></i>
-                    </button>
-                    <button class="btn" on:click={changeDisplayMode}>
-                        <i class="{(itemOrderMode===1)?'item-icon':'menu-icon'}"></i>
-                    </button>
+            {#if items.length > 0}
+                <div class="item-list">
+                    <div class="btn-area">
+                        <button class="btn" on:click={refresh}>
+                            <i class="reload-icon"></i>
+                        </button>
+                        <button class="btn" on:click={changeDisplayMode}>
+                            <i class="{(itemOrderMode===1)?'item-icon':'menu-icon'}"></i>
+                        </button>
+                    </div>
+                    {#if itemOrderMode === 1}
+                        <div class="items">
+                            {#each items as item, i}
+                                <div class="item" style="order: {itemOrder1[i]}">
+                                    <div class="item-img-wrapper">
+                                        <img class="item-img" src="{item['image']}">
+                                    </div>
+                                    <div class="item-name" on:click={clickItem(item)}>
+                                        <span>
+                                            {#if nvl(item.starforce) !== ""}
+                                                <span class="star">★{item.starforce.replace("성 강화","")}</span>
+                                            {/if}
+                                            <span>{item["name"]}{(item["seed"] !== "")?` ${item["seed"]}레벨`:""}</span>
+                                        </span>
+                                    </div>
+                                    <div class="item-cls">
+                                        <span>{calculate_option(item,main,character["직업"])}</span>
+                                    </div>
+                                    <div class="item-cube">
+                                        {#if item["잠재옵션"]}
+                                            {#if item["잠재옵션"]["grade"] !== ""}
+                                                <div class="item-main-cube">
+                                                    <div class='{gradeMapper[item["잠재옵션"]["grade"]]}'>잠재</div>
+                                                    {#each item["잠재옵션"]["option"] as option, j}
+                                                        <div class='cube {gradeMapper[item["잠재옵션"]["grade"]]}'>{nvl(option[0])}{(nvl(option[1])!=="")?": " + nvl(option[1]):""}</div>
+                                                    {/each}
+                                                </div>
+                                            {/if}
+                                        {/if}
+                                        {#if item["에디셔널 잠재옵션"]}
+                                            {#if item["에디셔널 잠재옵션"]["grade"] !== ""}
+                                                <div class="item-additional-cube">
+                                                    <div class='{gradeMapper[item["에디셔널 잠재옵션"]["grade"]]}'>에디</div>
+                                                    {#each item["에디셔널 잠재옵션"]["option"] as option, j}
+                                                        <div class='cube {gradeMapper[item["에디셔널 잠재옵션"]["grade"]]}'>{nvl(option[0])}{(nvl(option[1])!=="")?": " + nvl(option[1]):""}</div>
+                                                    {/each}
+                                                </div>
+                                            {/if}
+                                        {/if}
+                                    </div>
+                                </div>
+                            {/each}
+                        </div>
+                    {:else}
+                        <div class="simple-items">
+                            {#each items as item, i}
+                                <div class="item" style="order: {itemOrder2[i]}">
+                                    <div class="item-img-wrapper" on:click={clickItem(item)}>
+                                        <img class="item-img" src="{item['image']}">
+                                    </div>
+                                </div>
+                            {/each}
+                            <div class="empty" style="order: 2"></div>
+                            <div class="empty" style="order: 4"></div>
+                            <div class="empty" style="order: 6"></div>
+                            <div class="empty" style="order: 25"></div>
+                            <div class="empty" style="order: 26"></div>
+                        </div>
+                    {/if}
                 </div>
-                {#if itemOrderMode === 1}
-                    <div class="items">
-                        {#each items as item, i}
-                            <div class="item" style="order: {itemOrder1[i]}">
-                                <div class="item-img-wrapper">
-                                    <img class="item-img" src="{item['image']}">
-                                </div>
-                                <div class="item-name" on:click={clickItem(item)}>
-                                    <span>
-                                        {#if nvl(item.starforce) !== ""}
-                                            <span class="star">★{item.starforce.replace("성 강화","")}</span>
-                                        {/if}
-                                        <span>{item["name"]}{(item["seed"] !== "")?` ${item["seed"]}레벨`:""}</span>
-                                    </span>
-                                </div>
-                                <div class="item-cls">
-                                    <span>{calculate_option(item,main,character["직업"])}</span>
-                                </div>
-                                <div class="item-cube">
-                                    {#if item["잠재옵션"]}
-                                        {#if item["잠재옵션"]["grade"] !== ""}
-                                            <div class="item-main-cube">
-                                                <div class='{gradeMapper[item["잠재옵션"]["grade"]]}'>잠재</div>
-                                                {#each item["잠재옵션"]["option"] as option, j}
-                                                    <div class='cube {gradeMapper[item["잠재옵션"]["grade"]]}'>{nvl(option[0])}{(nvl(option[1])!=="")?": " + nvl(option[1]):""}</div>
-                                                {/each}
-                                            </div>
-                                        {/if}
-                                    {/if}
-                                    {#if item["에디셔널 잠재옵션"]}
-                                        {#if item["에디셔널 잠재옵션"]["grade"] !== ""}
-                                            <div class="item-additional-cube">
-                                                <div class='{gradeMapper[item["에디셔널 잠재옵션"]["grade"]]}'>에디</div>
-                                                {#each item["에디셔널 잠재옵션"]["option"] as option, j}
-                                                    <div class='cube {gradeMapper[item["에디셔널 잠재옵션"]["grade"]]}'>{nvl(option[0])}{(nvl(option[1])!=="")?": " + nvl(option[1]):""}</div>
-                                                {/each}
-                                            </div>
-                                        {/if}
-                                    {/if}
-                                </div>
-                            </div>
-                        {/each}
-                    </div>
-                {:else}
-                    <div class="simple-items">
-                        {#each items as item, i}
-                            <div class="item" style="order: {itemOrder2[i]}">
-                                <div class="item-img-wrapper" on:click={clickItem(item)}>
-                                    <img class="item-img" src="{item['image']}">
-                                </div>
-                            </div>
-                        {/each}
-                        <div class="empty" style="order: 2"></div>
-                        <div class="empty" style="order: 4"></div>
-                        <div class="empty" style="order: 6"></div>
-                        <div class="empty" style="order: 25"></div>
-                        <div class="empty" style="order: 26"></div>
-                    </div>
-                {/if}
-            </div>
-            <div class="cashitem">
-            </div>
+            {/if}
+            {#if cashItems.length > 0}
+                <div class="cashitem">
+                </div>
+            {/if}
         {:catch error}
             <p>오류가 발생했습니다.</p>
         {/await}
