@@ -355,16 +355,16 @@
                     {/if}
                 {/if}
             </div>
-            {#if items.length > 0}
-                <div class="item-list">
-                    <div class="btn-area">
-                        <button class="btn" on:click={refresh}>
-                            <i class="reload-icon"></i>
-                        </button>
-                        <button class="btn" on:click={changeDisplayMode}>
-                            <i class="{(itemOrderMode===1)?'item-icon':'menu-icon'}"></i>
-                        </button>
-                    </div>
+            <div class="item-list">
+                <div class="btn-area">
+                    <button class="btn" on:click={refresh}>
+                        <i class="reload-icon"></i>
+                    </button>
+                    <button class="btn" on:click={changeDisplayMode}>
+                        <i class="{(itemOrderMode===1)?'item-icon':'menu-icon'}"></i>
+                    </button>
+                </div>
+                {#if items.length > 0}
                     {#if itemOrderMode === 1}
                         <div class="items">
                             {#each items as item, i}
@@ -424,8 +424,8 @@
                             <div class="empty" style="order: 26"></div>
                         </div>
                     {/if}
-                </div>
-            {/if}
+                {/if}
+            </div>
             {#if cashItems.length > 0}
                 <div class="cashitem">
                 </div>
