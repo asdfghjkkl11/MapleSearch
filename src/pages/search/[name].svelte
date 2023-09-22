@@ -566,7 +566,6 @@
 
         if(items) {
             for (let i = 0; i < items.length; i++) {
-                console.log(items[i]["seed"])
                 let a = items[i]["잠재옵션"];
                 let b = items[i]["에디셔널 잠재옵션"];
 
