@@ -84,7 +84,7 @@ export function calculate_option(item, main, cls){
             option += Number(nvl(item["올스탯"][2], 0).replace("%", "")) * 10;
         }
         if (item[attack]) {
-            option += Number(nvl(item[attack][2], 0)) * 5;
+            option += Number(nvl(item[attack][2], 0)) * 4;
         }
 
         let res = (option > 0) ? option + "급" : "";
