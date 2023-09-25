@@ -32,9 +32,8 @@
         grid-auto-flow: column;
         grid-template-rows: repeat(13, 1fr);
     }
-    .cashitems{
-        display: flex;
-        flex-direction: column;
+    .items.cash{
+        grid-template-rows: repeat(10, 1fr);
     }
     .grid-col-2{
         display: flex;
@@ -72,6 +71,9 @@
         box-shadow: inset 0 -1px 0 0 #cdcdcd;
         box-sizing: border-box;
     }
+    .item.cash{
+        min-width: 300px;
+    }
     .item > div{
         flex-shrink: 0;
     }
@@ -97,6 +99,10 @@
         align-items: center;
         flex: 1;
         cursor: pointer;
+    }
+    .cash .item-name{
+        flex: none;
+        min-width: 120px;
     }
     .item-cls{
         min-width: 40px;
@@ -136,7 +142,7 @@
         gap: 8px;
     }
     .btn{
-        width: 24px;
+        min-width: 24px;
         height: 24px;
         padding: 0;
         display: flex;
@@ -144,7 +150,11 @@
         justify-content: center;
         background: #292c35cc;
         border: 1px solid #cdcdcd;
+        color: #ffffff;
         cursor: pointer;
+    }
+    .btn.text{
+        padding: 0 4px;
     }
     .btn-close{
         width: 32px;
@@ -190,7 +200,7 @@
         grid-template-columns: repeat(5, 1fr);
     }
     .simple-items .item{
-        width: 60px;
+        width: 60px !important;
         height: 60px;
         min-width: auto;
         justify-content: center;
@@ -286,6 +296,9 @@
             width: 360px;
             justify-content: center;
         }
+        .item.cash {
+            width: 300px;
+        }
     }
     @media (max-width: 1024px) {
         .info {
@@ -360,76 +373,120 @@
                     <button class="btn" on:click={refresh}>
                         <i class="reload-icon"></i>
                     </button>
+                    <button class="btn text" on:click={changeItemType}>
+                        <span>{(itemType===1)?'캐시아이템 보기':'장비아이템 보기'}</span>
+                        <i class=""></i>
+                    </button>
                     <button class="btn" on:click={changeDisplayMode}>
                         <i class="{(itemOrderMode===1)?'item-icon':'menu-icon'}"></i>
                     </button>
                 </div>
-                {#if items.length > 0}
-                    {#if itemOrderMode === 1}
-                        <div class="items">
-                            {#each items as item, i}
-                                <div class="item" style="order: {itemOrder1[i]}">
-                                    <div class="item-img-wrapper">
-                                        <img class="item-img" src="{item['image']}">
-                                    </div>
-                                    <div class="item-name" on:click={clickItem(item)}>
-                                        <span>
-                                            {#if nvl(item.starforce) !== ""}
-                                                <span class="star">★{item.starforce.replace("성 강화","")}</span>
+                {#if itemType === 1}
+                    {#if items.length > 0}
+                        {#if itemOrderMode === 1}
+                            <div class="items">
+                                {#each items as item, i}
+                                    <div class="item" style="order: {itemOrder1[i]}">
+                                        <div class="item-img-wrapper">
+                                            <img class="item-img" src="{item['image']}">
+                                        </div>
+                                        <div class="item-name" on:click={clickItem(item)}>
+                                            <span>
+                                                {#if nvl(item.starforce) !== ""}
+                                                    <span class="star">★{item.starforce.replace("성 강화","")}</span>
+                                                {/if}
+                                                <span>{item["name"]}{(item["seed"] !== "")?` ${item["seed"]}레벨`:""}</span>
+                                            </span>
+                                        </div>
+                                        <div class="item-cls">
+                                            <span>{calculate_option(item,main,character["직업"])}</span>
+                                        </div>
+                                        <div class="item-cube">
+                                            {#if item["잠재옵션"]}
+                                                {#if item["잠재옵션"]["grade"] !== ""}
+                                                    <div class="item-main-cube">
+                                                        <div class='{gradeMapper[item["잠재옵션"]["grade"]]}'>잠재</div>
+                                                        {#each item["잠재옵션"]["option"] as option, j}
+                                                            <div class='cube {gradeMapper[item["잠재옵션"]["grade"]]}'>{nvl(option[0])}{(nvl(option[1])!=="")?": " + nvl(option[1]):""}</div>
+                                                        {/each}
+                                                    </div>
+                                                {/if}
                                             {/if}
-                                            <span>{item["name"]}{(item["seed"] !== "")?` ${item["seed"]}레벨`:""}</span>
-                                        </span>
-                                    </div>
-                                    <div class="item-cls">
-                                        <span>{calculate_option(item,main,character["직업"])}</span>
-                                    </div>
-                                    <div class="item-cube">
-                                        {#if item["잠재옵션"]}
-                                            {#if item["잠재옵션"]["grade"] !== ""}
-                                                <div class="item-main-cube">
-                                                    <div class='{gradeMapper[item["잠재옵션"]["grade"]]}'>잠재</div>
-                                                    {#each item["잠재옵션"]["option"] as option, j}
-                                                        <div class='cube {gradeMapper[item["잠재옵션"]["grade"]]}'>{nvl(option[0])}{(nvl(option[1])!=="")?": " + nvl(option[1]):""}</div>
-                                                    {/each}
-                                                </div>
+                                            {#if item["에디셔널 잠재옵션"]}
+                                                {#if item["에디셔널 잠재옵션"]["grade"] !== ""}
+                                                    <div class="item-additional-cube">
+                                                        <div class='{gradeMapper[item["에디셔널 잠재옵션"]["grade"]]}'>에디</div>
+                                                        {#each item["에디셔널 잠재옵션"]["option"] as option, j}
+                                                            <div class='cube {gradeMapper[item["에디셔널 잠재옵션"]["grade"]]}'>{nvl(option[0])}{(nvl(option[1])!=="")?": " + nvl(option[1]):""}</div>
+                                                        {/each}
+                                                    </div>
+                                                {/if}
                                             {/if}
-                                        {/if}
-                                        {#if item["에디셔널 잠재옵션"]}
-                                            {#if item["에디셔널 잠재옵션"]["grade"] !== ""}
-                                                <div class="item-additional-cube">
-                                                    <div class='{gradeMapper[item["에디셔널 잠재옵션"]["grade"]]}'>에디</div>
-                                                    {#each item["에디셔널 잠재옵션"]["option"] as option, j}
-                                                        <div class='cube {gradeMapper[item["에디셔널 잠재옵션"]["grade"]]}'>{nvl(option[0])}{(nvl(option[1])!=="")?": " + nvl(option[1]):""}</div>
-                                                    {/each}
-                                                </div>
-                                            {/if}
-                                        {/if}
+                                        </div>
                                     </div>
-                                </div>
-                            {/each}
-                        </div>
-                    {:else}
-                        <div class="simple-items">
-                            {#each items as item, i}
-                                <div class="item" style="order: {itemOrder2[i]}">
-                                    <div class="item-img-wrapper" on:click={clickItem(item)}>
-                                        <img class="item-img" src="{item['image']}">
+                                {/each}
+                            </div>
+                        {:else}
+                            <div class="simple-items">
+                                {#each items as item, i}
+                                    <div class="item" style="order: {itemOrder2[i]}">
+                                        <div class="item-img-wrapper" on:click={clickItem(item)}>
+                                            <img class="item-img" src="{item['image']}">
+                                        </div>
                                     </div>
-                                </div>
-                            {/each}
-                            <div class="empty" style="order: 2"></div>
-                            <div class="empty" style="order: 4"></div>
-                            <div class="empty" style="order: 6"></div>
-                            <div class="empty" style="order: 25"></div>
-                            <div class="empty" style="order: 26"></div>
-                        </div>
+                                {/each}
+                                <div class="empty" style="order: 2"></div>
+                                <div class="empty" style="order: 4"></div>
+                                <div class="empty" style="order: 9"></div>
+                                <div class="empty" style="order: 25"></div>
+                                <div class="empty" style="order: 26"></div>
+                            </div>
+                        {/if}
+                    {/if}
+                {:else}
+                    {#if cashItems.length > 0}
+                        {#if itemOrderMode === 1}
+                            <div class="items cash">
+                                {#each cashItems as item, i}
+                                    <div class="item cash" style="order: {cashItemOrder1[i]}">
+                                        <div class="item-img-wrapper">
+                                            <img class="item-img" src="{item['image']}">
+                                        </div>
+                                        <div class="item-name" on:click={clickItem(item)}>
+                                            <span>
+                                                <span>{item["name"]}</span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                {/each}
+                            </div>
+                        {:else}
+                            <div class="simple-items">
+                                {#each cashItems as item, i}
+                                    <div class="item cash" style="order: {cashItemOrder2[i]}">
+                                        <div class="item-img-wrapper" on:click={clickItem(item)}>
+                                            <img class="item-img" src="{item['image']}">
+                                        </div>
+                                    </div>
+                                {/each}
+                                <div class="empty" style="order: 2"></div>
+                                <div class="empty" style="order: 4"></div>
+                                <div class="empty" style="order: 7"></div>
+                                <div class="empty" style="order: 9"></div>
+                                <div class="empty" style="order: 12"></div>
+                                <div class="empty" style="order: 15"></div>
+                                <div class="empty" style="order: 19"></div>
+                                <div class="empty" style="order: 21"></div>
+                                <div class="empty" style="order: 22"></div>
+                                <div class="empty" style="order: 25"></div>
+                                <div class="empty" style="order: 26"></div>
+                                <div class="empty" style="order: 29"></div>
+                                <div class="empty" style="order: 30"></div>
+                            </div>
+                        {/if}
                     {/if}
                 {/if}
             </div>
-            {#if cashItems.length > 0}
-                <div class="cashitem">
-                </div>
-            {/if}
         {:catch error}
             <p>오류가 발생했습니다.</p>
         {/await}
@@ -544,9 +601,12 @@
     let character = {};
     let items = [];
     let cashItems = [];
+    let itemType = 1;
     let itemOrderMode = 1;
     let itemOrder1 = [20,4,1,19,16,12,22,18,15,11,14,23,17,2,5,7,3,21,13,6,8,9,10,24,25];
-    let itemOrder2 = [15,3,5,10,11,8,9,6,7,12,13,14,1,16,17,18,19,20,21,22,23,24,27,28,29];
+    let itemOrder2 = [16,3,5,11,12,8,10,6,7,13,14,15,1,16,17,18,19,20,21,22,23,24,27,28,29];
+    let cashItemOrder1 = [17,3,7,16,11,8,15,12,13,14,1,4,2,5,9,10,6];
+    let cashItemOrder2 = [16,3,5,11,8,10,6,13,14,1,17,18,20,23,24,25,28];
     let itemOptionOrder1 = ["STR","DEX","INT","LUK","MaxHP","MaxMP","공격력","마력","물리방어력","보스 몬스터공격 시 데미지","몬스터 방어력 무시","데미지","올스탯"];
     let itemOptionOrder2 = ["공격속도","가위 사용 가능 횟수"];
     let main = "STR";
@@ -666,6 +726,10 @@
         isModalOpen = false;
         let body = document.querySelector("body");
         body.style.overflow = "auto";
+    }
+
+    function changeItemType(){
+        itemType ^= 1;
     }
 
     function changeDisplayMode(){
