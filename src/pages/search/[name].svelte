@@ -7,7 +7,7 @@
         flex-direction: column;
         align-items: center;
         gap: 16px;
-        color: white;
+        color: rgb(201, 206, 220);
         box-sizing: border-box;
     }
     .info{
@@ -24,7 +24,7 @@
     .character > div{
         min-width: 140px;
         padding: 4px 8px;
-        box-shadow: 1px 1px 0 0 #eeeeee,inset 1px 1px 0 0 #eeeeee;
+        box-shadow: 1px 1px 0 0 rgba(255, 255, 255, 0.1),inset 1px 1px 0 0 rgba(255, 255, 255, 0.1);
         box-sizing: border-box;
     }
     .items{
@@ -68,7 +68,7 @@
         flex-wrap: wrap;
         gap: 4px;
         font-size: 14px;
-        box-shadow: inset 0 -1px 0 0 #cdcdcd;
+        box-shadow: inset 0 -1px 0 0 rgba(255, 255, 255, 0.1);
         box-sizing: border-box;
     }
     .item.cash{
@@ -115,25 +115,25 @@
         min-width: 80px;
     }
     .blue{
-        color: #99e6fe;
+        color: #81c3d7;
     }
     .purple{
-        color: #e198ff;
+        color: #7b53e2;
     }
     .yellow{
-        color: #ffdf00;
+        color: #e4ce00;
     }
     .star{
-        color: #ffdf00;
+        color: #e4ce00;
     }
     .green{
-        color: lime;
+        color: rgba(0,255,163,.9)
     }
     .option1{
-        color: #b6e301;
+        color: #9cc202;
     }
     .option2{
-        color: #65fbfb;
+        color: #4fcaca
     }
     .btn-area{
         display: flex;
@@ -188,6 +188,13 @@
         background: url('/image/menu.svg') no-repeat;
         background-size: contain;
     }
+    .setting-icon{
+        width: 18px;
+        height: 18px;
+        display: inline-block;
+        background: url('/image/img_setting.svg') no-repeat;
+        background-size: contain;
+    }
     .close-icon{
         width: 18px;
         height: 18px;
@@ -204,11 +211,11 @@
         height: 60px;
         min-width: auto;
         justify-content: center;
-        box-shadow: 1px 1px 0 0 #eeeeee, inset 1px 1px 0 0 #eeeeee;
+        box-shadow: 1px 1px 0 0 rgba(255, 255, 255, 0.1), inset 1px 1px 0 0 rgba(255, 255, 255, 0.1);
         cursor: pointer;
     }
     .simple-items .empty{
-        box-shadow: 1px 1px 0 0 #eeeeee, inset 1px 1px 0 0 #eeeeee;
+        box-shadow: 1px 1px 0 0 rgba(255, 255, 255, 0.1), inset 1px 1px 0 0 rgba(255, 255, 255, 0.1);
     }
     .item-list{
         display: flex;
@@ -233,15 +240,15 @@
     .modal-content{
         padding: 8px;
         height: fit-content;
-        width: 360px;
+        min-width: 360px;
         min-height: 460px;
         display: flex;
         flex-direction: column;
         gap: 8px;
-        background: #353535;
+        background: #24272b;
         border-radius: 8px;
         opacity: 1;
-        color: white;
+        color: rgb(201, 206, 220);
     }
     .modal-header{
         width: 100%;
@@ -289,7 +296,25 @@
     }
     .link{
         font-size: 16px;
-        color: #99e6fe;
+        color: #81c3d7;
+    }
+    .error{
+        font-size: 24px;
+    }
+    .input-text{
+        width: 28px;
+        text-align: right;
+        padding: 4px 8px;
+        border: none;
+        border-radius: 8px;
+        background: #2e3033;
+        color: #dfe2ea;
+    }
+    .input-text:focus{
+        outline: none;
+    }
+    .setting-row{
+        padding-right: 24px;
     }
     @media (max-width: 1630px) {
         .item {
@@ -380,6 +405,9 @@
                     <button class="btn" on:click={changeDisplayMode}>
                         <i class="{(itemOrderMode===1)?'item-icon':'menu-icon'}"></i>
                     </button>
+                    <button class="btn" on:click={settingOpen}>
+                        <i class="setting-icon"></i>
+                    </button>
                 </div>
                 {#if itemType === 1}
                     {#if items.length > 0}
@@ -399,7 +427,7 @@
                                             </span>
                                         </div>
                                         <div class="item-cls">
-                                            <span>{calculate_option(item,main,character["직업"])}</span>
+                                            <span>{calculate_option(item,main,character["직업"],atkStatMulti,atkStatMultiXenon)}</span>
                                         </div>
                                         <div class="item-cube">
                                             {#if item["잠재옵션"]}
@@ -488,7 +516,7 @@
                 {/if}
             </div>
         {:catch error}
-            <p>오류가 발생했습니다.</p>
+            <p class="error">오류가 발생했습니다.</p>
         {/await}
     </div>
 </div>
@@ -589,9 +617,31 @@
         </div>
     </div>
 </div>
+<div class="item-modal" class:is-show={isSettingOpen}>
+    <div class="modal-content">
+        <div class="modal-header">
+            <span>설정</span>
+            <button class="btn-close" on:click={settingClose}>
+                <i class="close-icon"></i>
+            </button>
+        </div>
+        <div class="modal-body">
+            <div class="setting-row">
+                <ul>
+                    <li>
+                        <span>공/마 1당 <input type="text" class="input-text" bind:value={atkStatMulti}> 급 (최대 소수점 2자리까지)</span>
+                    </li>
+                    <li>
+                        <span>제논: 공/마 1당 <input type="text" class="input-text" bind:value={atkStatMultiXenon}> 급 (최대 소수점 2자리까지)</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
 <script>
     import {params,afterPageLoad} from "@roxi/routify";
-    import {calculate_option, get_idb, nvl, option_parse, set_idb, uc} from "../../js/common";
+    import {calculate_option, get_idb, input_float, nvl, option_parse, set_idb, uc} from "../../js/common";
     import Searchbar from "../../component/Searchbar.svelte";
 
     let name = decodeURIComponent($params.name);
@@ -618,8 +668,22 @@
     }
     let selectedItem = {};
     let isModalOpen = false;
+    let isSettingOpen = false;
+    let atkStatMulti = nvl(localStorage.getItem("atkStatMulti"),4);
+    let atkStatMultiXenon = nvl(localStorage.getItem("atkStatMultiXenon"),7);
     $: data = getData();
 
+    $:{
+        atkStatMulti = input_float(atkStatMulti,2);
+        atkStatMultiXenon = input_float(atkStatMultiXenon,2);
+
+        if(atkStatMulti != nvl(localStorage.getItem("atkStatMulti"),4)){
+            localStorage.setItem("atkStatMulti",atkStatMulti);
+        }
+        if(atkStatMultiXenon != nvl(localStorage.getItem("atkStatMultiXenon"),7)){
+            localStorage.setItem("atkStatMultiXenon",atkStatMultiXenon);
+        }
+    }
     $:{
         if(character){
             if(character.name !== ""){
@@ -734,5 +798,15 @@
 
     function changeDisplayMode(){
         itemOrderMode ^= 1;
+    }
+    function settingOpen(){
+        isSettingOpen = true;
+        let body = document.querySelector("body");
+        body.style.overflow = "hidden";
+    }
+    function settingClose(){
+        isSettingOpen = false;
+        let body = document.querySelector("body");
+        body.style.overflow = "auto";
     }
 </script>

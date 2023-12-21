@@ -1,4 +1,7 @@
 <style>
+    .layer{
+        background: #141517;
+    }
     .body{
         width: 100%;
         height: 100%;
@@ -8,31 +11,6 @@
         align-items: center;
         position: relative;
     }
-    .bg{
-        min-width: 100%;
-        min-height: 100%;
-        position: absolute;
-        background-image: url("/image/wallpaperbetter.jpg");
-        background-position: center;
-        background-repeat: no-repeat;
-        background-size: cover;
-        z-index: -999;
-        opacity: 0.9;
-    }
-    .bg::after {
-        content: "";
-        width: 100%;
-        height: 100%;
-        position: absolute;
-        background: black;
-        opacity: 0.7;
-    }
-    .wrap{
-        width: 100%;
-        height: 100%;
-        overflow-x: hidden;
-        overflow-y: auto;
-    }
     .header{
         height: 80px;
         padding: 16px;
@@ -41,7 +19,6 @@
         gap: 8px;
         font-size: 24px;
         font-weight: 700;
-        background: #292c35;
         color: #fff;
         box-sizing: border-box;
         flex-shrink: 0;
@@ -53,31 +30,32 @@
         justify-content: center;
         font-weight: 500;
         gap: 8px;
-        background: #292c35;
-        color: #b8b8b8;
+        color: #9da5b6;
         flex-shrink: 0;
     }
     @media (max-width: 1200px) {
         .header{
             height: 48px;
         }
-        .body {
-            height: calc(100vh - 112px);
-        }
     }
 </style>
-<div class="header">
-    메이플 캐릭터 검색
-</div>
-<div class="body">
-    <div class="bg">
+<div class="layer">
+    <div class="header">
+        MESO.GG
     </div>
-    <div class="wrap">
+    <div class="body">
         <slot/>
     </div>
-</div>
-<div class="footer">
-    <span>Copyright © 2023 asdfghjkkl11</span>
+    <div class="footer">
+        <span>Copyright © 2023 asdfghjkkl11</span>
+    </div>
 </div>
 <script>
+
+    import {afterPageLoad} from "@roxi/routify";
+
+    $afterPageLoad(()=>{
+        let body = document.querySelector("body");
+        body.style.overflow = "auto";
+    })
 </script>

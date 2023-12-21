@@ -7,14 +7,24 @@
         height: 40px;
         padding: 0;
         border: none;
-        box-shadow: 1px 1px 0 0 #acacac,inset 1px 1px 0 0 #acacac;
+        box-shadow: 1px 1px 0 0 #303133,inset 1px 1px 0 0 #303133;
         box-sizing: border-box;
         -webkit-appearance: none;
     }
+    .selectbar.is_focus > *{
+        box-shadow: 1px 1px 0 0 #ffffff,inset 1px 1px 0 0 #ffffff;
+    }
+
     .selectbar > [type="text"]{
-        width: 240px;
-        padding: 8px;
+        width: 320px;
+        padding: 8px 16px;
+        font-size: 18px;
+        background: #141517;
+        color: #ffffff;
+    }
+    .selectbar > [type="text"]::placeholder {
         font-size: 16px;
+        color: #757575;
     }
     .selectbar > [type="text"]:focus,
     .selectbar > button:focus{
@@ -25,7 +35,7 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        background: #f0f0f0;
+        background: #141517;
     }
     .i_search {
         width: 32px;
@@ -35,15 +45,15 @@
         background-size: contain;
     }
 </style>
-<div class="selectbar">
-    <input type="text" bind:value={name} on:keydown={key_down} placeholder="캐릭터 이름을 입력해주세요.">
+<div class="selectbar" class:is_focus={is_focus}>
+    <input type="text" bind:value={name} on:keydown={key_down} on:focus={()=>is_focus = true} on:blur={()=>is_focus=false} placeholder="캐릭터 이름을 입력해주세요.">
     <button on:click={search}>
         <i class="i_search"></i>
     </button>
 </div>
 <script>
     import {afterPageLoad, goto} from "@roxi/routify";
-
+    let is_focus = false;
     let name = "";
 
     $afterPageLoad(()=>{

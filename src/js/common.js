@@ -41,7 +41,7 @@ export function uc(str) {
     return nvl(str).replace(/[^\d.]+/g, '');
 }
 
-export function calculate_option(item, main, cls){
+export function calculate_option(item, main, cls ,atkStatMulti, atkStatMultiXenon){
     let option = 0;
     let attack = (main === "INT")?"마력":"공격력";
 
@@ -66,7 +66,7 @@ export function calculate_option(item, main, cls){
             option += Number(nvl(item["올스탯"][2], 0).replace("%", "")) * 10;
         }
         if (item[attack]) {
-            option += Number(nvl(item[attack][2], 0)) * 7;
+            option += Number(nvl(item[attack][2], 0)) * atkStatMultiXenon;
         }
         if (option > 0) {
             option /= 2;
@@ -84,7 +84,7 @@ export function calculate_option(item, main, cls){
             option += Number(nvl(item["올스탯"][2], 0).replace("%", "")) * 10;
         }
         if (item[attack]) {
-            option += Number(nvl(item[attack][2], 0)) * 4;
+            option += Number(nvl(item[attack][2], 0)) * atkStatMulti;
         }
 
         let res = (option > 0) ? option + "급" : "";
@@ -123,4 +123,40 @@ export async function clear_idb() {
 }
 export async function keys_idb() {
     return (await dbPromise).getAllKeys('search');
+}
+
+export function input_int(str){
+    str = String(nvl(str, "0"));
+    let minus = (str[0]==="-")?"-":"";
+    str = str.replace(/[^0-9]/g,"");
+
+    while(str.length > 1 && str[0] === "0"){
+        str = str.slice(1);
+    }
+
+    let integer = str.replace(/(\d)(?=(?:\d{3})+(?!\d))/g, "$1,");
+
+    return minus + integer;
+
+}
+export function input_float(str,fixed = null){
+    str = String(nvl(str, "0"));
+    let minus = (str[0]==="-")?"-":"";
+    str = str.replace(/[^0-9.]/g,"");
+    let split = str.split(".");
+    let point = (split.length>1)?".":"";
+    let integer = split.shift();
+    let float = split.join("");
+
+    while(integer.length > 1 && integer[0] === "0"){
+        integer = integer.slice(1);
+    }
+
+    if(fixed){
+        float = float.slice(0,fixed);
+    }
+
+    integer = integer.replace(/(\d)(?=(?:\d{3})+(?!\d))/g, "$1,");
+
+    return minus + integer + point + float;
 }
