@@ -59,7 +59,7 @@ export function calculate_option(item, main, cls ,atkStatMulti, atkStatMultiXeno
         option += Number(nvl(add.str, 0));
         option += Number(nvl(add.dex, 0));
         option += Number(nvl(add.luk, 0));
-        option += Number(nvl(add.all_stat, 0)) * 10;
+        option += Number(nvl(add.all_stat, 0)) * 20;
         option += Number(nvl(add.attack_power, 0)) * atkStatMultiXenon;
 
         if (option > 0) {
