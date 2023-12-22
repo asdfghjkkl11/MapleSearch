@@ -50,15 +50,12 @@
     .character-img-wrapper{
         width: 120px;
         height: 120px;
-        position: relative;
-        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
     .character-img{
-        width: 240px;
-        height: 240px;
-        position: absolute;
-        top: -80px;
-        left: -50px;
+        height: 120px;
     }
     .item{
         min-width: 360px;
@@ -88,6 +85,8 @@
         max-width: 32px;
     }
     .item-main-cube, .item-additional-cube{
+        min-width: 280px;
+        height: 16px;
         display: flex;
         align-items: center;
         gap: 8px;
@@ -126,6 +125,9 @@
     .star{
         color: #e4ce00;
     }
+    .white{
+        color: rgba(255,255,255)
+    }
     .green{
         color: rgba(0,255,163,.9)
     }
@@ -133,7 +135,16 @@
         color: #9cc202;
     }
     .option2{
-        color: #4fcaca
+        color: #4fcaca;
+    }
+    .option3{
+        color: #e4ce00;
+    }
+    .option4{
+        color: #7b53e2;
+    }
+    .modal-wrap{
+        max-width: 400px;
     }
     .btn-area{
         display: flex;
@@ -344,64 +355,71 @@
     <div class="info">
         {#await data}
             <p>...Loading</p>
-        {:then data}
+        {:then parsed_data}
             <div class="character">
-                {#if character}
-                    {#if character["name"] !== ""}
-                        <div class="grid-col-2">
-                            <div class="character-img-wrapper">
-                                <img class="character-img" src="{character['image']}">
-                            </div>
-                        </div>
-                        <div>{character["level"]}</div>
-                        <div>{character["name"]}</div>
-                        {#if character["월드"]}
-                            <div>{character["월드"]}</div>
-                            <div>{character["직업"]}</div>
-                            <div>스탯공격력</div>
-                            <div>{character["스탯공격력"][1]}</div>
-                            <div>HP</div>
-                            <div>{character["HP"]}</div>
-                            <div>STR</div>
-                            <div>{character["STR"]}</div>
-                            <div>DEX</div>
-                            <div>{character["DEX"]}</div>
-                            <div>INT</div>
-                            <div>{character["INT"]}</div>
-                            <div>LUK</div>
-                            <div>{character["LUK"]}</div>
-                            <div>보스공격력</div>
-                            <div>{character["보스공격력"]}</div>
-                            <div>방어율무시</div>
-                            <div>{character["방어율무시"]}</div>
-                            <div>크리티컬 데미지</div>
-                            <div>{character["크리티컬 데미지"]}</div>
-                            <div class="ability">
-                                <span class='{gradeMapper[character["어빌리티"]["grade"]]}'>{character["어빌리티"]["grade"]} 어빌리티</span>
-                                <span>{character["어빌리티"]["value"][0]}</span>
-                                <span>{character["어빌리티"]["value"][1]}</span>
-                                <span>{character["어빌리티"]["value"][2]}</span>
-                            </div>
-                        {:else}
-                            <div style="grid-column: span 2 / auto;">
-                                <span>메이플 공식홈페이지 - 마이메이플 - 캐릭터정보 공개설정에서<br>공개설정을해야 조회됩니다.</span>
-                            </div>
-                            <div style="grid-column: span 2 / auto;">
-                                <a class="link" href="https://maplestory.nexon.com/MyMaple/Account/Character/Visibility" target="_blank">홈페이지 이동</a>
-                            </div>
-                        {/if}
-                    {/if}
-                {/if}
+                <div class="grid-col-2">
+                    <div class="character-img-wrapper">
+                        <img class="character-img" src="{parsed_data.basic.character_image}">
+                    </div>
+                </div>
+                <div>{parsed_data.basic.character_level}</div>
+                <div>{parsed_data.basic.character_name}</div>
+                <div>{parsed_data.basic.world_name}</div>
+                <div>{parsed_data.basic.character_class}</div>
+                <div>전투력</div>
+                <div>{input_int(parsed_stat['전투력'])}</div>
+                <div>스탯공격력</div>
+                <div>{input_int(parsed_stat['최대 스탯공격력'])}</div>
+                <div>HP</div>
+                <div>{input_int(parsed_stat['HP'])}</div>
+                <div>STR</div>
+                <div>{input_int(parsed_stat['STR'])}</div>
+                <div>DEX</div>
+                <div>{input_int(parsed_stat['DEX'])}</div>
+                <div>INT</div>
+                <div>{input_int(parsed_stat['INT'])}</div>
+                <div>LUK</div>
+                <div>{input_int(parsed_stat['LUK'])}</div>
+                <div>크리티컬 확률</div>
+                <div>{parsed_stat['크리티컬 확률']}%</div>
+                <div>보스 몬스터 데미지</div>
+                <div>{parsed_stat['보스 몬스터 데미지']}%</div>
+                <div>방어율 무시</div>
+                <div>{parsed_stat['방어율 무시']}%</div>
+                <div>크리티컬 데미지</div>
+                <div>{parsed_stat['크리티컬 데미지']}%</div>
+                <div>버프 지속시간</div>
+                <div>{parsed_stat['버프 지속시간']}%</div>
+                <div>재사용 대기시간 감소</div>
+                <div>{parsed_stat['재사용 대기시간 감소 (초)']}초 / {parsed_stat['재사용 대기시간 감소 (%)']}%</div>
+                <div>아이템 드롭률</div>
+                <div>{parsed_stat['아이템 드롭률']}%</div>
+                <div>메소 획득량</div>
+                <div>{parsed_stat['메소 획득량']}%</div>
+                <div>아케인포스</div>
+                <div>{input_int(parsed_stat['아케인포스'])}</div>
+                <div>어센틱포스</div>
+                <div>{input_int(parsed_stat['어센틱포스'])}</div>
+                <div class="ability">
+                    <span class='{gradeMapper[parsed_data.ability.ability_grade]}'>{parsed_data.ability.ability_grade} 어빌리티</span>
+                    <span>{parsed_data.ability.ability_info[0].ability_value}</span>
+                    <span>{parsed_data.ability.ability_info[1].ability_value}</span>
+                    <span>{parsed_data.ability.ability_info[2].ability_value}</span>
+                </div>
+                <div>무릉</div>
+                <div>{parsed_data.dojang.dojang_best_floor}층 ({parsed_data.dojang.dojang_best_time}초)</div>
+                <div>유니온</div>
+                <div>{parsed_data.union.union_level}</div>
             </div>
             <div class="item-list">
                 <div class="btn-area">
                     <button class="btn" on:click={refresh}>
                         <i class="reload-icon"></i>
                     </button>
-                    <button class="btn text" on:click={changeItemType}>
-                        <span>{(itemType===1)?'캐시아이템 보기':'장비아이템 보기'}</span>
-                        <i class=""></i>
-                    </button>
+<!--                    <button class="btn text" on:click={changeItemType}>-->
+<!--                        <span>{(itemType===1)?'캐시아이템 보기':'장비아이템 보기'}</span>-->
+<!--                        <i class=""></i>-->
+<!--                    </button>-->
                     <button class="btn" on:click={changeDisplayMode}>
                         <i class="{(itemOrderMode===1)?'item-icon':'menu-icon'}"></i>
                     </button>
@@ -409,110 +427,61 @@
                         <i class="setting-icon"></i>
                     </button>
                 </div>
-                {#if itemType === 1}
-                    {#if items.length > 0}
-                        {#if itemOrderMode === 1}
-                            <div class="items">
-                                {#each items as item, i}
-                                    <div class="item" style="order: {itemOrder1[i]}">
-                                        <div class="item-img-wrapper">
-                                            <img class="item-img" src="{item['image']}">
-                                        </div>
-                                        <div class="item-name" on:click={clickItem(item)}>
-                                            <span>
-                                                {#if nvl(item.starforce) !== ""}
-                                                    <span class="star">★{item.starforce.replace("성 강화","")}</span>
-                                                {/if}
-                                                <span>{item["name"]}{(item["seed"] !== "")?` ${item["seed"]}레벨`:""}</span>
-                                            </span>
-                                        </div>
-                                        <div class="item-cls">
-                                            <span>{calculate_option(item,main,character["직업"],atkStatMulti,atkStatMultiXenon)}</span>
-                                        </div>
-                                        <div class="item-cube">
-                                            {#if item["잠재옵션"]}
-                                                {#if item["잠재옵션"]["grade"] !== ""}
-                                                    <div class="item-main-cube">
-                                                        <div class='{gradeMapper[item["잠재옵션"]["grade"]]}'>잠재</div>
-                                                        {#each item["잠재옵션"]["option"] as option, j}
-                                                            <div class='cube {gradeMapper[item["잠재옵션"]["grade"]]}'>{nvl(option[0])}{(nvl(option[1])!=="")?": " + nvl(option[1]):""}</div>
-                                                        {/each}
-                                                    </div>
-                                                {/if}
-                                            {/if}
-                                            {#if item["에디셔널 잠재옵션"]}
-                                                {#if item["에디셔널 잠재옵션"]["grade"] !== ""}
-                                                    <div class="item-additional-cube">
-                                                        <div class='{gradeMapper[item["에디셔널 잠재옵션"]["grade"]]}'>에디</div>
-                                                        {#each item["에디셔널 잠재옵션"]["option"] as option, j}
-                                                            <div class='cube {gradeMapper[item["에디셔널 잠재옵션"]["grade"]]}'>{nvl(option[0])}{(nvl(option[1])!=="")?": " + nvl(option[1]):""}</div>
-                                                        {/each}
-                                                    </div>
-                                                {/if}
-                                            {/if}
-                                        </div>
+                {#if itemOrderMode === 1}
+                    <div class="items">
+                        {#each parsed_data['item-equipment'].item_equipment as item, i}
+                            <div class="item" style="order: {itemOrder1[i]}">
+                                <div class="item-img-wrapper">
+                                    <img class="item-img" src="{item.item_shape_icon}">
+                                </div>
+                                <div class="item-name" on:click={clickItem(item)}>
+                                    <span>
+                                        {#if nvl(item.starforce) !== "0"}
+                                            <span class="star">★{item.starforce}</span>
+                                        {/if}
+                                        <span>{item.item_name}{(item.special_ring_level !== 0)?` ${item.special_ring_level}레벨`:""}</span>
+                                    </span>
+                                </div>
+                                <div class="item-cls">
+                                    <span>{calculate_option(item,main,parsed_data.basic.character_class,atkStatMulti,atkStatMultiXenon)}</span>
+                                </div>
+                                <div class="item-cube">
+                                    <div class="item-main-cube">
+                                        {#if item.potential_option_grade}
+                                            <div class='{gradeMapper[item.potential_option_grade]}'>잠재</div>
+                                            <div class='cube {gradeMapper[item.potential_option_grade]}'>{option_parse(item.potential_option_1)}</div>
+                                            <div class='cube {gradeMapper[item.potential_option_grade]}'>{option_parse(item.potential_option_2)}</div>
+                                            <div class='cube {gradeMapper[item.potential_option_grade]}'>{option_parse(item.potential_option_3)}</div>
+                                        {/if}
                                     </div>
-                                {/each}
-                            </div>
-                        {:else}
-                            <div class="simple-items">
-                                {#each items as item, i}
-                                    <div class="item" style="order: {itemOrder2[i]}">
-                                        <div class="item-img-wrapper" on:click={clickItem(item)}>
-                                            <img class="item-img" src="{item['image']}">
-                                        </div>
+                                    <div class="item-additional-cube">
+                                        {#if item.additional_potential_option_grade}
+                                            <div class='{gradeMapper[item.additional_potential_option_grade]}'>에디</div>
+                                            <div class='cube {gradeMapper[item.additional_potential_option_grade]}'>{option_parse(item.additional_potential_option_1)}</div>
+                                            <div class='cube {gradeMapper[item.additional_potential_option_grade]}'>{option_parse(item.additional_potential_option_2)}</div>
+                                            <div class='cube {gradeMapper[item.additional_potential_option_grade]}'>{option_parse(item.additional_potential_option_3)}</div>
+                                        {/if}
                                     </div>
-                                {/each}
-                                <div class="empty" style="order: 2"></div>
-                                <div class="empty" style="order: 4"></div>
-                                <div class="empty" style="order: 9"></div>
-                                <div class="empty" style="order: 25"></div>
-                                <div class="empty" style="order: 26"></div>
+                                </div>
                             </div>
-                        {/if}
-                    {/if}
+                        {/each}
+                    </div>
                 {:else}
-                    {#if cashItems.length > 0}
-                        {#if itemOrderMode === 1}
-                            <div class="items cash">
-                                {#each cashItems as item, i}
-                                    <div class="item cash" style="order: {cashItemOrder1[i]}">
-                                        <div class="item-img-wrapper">
-                                            <img class="item-img" src="{item['image']}">
-                                        </div>
-                                        <div class="item-name" on:click={clickItem(item)}>
-                                            <span>
-                                                <span>{item["name"]}</span>
-                                            </span>
-                                        </div>
-                                    </div>
-                                {/each}
+                    <div class="simple-items">
+                        {#each parsed_data['item-equipment'].item_equipment as item, i}
+                            <div class="item" style="order: {itemOrder2[i]}">
+                                <div class="item-img-wrapper" on:click={clickItem(item)}>
+                                    <img class="item-img" src="{item.item_shape_icon}">
+                                </div>
                             </div>
-                        {:else}
-                            <div class="simple-items">
-                                {#each cashItems as item, i}
-                                    <div class="item cash" style="order: {cashItemOrder2[i]}">
-                                        <div class="item-img-wrapper" on:click={clickItem(item)}>
-                                            <img class="item-img" src="{item['image']}">
-                                        </div>
-                                    </div>
-                                {/each}
-                                <div class="empty" style="order: 2"></div>
-                                <div class="empty" style="order: 4"></div>
-                                <div class="empty" style="order: 7"></div>
-                                <div class="empty" style="order: 9"></div>
-                                <div class="empty" style="order: 12"></div>
-                                <div class="empty" style="order: 15"></div>
-                                <div class="empty" style="order: 19"></div>
-                                <div class="empty" style="order: 21"></div>
-                                <div class="empty" style="order: 22"></div>
-                                <div class="empty" style="order: 25"></div>
-                                <div class="empty" style="order: 26"></div>
-                                <div class="empty" style="order: 29"></div>
-                                <div class="empty" style="order: 30"></div>
-                            </div>
-                        {/if}
-                    {/if}
+                        {/each}
+                        <div class="empty" style="order: 2"></div>
+                        <div class="empty" style="order: 4"></div>
+                        <div class="empty" style="order: 9"></div>
+                        <div class="empty" style="order: 26"></div>
+                        <div class="empty" style="order: 27"></div>
+                        <div class="empty" style="order: 29"></div>
+                    </div>
                 {/if}
             </div>
         {:catch error}
@@ -524,10 +493,10 @@
     <div class="modal-content">
         <div class="modal-header">
             <span>
-                {#if nvl(selectedItem?.starforce) !== ""}
-                    <span class="star">★{selectedItem?.starforce?.replace("성 강화","")}</span>
+                {#if nvl(selectedItem.starforce) !== "0"}
+                    <span class="star">★{selectedItem.starforce}</span>
                 {/if}
-                <span>{selectedItem["name"]}{(selectedItem["seed"] !== "")?` ${selectedItem["seed"]}레벨`:""}</span>
+                <span>{selectedItem.item_name}{(selectedItem.special_ring_level !== 0)?` ${selectedItem.special_ring_level}레벨`:""}</span>
             </span>
             <button class="btn-close" on:click={modalClose}>
                 <i class="close-icon"></i>
@@ -536,80 +505,84 @@
         <div class="modal-body">
             <div class="item-main-info">
                 <div class="item-img-wrapper">
-                    <img class="item-img" src="{selectedItem['image']}">
+                    <img class="item-img" src="{selectedItem.item_shape_icon}">
                 </div>
                 <div class="item-info">
-                    {#if (selectedItem["soul"])}
-                        <span>{selectedItem["soul"]}</span>
+                    {#if selectedItem["soul_name"]}
+                        <span>{selectedItem["soul_name"].replace("소울 적용","")}</span>
                     {/if}
-                    <span>{selectedItem["name"]}{(selectedItem["seed"] !== "")?` ${selectedItem["seed"]}레벨`:""}</span>
-                    <span>{selectedItem["starforce"]}</span>
-                    <span>level: {selectedItem["level"]}</span>
+                    <span>{selectedItem.item_name}{(selectedItem.special_ring_level !== 0)?` ${selectedItem.special_ring_level}레벨`:""}</span>
+                    {#if nvl(selectedItem.starforce) !== "0"}
+                        <span>{selectedItem.starforce}성 강화</span>
+                    {/if}
+                    <span>level: {selectedItem.item_base_option?.base_equipment_level}</span>
                 </div>
             </div>
             <div class="stat">
-                {#each itemOptionOrder1 as option,i}
-                    {#if (selectedItem[option])}
-                        <div>
-                            <span>{option} : {selectedItem[option][0]}
-                                {#if (selectedItem[option].length > 1)}
-                                    ({selectedItem[option][1]}
-                                    {#if (selectedItem[option].length > 2)}
-                                        <span class="option1">+{selectedItem[option][2]}</span>
+                {#if selectedItem.item_total_option}
+                    {#each itemOptionOrder1 as option,i}
+                        {#if nvl(selectedItem.item_total_option[option.key]) != 0}
+                            <div>
+                                <span>
+                                    <span>{option.value} : <span class="white">{selectedItem.item_total_option[option.key]}{#if option.per}%{/if}</span></span>
+
+                                    {#if nvl(selectedItem.item_add_option[option.key]) != 0
+                                    || nvl(selectedItem.item_etc_option[option.key]) != 0
+                                    || nvl(selectedItem.item_starforce_option[option.key]) != 0
+                                    || nvl(selectedItem.item_exceptional_option[option.key]) != 0}
+                                        <span>( </span><span class="white">{nvl(selectedItem?.item_base_option)[option.key]}</span>
+                                        {#if nvl(selectedItem.item_add_option[option.key]) != 0}
+                                            <span class="option1">+{selectedItem.item_add_option[option.key]}</span>
+                                        {/if}
+                                        {#if nvl(selectedItem.item_etc_option[option.key]) != 0}
+                                            <span class="option2">+{selectedItem.item_etc_option[option.key]}</span>
+                                        {/if}
+                                        {#if nvl(selectedItem.item_starforce_option[option.key]) != 0}
+                                            <span class="option3">+{selectedItem.item_starforce_option[option.key]}</span>
+                                        {/if}
+                                        {#if nvl(selectedItem.item_exceptional_option[option.key]) != 0}
+                                            <span class="option4">+{selectedItem.item_exceptional_option[option.key]}</span>
+                                        {/if}
+                                        <span>)</span>
                                     {/if}
-                                    {#if (selectedItem[option].length > 3)}
-                                        <span class="option2">+{selectedItem[option][3]}</span>
-                                    {/if}
-                                    )
-                                {/if}
-                            </span>
-                        </div>
-                    {/if}
-                {/each}
-                {#each itemOptionOrder2 as option,i}
-                    {#if (selectedItem[option])}
-                        <div>
-                            <span>{option} : {selectedItem[option]}</span>
-                        </div>
-                    {/if}
-                {/each}
-                {#if selectedItem["잠재옵션"]}
-                    {#if selectedItem["잠재옵션"]["grade"] !== ""}
-                        <div class="divider"></div>
-                        <div>
-                            <div class='{gradeMapper[selectedItem["잠재옵션"]["grade"]]}'>잠재옵션</div>
-                            {#each selectedItem["잠재옵션"]["option"] as option, j}
-                                <div class='cube'>{nvl(option[0])}{(nvl(option[1])!=="")?": " + nvl(option[1]):""}</div>
-                            {/each}
-                        </div>
-                    {/if}
-                {/if}
-                {#if selectedItem["에디셔널 잠재옵션"]}
-                    {#if selectedItem["에디셔널 잠재옵션"]["grade"] !== ""}
-                        <div class="divider"></div>
-                        <div>
-                            <div class='{gradeMapper[selectedItem["에디셔널 잠재옵션"]["grade"]]}'>에디셔널 잠재옵션</div>
-                            {#each selectedItem["에디셔널 잠재옵션"]["option"] as option, j}
-                                <div class='cube'>{nvl(option[0])}{(nvl(option[1])!=="")?": " + nvl(option[1]):""}</div>
-                            {/each}
-                        </div>
-                    {/if}
-                {/if}
-                {#if selectedItem["소울옵션"]}
-                    <div class="divider"></div>
-                    {#each selectedItem["소울옵션"] as option,j}
-                        <div>
-                            <span>{option}</span>
-                        </div>
+                                </span>
+                            </div>
+                        {/if}
                     {/each}
                 {/if}
-                {#if selectedItem["기타"]}
+                <div>
+                    <span>가위 사용 가능 횟수 : <span class="white">{(selectedItem.cuttable_count==255)?0:selectedItem.cuttable_count}</span></span>
+                </div>
+                {#if selectedItem.potential_option_grade}
                     <div class="divider"></div>
-                    {#each selectedItem["기타"] as option,j}
-                        <div>
-                            <span>{option}</span>
-                        </div>
-                    {/each}
+                    <div>
+                        <div class='{gradeMapper[selectedItem.potential_option_grade]}'>잠재옵션</div>
+                        <div class='cube {gradeMapper[selectedItem.potential_option_grade]}'>{option_parse(selectedItem.potential_option_1)}</div>
+                        <div class='cube {gradeMapper[selectedItem.potential_option_grade]}'>{option_parse(selectedItem.potential_option_2)}</div>
+                        <div class='cube {gradeMapper[selectedItem.potential_option_grade]}'>{option_parse(selectedItem.potential_option_3)}</div>
+                    </div>
+                {/if}
+                {#if selectedItem.additional_potential_option_grade}
+                    <div class="divider"></div>
+                    <div>
+                        <div class='{gradeMapper[selectedItem.additional_potential_option_grade]}'>에디셔널 잠재옵션</div>
+                        <div class='cube {gradeMapper[selectedItem.additional_potential_option_grade]}'>{option_parse(selectedItem.additional_potential_option_1)}</div>
+                        <div class='cube {gradeMapper[selectedItem.additional_potential_option_grade]}'>{option_parse(selectedItem.additional_potential_option_2)}</div>
+                        <div class='cube {gradeMapper[selectedItem.additional_potential_option_grade]}'>{option_parse(selectedItem.additional_potential_option_3)}</div>
+                    </div>
+                {/if}
+                {#if selectedItem.soul_option}
+                    <div class="divider"></div>
+                    <div>
+                        <span>{selectedItem.soul_name}</span>
+                        <span class="white">{selectedItem.soul_option}</span>
+                    </div>
+                {/if}
+                {#if selectedItem.item_description}
+                    <div class="divider"></div>
+                    <div class="modal-wrap">
+                        <span>{selectedItem.item_description}</span>
+                    </div>
                 {/if}
             </div>
         </div>
@@ -641,24 +614,79 @@
 </div>
 <script>
     import {params,afterPageLoad} from "@roxi/routify";
-    import {calculate_option, get_idb, input_float, nvl, option_parse, set_idb, uc} from "../../js/common";
+    import {calculate_option, get_idb, input_float, input_int, nvl, option_parse, set_idb, uc} from "../../js/common";
     import Searchbar from "../../component/Searchbar.svelte";
 
     let name = decodeURIComponent($params.name);
     const myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
 
-    let character = {};
     let items = [];
     let cashItems = [];
     let itemType = 1;
     let itemOrderMode = 1;
-    let itemOrder1 = [20,4,1,19,16,12,22,18,15,11,14,23,17,2,5,7,3,21,13,6,8,9,10,24,25];
-    let itemOrder2 = [16,3,5,11,12,8,10,6,7,13,14,15,1,16,17,18,19,20,21,22,23,24,27,28,29];
+    let itemOrder1 = [3,4,5,6,7,8,19,18,17,16,15,14,11,10,13,9,20,12,21,1,2,0,22,23];
+    let itemOrder2 = [3,18,23,25,24,28,16,11,6,1,12,7,8,13,14,19,10,22,15,17,20,5,21,30];
     let cashItemOrder1 = [17,3,7,16,11,8,15,12,13,14,1,4,2,5,9,10,6];
     let cashItemOrder2 = [16,3,5,11,8,10,6,13,14,1,17,18,20,23,24,25,28];
-    let itemOptionOrder1 = ["STR","DEX","INT","LUK","MaxHP","MaxMP","공격력","마력","물리방어력","보스 몬스터공격 시 데미지","몬스터 방어력 무시","데미지","올스탯"];
-    let itemOptionOrder2 = ["공격속도","가위 사용 가능 횟수"];
+    let itemOptionOrder1 = [
+        {
+            key: "str",
+            value: "STR"
+        },
+        {
+            key: "dex",
+            value: "DEX"
+        },
+        {
+            key: "int",
+            value: "INT"
+        },
+        {
+            key: "luk",
+            value: "LUK"
+        },
+        {
+            key: "max_hp",
+            value: "MaxHP"
+        },
+        {
+            key: "max_mp",
+            value: "MaxMP"
+        },
+        {
+            key: "attack_power",
+            value: "공격력"
+        },
+        {
+            key: "magic_power",
+            value: "마력"
+        },
+        {
+            key: "armor",
+            value: "물리방어력"
+        },
+        {
+            key: "boss_damage",
+            value: "보스 몬스터공격 시 데미지",
+            per: true
+        },
+        {
+            key: "ignore_monster_armor",
+            value: "몬스터 방어력 무시",
+            per: true
+        },
+        {
+            key: "damage",
+            value: "데미지",
+            per: true
+        },
+        {
+            key: "all_stat",
+            value: "올스탯",
+            per: true
+        }
+    ];
     let main = "STR";
     let gradeMapper = {
         "레어": "blue",
@@ -672,6 +700,8 @@
     let atkStatMulti = nvl(localStorage.getItem("atkStatMulti"),4);
     let atkStatMultiXenon = nvl(localStorage.getItem("atkStatMultiXenon"),7);
     $: data = getData();
+    let parsed_data = {}
+    let parsed_stat = null;
 
     $:{
         atkStatMulti = input_float(atkStatMulti,2);
@@ -684,24 +714,23 @@
             localStorage.setItem("atkStatMultiXenon",atkStatMultiXenon);
         }
     }
-    $:{
-        if(character){
-            if(character.name !== ""){
-                let str = uc(character["STR"]);
-                let dex = uc(character["DEX"]);
-                let int = uc(character["INT"]);
-                let luk = uc(character["LUK"]);
-                let max = Math.max(str,dex,int,luk);
 
-                if(max == str){
-                    main = "STR";
-                }else if(max == dex){
-                    main = "DEX";
-                }else if(max == int){
-                    main = "INT";
-                }else if(max == luk){
-                    main = "LUK";
-                }
+    $:{
+        if(parsed_stat){
+            let str = parsed_stat["STR"];
+            let dex = parsed_stat["DEX"];
+            let int = parsed_stat["INT"];
+            let luk = parsed_stat["LUK"];
+            let max = Math.max(str,dex,int,luk);
+
+            if(max == str){
+                main = "str";
+            }else if(max == dex){
+                main = "dex";
+            }else if(max == int){
+                main = "int";
+            }else if(max == luk){
+                main = "luk";
             }
         }
 
@@ -733,10 +762,9 @@
         if(cache){
             let time = new Date().getTime() - cache.time;
             if(time < 300000){
-                character = cache.data.character;
-                items = cache.data.items;
-                cashItems = cache.data.cashItems;
-                return "";
+                parsed_data = cache.data;
+                parsed_stat = parse_stat();
+                return cache.data;
             }
         }
         return getDataFromServer();
@@ -748,7 +776,7 @@
     })
 
     async function getDataFromServer(){
-        return fetch("https://mapleserver.asdfghjkkl11.com/maple/getCharacter",{
+        return fetch("https://mapleserver.asdfghjkkl11.com/maple/getInfo",{
             "method": "POST",
             "body": JSON.stringify({
                 "ID": name
@@ -756,16 +784,17 @@
             headers: myHeaders,
         }).then(async response => {
             let data = await response.json();
-            if(data.resultCode === "success") {
-                character = data.data.character;
-                items = data.data.items;
-                cashItems = data.data.cashItems;
+
+            if(data.basic) {
+                parsed_data = data;
+                parsed_stat = parse_stat();
                 await set_idb(name,{
-                    data: data.data,
+                    data: data,
                     time: new Date().getTime()
                 });
+                return data;
             }else{
-                throw new Error(data.error.message);
+                throw new Error(data);
             }
         });
     }
@@ -775,7 +804,6 @@
     }
 
     function clickItem(item){
-        console.log(item)
         selectedItem = item;
         modalOpen();
     }
@@ -808,5 +836,16 @@
         isSettingOpen = false;
         let body = document.querySelector("body");
         body.style.overflow = "auto";
+    }
+
+    function parse_stat(){
+        let result = {};
+        let stat = parsed_data.stat.final_stat;
+
+        for(let i = 0; i < stat.length; i++){
+            result[stat[i].stat_name] = stat[i].stat_value;
+        }
+
+        return result;
     }
 </script>

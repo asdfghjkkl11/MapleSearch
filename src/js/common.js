@@ -6,35 +6,40 @@ export function nvl(text, rText) {
     return text;
 }
 export function option_parse(option){
+    if(!option){
+        return "";
+    }
+    let options = option.split(":")
     if(option.length > 0) {
-        if (option[0] == "보스 몬스터 공격 시 데미지") {
-            option[0] = "보공";
-        } else if (option[0] == "몬스터 방어율 무시") {
-            option[0] = "방무";
-        } else if (option[0] == "크리티컬 데미지") {
-            option[0] = "크뎀";
-        } else if (option[0] == "아이템 드롭률") {
-            option[0] = "아획";
-        } else if (option[0] == "메소 획득량") {
-            option[0] = "메획";
-        } else if (option[0] == "HP 회복 아이템 및 회복 스킬 효율") {
-            option[0] = "회복 효율";
-        } else if (option[0] == "모든 스킬의 MP 소모") {
-            option[0] = "MP 소모";
-        } else if (option[0] == "모든 스킬의 재사용 대기시간") {
-            option[0] = "쿨감";
-            option[1] = option[1].split("(")[0];
-        } else if (option[0].includes("캐릭터 기준 9레벨 당")) {
-            option[0] = option[0].replace("캐릭터 기준 ", "");
-        } else if (option[0].includes("스킬 사용 가능")) {
-            option[0] = option[0].split(" 스킬 사용 가능")[0];
-        } else if (option[0].includes("확률로")) {
-            option[0] = option[0].split("확률로 ")[1];
-        } else if (option[0].includes("최대")) {
-            option[0] = option[0].replace("최대", "");
+        if (options[0].includes("보스 몬스터 공격 시 데미지")) {
+            options[0] = "보공";
+        } else if (options[0].includes("몬스터 방어율 무시")) {
+            options[0] = "방무";
+        } else if (options[0].includes("크리티컬 데미지")) {
+            options[0] = "크뎀";
+        } else if (options[0].includes("아이템 드롭률")) {
+            options[0] = "아획";
+        } else if (options[0].includes("메소 획득량")) {
+            options[0] = "메획";
+        } else if (options[0].includes("HP 회복 아이템 및 회복 스킬 효율")) {
+            options[0] = "회복 효율";
+        } else if (options[0].includes("모든 스킬의 MP 소모")) {
+            options[0] = "MP 소모";
+        } else if (options[0].includes("모든 스킬의 재사용 대기시간")) {
+            options[0] = "쿨감";
+            options[1] = options[1].split("(")[0];
+        } else if (options[0].includes("캐릭터 기준 9레벨 당")) {
+            options[0] = options[0].replace("캐릭터 기준 ", "");
+        } else if (options[0].includes("스킬 사용 가능")) {
+            options[0] = options[0].split(" 스킬 사용 가능")[0];
+        } else if (options[0].includes("확률로")) {
+            options[0] = options[0].split("확률로 ")[1];
+            return options[0];
+        } else if (options[0].includes("최대")) {
+            options[0] = options[0].replace("최대", "");
         }
     }
-    return option;
+    return options[0] + ":" + options[1];
 }
 
 export function uc(str) {
@@ -43,31 +48,20 @@ export function uc(str) {
 
 export function calculate_option(item, main, cls ,atkStatMulti, atkStatMultiXenon){
     let option = 0;
-    let attack = (main === "INT")?"마력":"공격력";
 
-    if(item["itemType"].includes("한손무기")){
+    if(item.item_equipment_slot.includes("무기")){
         return "";
     }
-    if(item["itemType"].includes("두손무기")){
-        return "";
-    }
+    let add = item.item_add_option;
+    let attack = (main === "int")?add.magic_power:add.attack_power;
 
     if(cls.includes("제논")){
-        if (item["STR"]) {
-            option += Number(nvl(item["STR"][2], 0));
-        }
-        if (item["DEX"]) {
-            option += Number(nvl(item["DEX"][2], 0));
-        }
-        if (item["LUK"]) {
-            option += Number(nvl(item["LUK"][2], 0));
-        }
-        if (item["올스탯"]) {
-            option += Number(nvl(item["올스탯"][2], 0).replace("%", "")) * 10;
-        }
-        if (item[attack]) {
-            option += Number(nvl(item[attack][2], 0)) * atkStatMultiXenon;
-        }
+        option += Number(nvl(add.str, 0));
+        option += Number(nvl(add.dex, 0));
+        option += Number(nvl(add.luk, 0));
+        option += Number(nvl(add.all_stat, 0)) * 10;
+        option += Number(nvl(add.attack_power, 0)) * atkStatMultiXenon;
+
         if (option > 0) {
             option /= 2;
             option = Math.floor(option);
@@ -77,25 +71,17 @@ export function calculate_option(item, main, cls ,atkStatMulti, atkStatMultiXeno
 
         return res;
     }else {
-        if (item[main]) {
-            option += Number(nvl(item[main][2], 0));
-        }
-        if (item["올스탯"]) {
-            option += Number(nvl(item["올스탯"][2], 0).replace("%", "")) * 10;
-        }
-        if (item[attack]) {
-            option += Number(nvl(item[attack][2], 0)) * atkStatMulti;
-        }
+        option += Number(nvl(add[main], 0));
+        option += Number(nvl(add.all_stat, 0)) * 10;
+        option += Number(nvl(attack, 0)) * atkStatMulti;
 
         let res = (option > 0) ? option + "급" : "";
 
         if(cls.includes("데몬어벤져")){
-            if (item["MaxHP"]) {
-                let hp = Number(nvl(item["MaxHP"][2], 0)) / item["level"];
-                if(hp > 0) {
-                    hp = 5 - ((hp - 9)/3);
-                    res += ` HP${hp}추`;
-                }
+            let hp = Number(nvl(add.max_hp, 0)) / item.item_base_option.base_equipment_level;
+            if(hp > 0) {
+                hp = 5 - ((hp - 9)/3);
+                res += ` HP${hp}추`;
             }
         }
 
