@@ -32,6 +32,7 @@ export function option_parse(option){
             options[0] = options[0].replace("캐릭터 기준 ", "");
         } else if (options[0].includes("스킬 사용 가능")) {
             options[0] = options[0].split(" 스킬 사용 가능")[0];
+            return options[0];
         } else if (options[0].includes("확률로")) {
             options[0] = options[0].split("확률로 ")[1];
             return options[0];
