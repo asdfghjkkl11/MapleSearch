@@ -2,7 +2,7 @@
     .items{
         display: grid;
         grid-auto-flow: column;
-        grid-template-rows: repeat(13, 1fr);
+        grid-template-rows: repeat(12, 1fr);
     }
     .item{
         min-width: 360px;

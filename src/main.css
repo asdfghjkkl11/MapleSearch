@@ -74,6 +74,7 @@ body[data-theme='light-mode'] {
     --border: rgba(0, 0, 0, 0.2);
     --btn-border: #acacac;
     --btn-background: #fefefe;
+    --btn-background-active: #dcdcdc;
     --img-background: #cdcdcd;
     --modal-background: #292c35aa;
     --modal-content-background: #ffffff;
@@ -102,6 +103,7 @@ body[data-theme='dark-mode'] {
     --border: rgba(255, 255, 255, 0.1);
     --btn-border: #cdcdcd;
     --btn-background: #292c35cc;
+    --btn-background-active: #595959;
     --img-background: #acacac;
     --modal-background: #292c35aa;
     --modal-content-background: #24272b;

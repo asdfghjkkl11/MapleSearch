@@ -52,6 +52,39 @@
     .character-img{
         height: 120px;
     }
+    .btn-area{
+        width: 100%;
+        padding: 8px;
+        position: sticky;
+        top: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        background: var(--layer);
+    }
+    .btn{
+        min-width: 64px;
+        height: 32px;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 16px;
+        font-weight: 500;
+        fill: var(--highlight);
+        stroke: var(--highlight);
+        background: var(--btn-background);
+        color: var(--highlight);
+        border: 1px solid var(--btn-border);
+        cursor: pointer;
+    }
+    .btn span{
+        padding: 0 8px;
+    }
+    .btn.active{
+        background: var(--btn-background-active);
+    }
     @media (max-width: 1024px) {
         .info {
             flex-direction: column;
@@ -61,6 +94,13 @@
 </style>
 <div class="main">
     <Searchbar/>
+    <div class="btn-area">
+        {#each tabList as tab, i}
+            <button class="btn" class:active={tabIndex === i} on:click={()=>{tabIndex = i}}>
+                <span>{tab}</span>
+            </button>
+        {/each}
+    </div>
     <div class="info">
         {#await data}
             <p>...Loading</p>
@@ -122,7 +162,13 @@
                     <div>유니온</div>
                     <div>{parsedData.union.union_level}</div>
                 </div>
-                <Equipment parsedData="{parsedData}" parsedStat="{parsedStat}" refresh="{refresh}"/>
+                {#if tabIndex === 0}
+                    <Equipment parsedData="{parsedData}" parsedStat="{parsedStat}" refresh="{refresh}"/>
+                {:else if tabIndex === 1}
+                    <CashEquipment parsedData="{parsedData}" refresh="{refresh}"/>
+                {:else}
+                    <p class="error">준비중입니다.</p>
+                {/if}
             {/if}
         {:catch error}
             <p class="error">오류가 발생했습니다.</p>
@@ -134,6 +180,7 @@
     import {get_idb, inputInt, nvl, set_idb} from "../../js/common";
     import Searchbar from "../../component/Searchbar.svelte";
     import Equipment from "../../component/Equipment.svelte";
+    import CashEquipment from "../../component/CashEquipment.svelte";
 
     let name = decodeURIComponent($params.name);
     const myHeaders = new Headers();
@@ -149,7 +196,8 @@
         "레전드리": "green",
     }
 
-    let tabList
+    let tabList = ["장비","캐시장비","5차스킬","6차스킬","심볼","유니온"]
+    let tabIndex = 0;
 
     $:{
         console.log(parsedData)
