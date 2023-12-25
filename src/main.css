@@ -159,3 +159,21 @@ body[data-theme='dark-mode'] {
 .option4{
     color: var(--option4);
 }
+.novice{
+    color: #b1703a;
+}
+.veteran{
+    color: #b5b5bd;
+}
+.master{
+    color: #ffd700;
+}
+.grand-master{
+    color: #a840ff;
+}
+.supreme{
+    background: linear-gradient(to bottom, #8A2BE2, #00B5E3);
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+}

@@ -160,7 +160,9 @@
                     <div>무릉</div>
                     <div>{parsedData.dojang.dojang_best_floor}층 ({parsedData.dojang.dojang_best_time}초)</div>
                     <div>유니온</div>
-                    <div>{parsedData.union.union_level}</div>
+                    <div>
+                        <span class="{cssList[unionIndex]}">{parsedData.union.union_level}</span>
+                    </div>
                 </div>
                 {#if tabIndex === 0}
                     <Equipment parsedData="{parsedData}" parsedStat="{parsedStat}" refresh="{refresh}"/>
@@ -172,6 +174,8 @@
                     <Hcore parsedData="{parsedData}"/>
                 {:else if tabIndex === 4}
                     <Symbol parsedData="{parsedData}"/>
+                {:else if tabIndex === 5}
+                    <Union parsedData="{parsedData}"/>
                 {:else}
                     <p class="error">준비중입니다.</p>
                 {/if}
@@ -190,6 +194,7 @@
     import Vcore from "../../component/Vcore.svelte";
     import Hcore from "../../component/Hcore.svelte";
     import Symbol from "../../component/Symbol.svelte";
+    import Union from "../../component/Union.svelte";
 
     let name = decodeURIComponent($params.name);
     const myHeaders = new Headers();
@@ -205,12 +210,23 @@
         "레전드리": "green",
     }
 
+    let gradeList = ["노비스","베테랑","마스터","그랜드 마스터","슈프림"];
+    let cssList = ["novice","veteran","master","grand-master","supreme"];
+    let unionIndex = 0;
     let tabList = ["장비","캐시장비","5차스킬","6차스킬","심볼","유니온"]
     let tabIndex = 0;
 
     $:{
         console.log(parsedData)
         parsedStat = parseStat();
+
+        if(parsedData.union?.union_grade) {
+            for (let i = 0; i < gradeList.length; i++) {
+                if (parsedData.union.union_grade.includes(gradeList[i])) {
+                    unionIndex = i;
+                }
+            }
+        }
     }
 
     $afterPageLoad(async () => {
@@ -228,10 +244,10 @@
             let time = new Date(cache.time).getDate();
             let now = new Date().getDate();
 
-            if(time === now){
+            // if(time === now){
                 parsedData = cache.data;
                 return cache.data;
-            }
+            // }
         }
         return getDataFromServer();
     }
