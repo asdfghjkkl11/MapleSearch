@@ -20,10 +20,11 @@
         padding: 16px;
         display: flex;
         align-items: center;
+        justify-content: space-between;
         gap: 8px;
         font-size: 24px;
         font-weight: 700;
-        color: #fff;
+        color: var(--highlight);
         box-sizing: border-box;
         flex-shrink: 0;
     }
@@ -34,8 +35,14 @@
         justify-content: center;
         font-weight: 500;
         gap: 8px;
-        color: #9da5b6;
+        color: var(--footer);
         flex-shrink: 0;
+    }
+    .icon{
+        width: 20px;
+        height: 20px;
+        cursor: pointer;
+        fill: var(--highlight);
     }
     @media (max-width: 1200px) {
         .header{
@@ -46,6 +53,9 @@
 <div class="layer">
     <div class="header">
         <a class="title" href="/search">MESO.GG</a>
+        <div class="icon" on:click={changeMode}>
+            <Darkmode/>
+        </div>
     </div>
     <div class="body">
         <slot/>
@@ -55,14 +65,22 @@
     </div>
 </div>
 <script>
-
     import {afterPageLoad} from "@roxi/routify";
     import {nvl} from "../js/common";
+    import Darkmode from "../component/icon/Darkmode.svelte";
 
     $afterPageLoad(()=>{
         let mode = nvl(localStorage.getItem("mode"),"dark-mode");
         let body = document.querySelector("body");
         body.style.overflow = "auto";
         body.dataset.theme = mode;
-    })
+    });
+
+    function changeMode(){
+        let mode = nvl(localStorage.getItem("mode"),"dark-mode");
+        mode = (mode === "dark-mode")?"light-mode":"dark-mode";
+        let body = document.querySelector("body");
+        body.dataset.theme = mode;
+        localStorage.setItem("mode",mode);
+    }
 </script>

@@ -73,6 +73,8 @@
         display: flex;
         align-items: center;
         justify-content: center;
+        fill: var(--highlight);
+        stroke: var(--highlight);
         background: var(--btn-background);
         border: 1px solid var(--btn-border);
         cursor: pointer;
@@ -84,6 +86,7 @@
         display: flex;
         align-items: center;
         justify-content: center;
+        fill: var(--close);
         border: none;
         cursor: pointer;
         background: none;
@@ -114,13 +117,6 @@
         height: 18px;
         display: inline-block;
         background: url('/image/img_setting.svg') no-repeat;
-        background-size: contain;
-    }
-    .close-icon{
-        width: 18px;
-        height: 18px;
-        display: inline-block;
-        background: url('/image/img_x.svg') no-repeat;
         background-size: contain;
     }
     .simple-items{
@@ -251,13 +247,17 @@
     <div class="item-list">
         <div class="btn-area">
             <button class="btn" on:click={refresh}>
-                <i class="reload-icon"></i>
+                <Refreash/>
             </button>
             <button class="btn" on:click={changeDisplayMode}>
-                <i class="{(itemOrderMode===1)?'item-icon':'menu-icon'}"></i>
+                {#if itemOrderMode===1}
+                    <ItemType1/>
+                {:else}
+                    <ItemType2/>
+                {/if}
             </button>
             <button class="btn" on:click={settingOpen}>
-                <i class="setting-icon"></i>
+                <Setting/>
             </button>
         </div>
         {#if itemOrderMode === 1}
@@ -328,7 +328,7 @@
                 <span>{selectedItem.item_name}{(selectedItem.special_ring_level !== 0)?` ${selectedItem.special_ring_level}레벨`:""}</span>
             </span>
             <button class="btn-close" on:click={modalClose}>
-                <i class="close-icon"></i>
+                <Close/>
             </button>
         </div>
         <div class="modal-body">
@@ -424,7 +424,7 @@
         <div class="modal-header">
             <span>설정</span>
             <button class="btn-close" on:click={settingClose}>
-                <i class="close-icon"></i>
+                <Close/>
             </button>
         </div>
         <div class="modal-body">
@@ -443,6 +443,11 @@
 </div>
 <script>
     import {calculate_option, input_float, input_int, nvl, option_parse} from "../js/common";
+    import Close from "./icon/Close.svelte";
+    import Refreash from "./icon/Refreash.svelte";
+    import Setting from "./icon/Setting.svelte";
+    import ItemType1 from "./icon/ItemType1.svelte";
+    import ItemType2 from "./icon/ItemType2.svelte";
 
     export let parsed_data;
     export let parsed_stat;

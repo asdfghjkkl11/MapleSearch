@@ -37,22 +37,19 @@
         justify-content: center;
         background: var(--layer);
     }
-    .i_search {
-        width: 32px;
-        height: 32px;
-        display: inline-block;
-        background: url("/image/img_search.svg") no-repeat;
-        background-size: contain;
+    .search-btn{
+        stroke: var(--highlight);
     }
 </style>
 <div class="selectbar" class:is_focus={is_focus}>
     <input type="text" bind:value={name} on:keydown={key_down} on:focus={()=>is_focus = true} on:blur={()=>is_focus=false} placeholder="캐릭터 이름을 입력해주세요.">
-    <button on:click={search}>
-        <i class="i_search"></i>
+    <button class="search-btn" on:click={search}>
+        <Search/>
     </button>
 </div>
 <script>
     import {afterPageLoad, goto} from "@roxi/routify";
+    import Search from "./icon/Search.svelte";
     let is_focus = false;
     let name = "";
 

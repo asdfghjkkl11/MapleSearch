@@ -72,25 +72,27 @@ body{
     background-color: grey;
 }
 body[data-theme='light-mode'] {
-    --layer: #141517;
+    --layer: #fefefe;
     --blue: #81c3d7;
     --purple: #7b53e2;
     --yellow: #e4ce00;
     --star: #e4ce00;
     --text: rgb(201, 206, 220);
-    --highlight: white;
+    --highlight: #141517;
     --green: rgba(0,255,163,.9);
     --option1: #9cc202;
     --option2: #4fcaca;
     --option3: #e4ce00;
     --option4: #7b53e2;
+    --footer: #666;
     --border: rgba(255, 255, 255, 0.1);
-    --btn-border: #cdcdcd;
-    --btn-background: #292c35cc;
+    --btn-border: #acacac;
+    --btn-background: #fefefe;
     --img-background: #acacac;
     --modal-background: #292c35aa;
     --modal-content-background: #24272b;
     --placeholder: #757575;
+    --close: #929292;
     --input-text: #dfe2ea;
     --input-text-background: #2e3033;
 }
@@ -102,12 +104,13 @@ body[data-theme='dark-mode'] {
     --yellow: #e4ce00;
     --star: #e4ce00;
     --text: rgb(201, 206, 220);
-    --highlight: white;
+    --highlight: #ffffff;
     --green: rgba(0,255,163,.9);
     --option1: #9cc202;
     --option2: #4fcaca;
     --option3: #e4ce00;
     --option4: #7b53e2;
+    --footer: #9da5b6;
     --border: rgba(255, 255, 255, 0.1);
     --btn-border: #cdcdcd;
     --btn-background: #292c35cc;
@@ -115,6 +118,7 @@ body[data-theme='dark-mode'] {
     --modal-background: #292c35aa;
     --modal-content-background: #24272b;
     --placeholder: #757575;
+    --close: #929292;
     --input-text: #dfe2ea;
     --input-text-background: #2e3033;
 }
