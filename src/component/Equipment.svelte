@@ -91,34 +91,6 @@
         cursor: pointer;
         background: none;
     }
-    .reload-icon{
-        width: 18px;
-        height: 18px;
-        display: inline-block;
-        background: url('/image/refresh.svg') no-repeat;
-        background-size: contain;
-    }
-    .item-icon{
-        width: 18px;
-        height: 18px;
-        display: inline-block;
-        background: url('/image/item.svg') no-repeat;
-        background-size: contain;
-    }
-    .menu-icon{
-        width: 18px;
-        height: 18px;
-        display: inline-block;
-        background: url('/image/menu.svg') no-repeat;
-        background-size: contain;
-    }
-    .setting-icon{
-        width: 18px;
-        height: 18px;
-        display: inline-block;
-        background: url('/image/img_setting.svg') no-repeat;
-        background-size: contain;
-    }
     .simple-items{
         display: grid;
         grid-template-columns: repeat(5, 1fr);
@@ -231,9 +203,6 @@
             width: 360px;
             justify-content: center;
         }
-        .item.cash {
-            width: 300px;
-        }
     }
     @media (max-width: 720px) {
         .items{
@@ -243,7 +212,7 @@
         }
     }
 </style>
-{#if parsed_data.basic}
+{#if parsedData.basic}
     <div class="item-list">
         <div class="btn-area">
             <button class="btn" on:click={refresh}>
@@ -263,37 +232,37 @@
         {#if itemOrderMode === 1}
             <div class="items">
                 {#each itemOrder1 as key, i}
-                    {#if parsed_equip[key]}
+                    {#if parsedEquip[key]}
                         <div class="item" style="order: {itemOrder1[i]}">
                             <div class="item-img-wrapper">
-                                <img class="item-img" src="{parsed_equip[key].item_shape_icon}">
+                                <img class="item-img" src="{parsedEquip[key].item_shape_icon}">
                             </div>
-                            <div class="item-name" on:click={clickItem(parsed_equip[key])}>
+                            <div class="item-name" on:click={clickItem(parsedEquip[key])}>
                                             <span>
-                                                {#if nvl(parsed_equip[key].starforce) !== "0"}
-                                                    <span class="star">★{parsed_equip[key].starforce}</span>
+                                                {#if nvl(parsedEquip[key].starforce) !== "0"}
+                                                    <span class="star">★{parsedEquip[key].starforce}</span>
                                                 {/if}
-                                                <span>{parsed_equip[key].item_name}{(parsed_equip[key].special_ring_level !== 0)?` ${parsed_equip[key].special_ring_level}레벨`:""}</span>
+                                                <span>{parsedEquip[key].item_name}{(parsedEquip[key].special_ring_level !== 0)?` ${parsedEquip[key].special_ring_level}레벨`:""}</span>
                                             </span>
                             </div>
                             <div class="item-cls">
-                                <span>{calculate_option(parsed_equip[key],main,parsed_data.basic.character_class,atkStatMulti,atkStatMultiXenon)}</span>
+                                <span>{calculateOption(parsedEquip[key],main,parsedData.basic.character_class,atkStatMulti,atkStatMultiXenon)}</span>
                             </div>
                             <div class="item-cube">
                                 <div class="item-main-cube">
-                                    {#if parsed_equip[key].potential_option_grade}
-                                        <div class='{gradeMapper[parsed_equip[key].potential_option_grade]}'>잠재</div>
-                                        <div class='cube {gradeMapper[parsed_equip[key].potential_option_grade]}'>{option_parse(parsed_equip[key].potential_option_1)}</div>
-                                        <div class='cube {gradeMapper[parsed_equip[key].potential_option_grade]}'>{option_parse(parsed_equip[key].potential_option_2)}</div>
-                                        <div class='cube {gradeMapper[parsed_equip[key].potential_option_grade]}'>{option_parse(parsed_equip[key].potential_option_3)}</div>
+                                    {#if parsedEquip[key].potential_option_grade}
+                                        <div class='{gradeMapper[parsedEquip[key].potential_option_grade]}'>잠재</div>
+                                        <div class='cube {gradeMapper[parsedEquip[key].potential_option_grade]}'>{optionParse(parsedEquip[key].potential_option_1)}</div>
+                                        <div class='cube {gradeMapper[parsedEquip[key].potential_option_grade]}'>{optionParse(parsedEquip[key].potential_option_2)}</div>
+                                        <div class='cube {gradeMapper[parsedEquip[key].potential_option_grade]}'>{optionParse(parsedEquip[key].potential_option_3)}</div>
                                     {/if}
                                 </div>
                                 <div class="item-additional-cube">
-                                    {#if parsed_equip[key].additional_potential_option_grade}
-                                        <div class='{gradeMapper[parsed_equip[key].additional_potential_option_grade]}'>에디</div>
-                                        <div class='cube {gradeMapper[parsed_equip[key].additional_potential_option_grade]}'>{option_parse(parsed_equip[key].additional_potential_option_1)}</div>
-                                        <div class='cube {gradeMapper[parsed_equip[key].additional_potential_option_grade]}'>{option_parse(parsed_equip[key].additional_potential_option_2)}</div>
-                                        <div class='cube {gradeMapper[parsed_equip[key].additional_potential_option_grade]}'>{option_parse(parsed_equip[key].additional_potential_option_3)}</div>
+                                    {#if parsedEquip[key].additional_potential_option_grade}
+                                        <div class='{gradeMapper[parsedEquip[key].additional_potential_option_grade]}'>에디</div>
+                                        <div class='cube {gradeMapper[parsedEquip[key].additional_potential_option_grade]}'>{optionParse(parsedEquip[key].additional_potential_option_1)}</div>
+                                        <div class='cube {gradeMapper[parsedEquip[key].additional_potential_option_grade]}'>{optionParse(parsedEquip[key].additional_potential_option_2)}</div>
+                                        <div class='cube {gradeMapper[parsedEquip[key].additional_potential_option_grade]}'>{optionParse(parsedEquip[key].additional_potential_option_3)}</div>
                                     {/if}
                                 </div>
                             </div>
@@ -304,10 +273,10 @@
         {:else}
             <div class="simple-items">
                 {#each itemOrder2 as key, i}
-                    {#if parsed_equip[key]}
+                    {#if parsedEquip[key]}
                         <div class="item" style="order: {i}">
-                            <div class="item-img-wrapper" on:click={clickItem(parsed_equip[key])}>
-                                <img class="item-img" src="{parsed_equip[key].item_shape_icon}">
+                            <div class="item-img-wrapper" on:click={clickItem(parsedEquip[key])}>
+                                <img class="item-img" src="{parsedEquip[key].item_shape_icon}">
                             </div>
                         </div>
                     {:else}
@@ -386,18 +355,18 @@
                     <div class="divider"></div>
                     <div>
                         <div class='{gradeMapper[selectedItem.potential_option_grade]}'>잠재옵션</div>
-                        <div class='cube {gradeMapper[selectedItem.potential_option_grade]}'>{option_parse(selectedItem.potential_option_1)}</div>
-                        <div class='cube {gradeMapper[selectedItem.potential_option_grade]}'>{option_parse(selectedItem.potential_option_2)}</div>
-                        <div class='cube {gradeMapper[selectedItem.potential_option_grade]}'>{option_parse(selectedItem.potential_option_3)}</div>
+                        <div class='cube {gradeMapper[selectedItem.potential_option_grade]}'>{optionParse(selectedItem.potential_option_1)}</div>
+                        <div class='cube {gradeMapper[selectedItem.potential_option_grade]}'>{optionParse(selectedItem.potential_option_2)}</div>
+                        <div class='cube {gradeMapper[selectedItem.potential_option_grade]}'>{optionParse(selectedItem.potential_option_3)}</div>
                     </div>
                 {/if}
                 {#if selectedItem.additional_potential_option_grade}
                     <div class="divider"></div>
                     <div>
                         <div class='{gradeMapper[selectedItem.additional_potential_option_grade]}'>에디셔널 잠재옵션</div>
-                        <div class='cube {gradeMapper[selectedItem.additional_potential_option_grade]}'>{option_parse(selectedItem.additional_potential_option_1)}</div>
-                        <div class='cube {gradeMapper[selectedItem.additional_potential_option_grade]}'>{option_parse(selectedItem.additional_potential_option_2)}</div>
-                        <div class='cube {gradeMapper[selectedItem.additional_potential_option_grade]}'>{option_parse(selectedItem.additional_potential_option_3)}</div>
+                        <div class='cube {gradeMapper[selectedItem.additional_potential_option_grade]}'>{optionParse(selectedItem.additional_potential_option_1)}</div>
+                        <div class='cube {gradeMapper[selectedItem.additional_potential_option_grade]}'>{optionParse(selectedItem.additional_potential_option_2)}</div>
+                        <div class='cube {gradeMapper[selectedItem.additional_potential_option_grade]}'>{optionParse(selectedItem.additional_potential_option_3)}</div>
                     </div>
                 {/if}
                 {#if selectedItem.soul_option}
@@ -442,17 +411,17 @@
     </div>
 </div>
 <script>
-    import {calculate_option, input_float, input_int, nvl, option_parse} from "../js/common";
+    import {calculateOption, inputFloat, nvl, optionParse} from "../js/common";
     import Close from "./icon/Close.svelte";
     import Refreash from "./icon/Refreash.svelte";
     import Setting from "./icon/Setting.svelte";
     import ItemType1 from "./icon/ItemType1.svelte";
     import ItemType2 from "./icon/ItemType2.svelte";
 
-    export let parsed_data;
-    export let parsed_stat;
+    export let parsedData;
+    export let parsedStat;
     export let refresh;
-    let itemType = 1;
+
     let itemOrderMode = 1;
     let itemOrder1 = [
         '엠블렘',
@@ -582,12 +551,11 @@
     let isSettingOpen = false;
     let atkStatMulti = nvl(localStorage.getItem("atkStatMulti"),4);
     let atkStatMultiXenon = nvl(localStorage.getItem("atkStatMultiXenon"),7);
-
-    let parsed_equip = null;
+    let parsedEquip = null;
 
     $:{
-        atkStatMulti = input_float(atkStatMulti,2);
-        atkStatMultiXenon = input_float(atkStatMultiXenon,2);
+        atkStatMulti = inputFloat(atkStatMulti,2);
+        atkStatMultiXenon = inputFloat(atkStatMultiXenon,2);
 
         if(atkStatMulti != nvl(localStorage.getItem("atkStatMulti"),4)){
             localStorage.setItem("atkStatMulti",atkStatMulti);
@@ -598,11 +566,11 @@
     }
 
     $:{
-        if(parsed_stat){
-            let str = parsed_stat["STR"];
-            let dex = parsed_stat["DEX"];
-            let int = parsed_stat["INT"];
-            let luk = parsed_stat["LUK"];
+        if(parsedStat){
+            let str = parsedStat["STR"];
+            let dex = parsedStat["DEX"];
+            let int = parsedStat["INT"];
+            let luk = parsedStat["LUK"];
             let max = Math.max(str,dex,int,luk);
 
             if(max == str){
@@ -615,7 +583,7 @@
                 main = "luk";
             }
         }
-        parsed_equip = parse_equip();
+        parsedEquip = parseEquip();
     }
 
     function clickItem(item){
@@ -651,9 +619,9 @@
         body.style.overflow = "auto";
     }
 
-    function parse_equip(){
+    function parseEquip(){
         let result = {};
-        let equip = nvl(parsed_data['item-equipment']?.item_equipment,[]);
+        let equip = nvl(parsedData['item-equipment']?.item_equipment,[]);
 
         for(let i = 0; i < equip.length; i++){
             result[equip[i].item_equipment_slot] = equip[i];

@@ -5,7 +5,7 @@ export function nvl(text, rText) {
     if (rText != null && text == "") text = rText;
     return text;
 }
-export function option_parse(option){
+export function optionParse(option){
     if(!option){
         return "";
     }
@@ -50,7 +50,7 @@ export function uc(str) {
     return nvl(str).replace(/[^\d.]+/g, '');
 }
 
-export function calculate_option(item, main, cls ,atkStatMulti, atkStatMultiXenon){
+export function calculateOption(item, main, cls ,atkStatMulti, atkStatMultiXenon){
     let option = 0;
 
     if(item.item_equipment_slot.includes("무기")){
@@ -115,7 +115,7 @@ export async function keys_idb() {
     return (await dbPromise).getAllKeys('search');
 }
 
-export function input_int(str){
+export function inputInt(str){
     str = String(nvl(str, "0"));
     let minus = (str[0]==="-")?"-":"";
     str = str.replace(/[^0-9]/g,"");
@@ -129,7 +129,7 @@ export function input_int(str){
     return minus + integer;
 
 }
-export function input_float(str,fixed = null){
+export function inputFloat(str,fixed = null){
     str = String(nvl(str, "0"));
     let minus = (str[0]==="-")?"-":"";
     str = str.replace(/[^0-9.]/g,"");

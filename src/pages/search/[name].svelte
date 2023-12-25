@@ -64,65 +64,65 @@
     <div class="info">
         {#await data}
             <p>...Loading</p>
-        {:then parsed_data}
-            {#if parsed_data.basic}
+        {:then parsedData}
+            {#if parsedData.basic}
                 <div class="character">
                     <div class="grid-col-2">
                         <div class="character-img-wrapper">
-                            <img class="character-img" src="{parsed_data.basic.character_image}">
+                            <img class="character-img" src="{parsedData.basic.character_image}">
                         </div>
                     </div>
-                    <div>{parsed_data.basic.character_level}</div>
-                    <div>{parsed_data.basic.character_name}</div>
-                    <div>{parsed_data.basic.world_name}</div>
-                    <div>{parsed_data.basic.character_class}</div>
+                    <div>{parsedData.basic.character_level}</div>
+                    <div>{parsedData.basic.character_name}</div>
+                    <div>{parsedData.basic.world_name}</div>
+                    <div>{parsedData.basic.character_class}</div>
                     <div>전투력</div>
-                    <div>{input_int(parsed_stat['전투력'])}</div>
+                    <div>{inputInt(parsedStat['전투력'])}</div>
                     <div>스탯공격력</div>
-                    <div>{input_int(parsed_stat['최대 스탯공격력'])}</div>
+                    <div>{inputInt(parsedStat['최대 스탯공격력'])}</div>
                     <div>HP</div>
-                    <div>{input_int(parsed_stat['HP'])}</div>
+                    <div>{inputInt(parsedStat['HP'])}</div>
                     <div>STR</div>
-                    <div>{input_int(parsed_stat['STR'])}</div>
+                    <div>{inputInt(parsedStat['STR'])}</div>
                     <div>DEX</div>
-                    <div>{input_int(parsed_stat['DEX'])}</div>
+                    <div>{inputInt(parsedStat['DEX'])}</div>
                     <div>INT</div>
-                    <div>{input_int(parsed_stat['INT'])}</div>
+                    <div>{inputInt(parsedStat['INT'])}</div>
                     <div>LUK</div>
-                    <div>{input_int(parsed_stat['LUK'])}</div>
+                    <div>{inputInt(parsedStat['LUK'])}</div>
                     <div>크리티컬 확률</div>
-                    <div>{parsed_stat['크리티컬 확률']}%</div>
+                    <div>{parsedStat['크리티컬 확률']}%</div>
                     <div>보스 몬스터 데미지</div>
-                    <div>{parsed_stat['보스 몬스터 데미지']}%</div>
+                    <div>{parsedStat['보스 몬스터 데미지']}%</div>
                     <div>방어율 무시</div>
-                    <div>{parsed_stat['방어율 무시']}%</div>
+                    <div>{parsedStat['방어율 무시']}%</div>
                     <div>크리티컬 데미지</div>
-                    <div>{parsed_stat['크리티컬 데미지']}%</div>
+                    <div>{parsedStat['크리티컬 데미지']}%</div>
                     <div>버프 지속시간</div>
-                    <div>{parsed_stat['버프 지속시간']}%</div>
+                    <div>{parsedStat['버프 지속시간']}%</div>
                     <div>재사용 대기시간 감소</div>
-                    <div>{parsed_stat['재사용 대기시간 감소 (초)']}초 / {parsed_stat['재사용 대기시간 감소 (%)']}%</div>
+                    <div>{parsedStat['재사용 대기시간 감소 (초)']}초 / {parsedStat['재사용 대기시간 감소 (%)']}%</div>
                     <div>아이템 드롭률</div>
-                    <div>{parsed_stat['아이템 드롭률']}%</div>
+                    <div>{parsedStat['아이템 드롭률']}%</div>
                     <div>메소 획득량</div>
-                    <div>{parsed_stat['메소 획득량']}%</div>
+                    <div>{parsedStat['메소 획득량']}%</div>
                     <div>아케인포스</div>
-                    <div>{input_int(parsed_stat['아케인포스'])}</div>
+                    <div>{inputInt(parsedStat['아케인포스'])}</div>
                     <div>어센틱포스</div>
-                    <div>{input_int(parsed_stat['어센틱포스'])}</div>
+                    <div>{inputInt(parsedStat['어센틱포스'])}</div>
                     <div class="ability">
-                        <span class='{gradeMapper[parsed_data.ability.ability_grade]}'>{parsed_data.ability.ability_grade}
+                        <span class='{gradeMapper[parsedData.ability.ability_grade]}'>{parsedData.ability.ability_grade}
                             어빌리티</span>
-                        <span>{parsed_data.ability.ability_info[0].ability_value}</span>
-                        <span>{parsed_data.ability.ability_info[1].ability_value}</span>
-                        <span>{parsed_data.ability.ability_info[2].ability_value}</span>
+                        <span>{parsedData.ability.ability_info[0].ability_value}</span>
+                        <span>{parsedData.ability.ability_info[1].ability_value}</span>
+                        <span>{parsedData.ability.ability_info[2].ability_value}</span>
                     </div>
                     <div>무릉</div>
-                    <div>{parsed_data.dojang.dojang_best_floor}층 ({parsed_data.dojang.dojang_best_time}초)</div>
+                    <div>{parsedData.dojang.dojang_best_floor}층 ({parsedData.dojang.dojang_best_time}초)</div>
                     <div>유니온</div>
-                    <div>{parsed_data.union.union_level}</div>
+                    <div>{parsedData.union.union_level}</div>
                 </div>
-                <Equipment parsed_data="{parsed_data}" parsed_stat="{parsed_stat}" refresh="{refresh}"/>
+                <Equipment parsedData="{parsedData}" parsedStat="{parsedStat}" refresh="{refresh}"/>
             {/if}
         {:catch error}
             <p class="error">오류가 발생했습니다.</p>
@@ -131,7 +131,7 @@
 </div>
 <script>
     import {params,afterPageLoad} from "@roxi/routify";
-    import {get_idb, input_int, nvl, set_idb} from "../../js/common";
+    import {get_idb, inputInt, nvl, set_idb} from "../../js/common";
     import Searchbar from "../../component/Searchbar.svelte";
     import Equipment from "../../component/Equipment.svelte";
 
@@ -139,8 +139,8 @@
     const myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
     let data = init();
-    let parsed_data = {}
-    let parsed_stat = null;
+    let parsedData = {}
+    let parsedStat = null;
 
     let gradeMapper = {
         "레어": "blue",
@@ -149,9 +149,11 @@
         "레전드리": "green",
     }
 
+    let tabList
+
     $:{
-        console.log(parsed_data)
-        parsed_stat = parse_stat();
+        console.log(parsedData)
+        parsedStat = parseStat();
     }
 
     $afterPageLoad(async () => {
@@ -170,7 +172,7 @@
             let now = new Date().getDate();
 
             if(time === now){
-                parsed_data = cache.data;
+                parsedData = cache.data;
                 return cache.data;
             }
         }
@@ -188,7 +190,7 @@
             let data = await response.json();
 
             if(data.basic) {
-                parsed_data = data;
+                parsedData = data;
                 await set_idb(name,{
                     data: data,
                     time: new Date().getTime()
@@ -200,9 +202,9 @@
         });
     }
 
-    function parse_stat(){
+    function parseStat(){
         let result = {};
-        let stat = nvl(parsed_data.stat?.final_stat,[]);
+        let stat = nvl(parsedData.stat?.final_stat,[]);
 
         for(let i = 0; i < stat.length; i++){
             result[stat[i].stat_name] = stat[i].stat_value;
