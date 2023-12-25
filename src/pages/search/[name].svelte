@@ -244,10 +244,10 @@
             let time = new Date(cache.time).getDate();
             let now = new Date().getDate();
 
-            // if(time === now){
+            if(time === now){
                 parsedData = cache.data;
                 return cache.data;
-            // }
+            }
         }
         return getDataFromServer();
     }
