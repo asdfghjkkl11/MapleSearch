@@ -1,6 +1,10 @@
 <style>
     .layer{
-        background: #141517;
+        background: var(--layer);
+    }
+    .title{
+        text-decoration: none;
+        color: var(--highlight);
     }
     .body{
         width: 100%;
@@ -41,7 +45,7 @@
 </style>
 <div class="layer">
     <div class="header">
-        MESO.GG
+        <a class="title" href="/search">MESO.GG</a>
     </div>
     <div class="body">
         <slot/>
@@ -53,9 +57,12 @@
 <script>
 
     import {afterPageLoad} from "@roxi/routify";
+    import {nvl} from "../js/common";
 
     $afterPageLoad(()=>{
+        let mode = nvl(localStorage.getItem("mode"),"dark-mode");
         let body = document.querySelector("body");
         body.style.overflow = "auto";
+        body.dataset.theme = mode;
     })
 </script>

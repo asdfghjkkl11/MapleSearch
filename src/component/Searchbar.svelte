@@ -7,24 +7,24 @@
         height: 40px;
         padding: 0;
         border: none;
-        box-shadow: 1px 1px 0 0 #303133,inset 1px 1px 0 0 #303133;
+        box-shadow: 1px 1px 0 0 var(--border),inset 1px 1px 0 0 var(--border);
         box-sizing: border-box;
         -webkit-appearance: none;
     }
     .selectbar.is_focus > *{
-        box-shadow: 1px 1px 0 0 #ffffff,inset 1px 1px 0 0 #ffffff;
+        box-shadow: 1px 1px 0 0 var(--highlight),inset 1px 1px 0 0 var(--highlight);
     }
 
     .selectbar > [type="text"]{
         width: 320px;
         padding: 8px 16px;
         font-size: 18px;
-        background: #141517;
-        color: #ffffff;
+        background: var(--layer);
+        color: var(--highlight);
     }
     .selectbar > [type="text"]::placeholder {
         font-size: 16px;
-        color: #757575;
+        color: var(--placeholder);
     }
     .selectbar > [type="text"]:focus,
     .selectbar > button:focus{
@@ -35,7 +35,7 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        background: #141517;
+        background: var(--layer);
     }
     .i_search {
         width: 32px;
