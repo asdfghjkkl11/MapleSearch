@@ -350,7 +350,6 @@
     let presetIndex = 0;
     $:{
         parsedEquip = parseEquip();
-        console.log(parsedEquip)
     }
 
     function changeDisplayMode(){

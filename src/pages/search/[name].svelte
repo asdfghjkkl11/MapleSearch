@@ -166,6 +166,12 @@
                     <Equipment parsedData="{parsedData}" parsedStat="{parsedStat}" refresh="{refresh}"/>
                 {:else if tabIndex === 1}
                     <CashEquipment parsedData="{parsedData}" refresh="{refresh}"/>
+                {:else if tabIndex === 2}
+                    <Vcore parsedData="{parsedData}"/>
+                {:else if tabIndex === 3}
+                    <Hcore parsedData="{parsedData}"/>
+                {:else if tabIndex === 4}
+                    <Symbol parsedData="{parsedData}"/>
                 {:else}
                     <p class="error">준비중입니다.</p>
                 {/if}
@@ -181,6 +187,9 @@
     import Searchbar from "../../component/Searchbar.svelte";
     import Equipment from "../../component/Equipment.svelte";
     import CashEquipment from "../../component/CashEquipment.svelte";
+    import Vcore from "../../component/Vcore.svelte";
+    import Hcore from "../../component/Hcore.svelte";
+    import Symbol from "../../component/Symbol.svelte";
 
     let name = decodeURIComponent($params.name);
     const myHeaders = new Headers();
