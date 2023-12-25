@@ -38,6 +38,9 @@ export function option_parse(option){
             return options[0];
         } else if (options[0].includes("최대")) {
             options[0] = options[0].replace("최대", "");
+        } else if (options[0].includes("HP 회복")) {
+            options[0] = "HP 회복";
+            return options[0];
         }
     }
     return options[0] + ":" + options[1];
