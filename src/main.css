@@ -72,6 +72,8 @@ body[data-theme='light-mode'] {
     --option4: #7b53e2;
     --footer: #666;
     --border: rgba(0, 0, 0, 0.2);
+    --union-border: rgba(255, 255, 255, 0.5);
+    --union-background: #5b93c7;
     --btn-border: #acacac;
     --btn-background: #fefefe;
     --btn-background-active: #dcdcdc;
@@ -101,6 +103,8 @@ body[data-theme='dark-mode'] {
     --option4: #7b53e2;
     --footer: #9da5b6;
     --border: rgba(255, 255, 255, 0.1);
+    --union-border: rgba(255, 255, 255, 0.5);
+    --union-background: #375774;
     --btn-border: #cdcdcd;
     --btn-background: #292c35cc;
     --btn-background-active: #595959;

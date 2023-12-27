@@ -27,6 +27,31 @@
         font-weight: 500;
         text-align: center;
     }
+    .union-block{
+        position: relative;
+        display: flex;
+        justify-content: center;
+    }
+    .block{
+        border: none;
+        border-collapse: collapse;
+    }
+    .block td{
+        width: 16px;
+        height: 16px;
+        padding: 0;
+        border: 1px solid var(--border);
+        box-sizing: border-box;
+    }
+    .block td.active{
+        background: var(--union-background);
+    }
+    .block-border{
+        position: absolute;
+        z-index: 1;
+        stroke: var(--highlight);
+        fill: none;
+    }
     @media (max-width: 1630px) {
         .union {
             width: 360px;
@@ -43,6 +68,20 @@
 {#if parsedData.basic}
     <div class="flex">
         <span class="highlight title">{grade} (<span class="{cssList[index]}">{level}</span>)</span>
+        <div class="union-block">
+            <div class="block-border">
+            <UnionBorder/>
+            </div>
+            <table class="block" style="width: {x * tileSize}px; height: {y * tileSize}px;">
+                {#each Array(y) as Y, i}
+                    <tr>
+                        {#each  Array(x) as X, j}
+                            <td class:active={tileSet.has(`${j}_${y-i}`)}></td>
+                        {/each}
+                    </tr>
+                {/each}
+            </table>
+        </div>
         <span class="highlight title">공격대 점령 효과</span>
         <div class="unions">
             {#each unionOccupiedStat as stat, i}
@@ -63,6 +102,7 @@
 {/if}
 <script>
     import {nvl} from "../js/common";
+    import UnionBorder from "./icon/UnionBorder.svelte";
 
     export let parsedData;
 
@@ -92,6 +132,7 @@
     }
     let unionOccupiedStat = nvl(parsedData["union-raider"].union_occupied_stat,[]).sort(sortCallback);
     let unionRaiderStat = nvl(parsedData["union-raider"].union_raider_stat,[]).sort();
+    let unionBlock = nvl(parsedData["union-raider"].union_block,[]);
     let grade = parsedData.union.union_grade;
     let level = parsedData.union.union_level;
     let gradeList = ["노비스","베테랑","마스터","그랜드 마스터","슈프림"];
@@ -100,10 +141,23 @@
     let raiderList;
     let keyList = ["STR","DEX","INT","LUK","크리티컬 확률"];
     let valueList;
+    let x = 22;
+    let y = 20;
+    let tileSize = 16;
+    let tileSet = new Set();
 
     $:{
         valueList = [0,0,0,0,0];
         raiderList = [];
+        tileSet.clear();
+
+        for(let i = 0; i < unionBlock.length; i++){
+            for(let j = 0; j < unionBlock[i].block_position.length; j++) {
+                let position = unionBlock[i].block_position[j];
+                let set = `${position.x + 11}_${position.y + 10}`;
+                tileSet.add(set);
+            }
+        }
 
         for(let i = 0; i < gradeList.length; i++){
             if(grade.includes(gradeList[i])){

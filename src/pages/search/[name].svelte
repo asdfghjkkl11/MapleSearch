@@ -63,6 +63,7 @@
         flex-wrap: wrap;
         gap: 8px;
         background: var(--layer);
+        z-index: 100;
     }
     .btn{
         min-width: 64px;
