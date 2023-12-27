@@ -115,6 +115,25 @@ export async function keys_idb() {
     return (await dbPromise).getAllKeys('search');
 }
 
+export function parseIntText(num){
+    let res = "";
+    let count = 0;
+    const unit = ['만', '억', '조', '경', '해'];
+    console.log(num)
+    while(num > 0){
+        let mod = num % 10000;
+        num = parseInt(num/ 10000);
+
+        res = mod.toString() + res;
+        if(num > 0){
+            res = unit[count] + res;
+        }
+        count++;
+        console.log(num)
+    }
+
+    return res;
+}
 export function inputInt(str){
     str = String(nvl(str, "0"));
     let minus = (str[0]==="-")?"-":"";
@@ -127,7 +146,6 @@ export function inputInt(str){
     let integer = str.replace(/(\d)(?=(?:\d{3})+(?!\d))/g, "$1,");
 
     return minus + integer;
-
 }
 export function inputFloat(str,fixed = null){
     str = String(nvl(str, "0"));

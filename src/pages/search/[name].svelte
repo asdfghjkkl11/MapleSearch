@@ -118,9 +118,9 @@
                     <div>{parsedData.basic.world_name}</div>
                     <div>{parsedData.basic.character_class}</div>
                     <div>전투력</div>
-                    <div>{inputInt(parsedStat['전투력'])}</div>
+                    <div>{parseIntText(parsedStat['전투력'])}</div>
                     <div>스탯공격력</div>
-                    <div>{inputInt(parsedStat['최대 스탯공격력'])}</div>
+                    <div>{parseIntText(parsedStat['최대 스탯공격력'])}</div>
                     <div>HP</div>
                     <div>{inputInt(parsedStat['HP'])}</div>
                     <div>STR</div>
@@ -190,7 +190,7 @@
 </div>
 <script>
     import {params,afterPageLoad} from "@roxi/routify";
-    import {get_idb, inputInt, nvl, set_idb} from "../../js/common";
+    import {get_idb, inputInt, nvl, parseIntText, set_idb} from "../../js/common";
     import Searchbar from "../../component/Searchbar.svelte";
     import Equipment from "../../component/Equipment.svelte";
     import CashEquipment from "../../component/CashEquipment.svelte";
