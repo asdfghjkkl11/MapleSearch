@@ -15,6 +15,7 @@
         font-size: 14px;
         box-shadow: inset 0 -1px 0 0 var(--border);
         box-sizing: border-box;
+        cursor: pointer;
     }
     .skill .highlight{
         min-width: 160px;

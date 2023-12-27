@@ -15,6 +15,7 @@
         font-size: 14px;
         box-shadow: inset 0 -1px 0 0 var(--border);
         box-sizing: border-box;
+        cursor: pointer;
     }
     .skill > div{
         flex-shrink: 0;
@@ -26,17 +27,6 @@
         align-items: center;
         justify-content: space-between;
         box-sizing: border-box;
-    }
-    .flex{
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
-    }
-    .title{
-        padding: 8px;
-        font-size: 16px;
-        font-weight: 500;
-        text-align: center;
     }
     .skill-info{
         display: flex;
