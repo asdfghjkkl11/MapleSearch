@@ -157,12 +157,15 @@
         flex-direction: column;
         gap: 8px;
     }
-    .item-modal .item-img-wrapper{
+    .modal-item-img-wrapper{
         width: 80px;
         height: 80px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
         background: var(--img-background);
     }
-    .item-modal .item-img{
+    .modal-item-img{
         min-width: 64px;
     }
     .stat{
@@ -302,8 +305,8 @@
         </div>
         <div class="modal-body">
             <div class="item-main-info">
-                <div class="item-img-wrapper">
-                    <img class="item-img" src="{selectedItem.item_shape_icon}">
+                <div class="modal-item-img-wrapper">
+                    <img class="modal-item-img" src="{selectedItem.item_shape_icon}">
                 </div>
                 <div class="item-info">
                     {#if selectedItem["soul_name"]}

@@ -60,6 +60,7 @@
         display: flex;
         align-items: center;
         justify-content: center;
+        flex-wrap: wrap;
         gap: 8px;
         background: var(--layer);
     }
@@ -169,12 +170,14 @@
                 {:else if tabIndex === 1}
                     <CashEquipment parsedData="{parsedData}" refresh="{refresh}"/>
                 {:else if tabIndex === 2}
-                    <Vcore parsedData="{parsedData}"/>
+                    <Lskill parsedData="{parsedData}"/>
                 {:else if tabIndex === 3}
-                    <Hcore parsedData="{parsedData}"/>
+                    <Vskill parsedData="{parsedData}"/>
                 {:else if tabIndex === 4}
-                    <Symbol parsedData="{parsedData}"/>
+                    <Hskill parsedData="{parsedData}"/>
                 {:else if tabIndex === 5}
+                    <Symbol parsedData="{parsedData}" parsedStat="{parsedStat}"/>
+                {:else if tabIndex === 6}
                     <Union parsedData="{parsedData}"/>
                 {:else}
                     <p class="error">준비중입니다.</p>
@@ -191,8 +194,9 @@
     import Searchbar from "../../component/Searchbar.svelte";
     import Equipment from "../../component/Equipment.svelte";
     import CashEquipment from "../../component/CashEquipment.svelte";
-    import Vcore from "../../component/Vcore.svelte";
-    import Hcore from "../../component/Hcore.svelte";
+    import Lskill from "../../component/Lskill.svelte";
+    import Vskill from "../../component/Vskill.svelte";
+    import Hskill from "../../component/Hskill.svelte";
     import Symbol from "../../component/Symbol.svelte";
     import Union from "../../component/Union.svelte";
 
@@ -213,7 +217,7 @@
     let gradeList = ["노비스","베테랑","마스터","그랜드 마스터","슈프림"];
     let cssList = ["novice","veteran","master","grand-master","supreme"];
     let unionIndex = 0;
-    let tabList = ["장비","캐시장비","5차스킬","6차스킬","심볼","유니온"]
+    let tabList = ["장비","캐시장비","링크스킬","5차스킬","6차스킬","심볼","유니온"]
     let tabIndex = 0;
 
     $:{
