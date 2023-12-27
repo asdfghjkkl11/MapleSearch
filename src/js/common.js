@@ -119,16 +119,18 @@ export function parseIntText(num){
     let res = "";
     let count = 0;
     const unit = ['만', '억', '조', '경', '해'];
+
     while(num > 0){
         let mod = num % 10000;
         num = parseInt(num/ 10000);
 
         res = mod.toString() + res;
         if(num > 0){
-            res = unit[count] + res;
+            if(unit[count]) {
+                res = unit[count] + res;
+            }
         }
         count++;
-        console.log(num)
     }
 
     return res;
