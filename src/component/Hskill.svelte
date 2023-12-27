@@ -23,9 +23,6 @@
         align-items: center;
         justify-content: space-between;
     }
-    .skill > div{
-        flex-shrink: 0;
-    }
     .skill-text{
         width: 100%;
         padding: 4px 8px;

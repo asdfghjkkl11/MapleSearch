@@ -17,9 +17,6 @@
         box-sizing: border-box;
         cursor: pointer;
     }
-    .skill > div{
-        flex-shrink: 0;
-    }
     .skill-text{
         width: 100%;
         padding: 4px 8px;

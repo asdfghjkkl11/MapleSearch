@@ -12,7 +12,7 @@
     }
     .info{
         display: flex;
-        align-items: start;
+        align-items: flex-start;
         gap: 8px;
     }
     .error{
