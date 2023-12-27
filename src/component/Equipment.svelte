@@ -107,43 +107,6 @@
         flex-direction: column;
         gap: 8px;
     }
-    .item-modal{
-        width: 100vw;
-        height: 100vh;
-        padding: 64px;
-        display: none;
-        justify-content: center;
-        position: fixed;
-        right: 0;
-        top: 0;
-        background: var(--modal-background);
-        box-sizing: border-box;
-    }
-    .is-show{
-        display: flex;
-    }
-    .modal-content{
-        padding: 8px;
-        height: fit-content;
-        min-width: 360px;
-        min-height: 460px;
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
-        background: var(--modal-content-background);
-        border-radius: 8px;
-        opacity: 1;
-        color: var(--text);
-    }
-    .modal-header{
-        width: 100%;
-        height: 32px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        font-size: 18px;
-        font-weight: 500;
-    }
     .modal-item-img-wrapper{
         width: 80px;
         height: 80px;
@@ -161,9 +124,6 @@
     }
     .divider{
         height: 8px;
-    }
-    .modal-footer{
-        padding: 8px;
     }
     .item-main-info{
         display: flex;
