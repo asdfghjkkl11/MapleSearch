@@ -86,7 +86,7 @@
 {/if}
 <Modal bind:modal={symbolModal}>
     <span slot="header">심볼정보</span>
-    <span slot="content">
+    <div slot="content">
         <div class="symbol-info">
             <div class="symbol-title">
                 <img src="{selectedItem.symbol_icon}">
@@ -105,7 +105,7 @@
                 <span class="symbol-desc">{selectedItem.symbol_description}</span>
             </div>
         </div>
-    </span>
+    </div>
 </Modal>
 <script>
     import {inputInt, nvl} from "../js/common";

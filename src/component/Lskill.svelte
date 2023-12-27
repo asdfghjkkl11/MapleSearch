@@ -95,7 +95,7 @@
 {/if}
 <Modal bind:modal={skillModal}>
     <span slot="header">스킬정보</span>
-    <span slot="content">
+    <div slot="content">
         <div class="skill-info">
             <div class="skill-title">
                 <img src="{selectedItem.skill_icon}">
@@ -108,7 +108,7 @@
                 <span class="skill-desc">{selectedItem.skill_description}</span>
             </div>
         </div>
-    </span>
+    </div>
 </Modal>
 <script>
     import {nvl} from "../js/common";

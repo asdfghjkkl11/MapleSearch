@@ -43,10 +43,6 @@
         flex: 1;
         cursor: pointer;
     }
-    .cash .item-name{
-        flex: none;
-        min-width: 120px;
-    }
     .item-cls{
         min-width: 40px;
         display: flex;
@@ -148,15 +144,6 @@
         font-size: 18px;
         font-weight: 500;
     }
-    .modal-header span{
-        padding-left: 8px;
-    }
-    .modal-body{
-        padding: 0 8px;
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
-    }
     .modal-item-img-wrapper{
         width: 80px;
         height: 80px;
@@ -228,7 +215,7 @@
                     <ItemType2/>
                 {/if}
             </button>
-            <button class="btn" on:click={settingOpen}>
+            <button class="btn" on:click={settingModal.show}>
                 <Setting/>
             </button>
         </div>
@@ -241,12 +228,12 @@
                                 <img class="item-img" src="{parsedEquip[key].item_shape_icon}">
                             </div>
                             <div class="item-name" on:click={clickItem(parsedEquip[key])}>
-                                            <span>
-                                                {#if nvl(parsedEquip[key].starforce) !== "0"}
-                                                    <span class="star">★{parsedEquip[key].starforce}</span>
-                                                {/if}
-                                                <span>{parsedEquip[key].item_name}{(parsedEquip[key].special_ring_level !== 0)?` ${parsedEquip[key].special_ring_level}레벨`:""}</span>
-                                            </span>
+                                <span>
+                                    {#if nvl(parsedEquip[key].starforce) !== "0"}
+                                        <span class="star">★{parsedEquip[key].starforce}</span>
+                                    {/if}
+                                    <span>{parsedEquip[key].item_name}{(parsedEquip[key].special_ring_level !== 0)?` ${parsedEquip[key].special_ring_level}레벨`:""}</span>
+                                </span>
                             </div>
                             <div class="item-cls">
                                 <span>{calculateOption(parsedEquip[key],main,parsedData.basic.character_class,atkStatMulti,atkStatMultiXenon)}</span>
@@ -290,116 +277,102 @@
         {/if}
     </div>
 {/if}
-<div class="item-modal" class:is-show={isModalOpen}>
-    <div class="modal-content">
-        <div class="modal-header">
-            <span>
-                {#if nvl(selectedItem.starforce) !== "0"}
-                    <span class="star">★{selectedItem.starforce}</span>
+<Modal bind:modal={equipModal}>
+    <span slot="header">
+        {#if nvl(selectedItem.starforce) !== "0"}
+            <span class="star">★{selectedItem.starforce}</span>
+        {/if}
+        <span>{selectedItem.item_name}{(selectedItem.special_ring_level !== 0)?` ${selectedItem.special_ring_level}레벨`:""}</span>
+    </span>
+    <div slot="content">
+        <div class="item-main-info">
+            <div class="modal-item-img-wrapper">
+                <img class="modal-item-img" src="{selectedItem.item_shape_icon}">
+            </div>
+            <div class="item-info">
+                {#if selectedItem["soul_name"]}
+                    <span>{selectedItem["soul_name"].replace("소울 적용","")}</span>
                 {/if}
                 <span>{selectedItem.item_name}{(selectedItem.special_ring_level !== 0)?` ${selectedItem.special_ring_level}레벨`:""}</span>
-            </span>
-            <button class="btn-close" on:click={modalClose}>
-                <Close/>
-            </button>
-        </div>
-        <div class="modal-body">
-            <div class="item-main-info">
-                <div class="modal-item-img-wrapper">
-                    <img class="modal-item-img" src="{selectedItem.item_shape_icon}">
-                </div>
-                <div class="item-info">
-                    {#if selectedItem["soul_name"]}
-                        <span>{selectedItem["soul_name"].replace("소울 적용","")}</span>
-                    {/if}
-                    <span>{selectedItem.item_name}{(selectedItem.special_ring_level !== 0)?` ${selectedItem.special_ring_level}레벨`:""}</span>
-                    {#if nvl(selectedItem.starforce) !== "0"}
-                        <span>{selectedItem.starforce}성 강화</span>
-                    {/if}
-                    <span>level: {selectedItem.item_base_option?.base_equipment_level}</span>
-                </div>
+                {#if nvl(selectedItem.starforce) !== "0"}
+                    <span>{selectedItem.starforce}성 강화</span>
+                {/if}
+                <span>level: {selectedItem.item_base_option?.base_equipment_level}</span>
             </div>
-            <div class="stat">
-                {#if selectedItem.item_total_option}
-                    {#each itemOptionOrder1 as option,i}
-                        {#if nvl(selectedItem.item_total_option[option.key]) != 0}
-                            <div>
-                                <span>
-                                    <span>{option.value} : <span class="highlight">{selectedItem.item_total_option[option.key]}{#if option.per}%{/if}</span></span>
+        </div>
+        <div class="stat">
+            {#if selectedItem.item_total_option}
+                {#each itemOptionOrder1 as option,i}
+                    {#if nvl(selectedItem.item_total_option[option.key]) != 0}
+                        <div>
+                            <span>
+                                <span>{option.value} : <span class="highlight">{selectedItem.item_total_option[option.key]}{#if option.per}%{/if}</span></span>
 
-                                    {#if nvl(selectedItem.item_add_option[option.key]) != 0
-                                    || nvl(selectedItem.item_etc_option[option.key]) != 0
-                                    || nvl(selectedItem.item_starforce_option[option.key]) != 0
-                                    || nvl(selectedItem.item_exceptional_option[option.key]) != 0}
-                                        <span>( </span><span class="highlight">{nvl(selectedItem?.item_base_option)[option.key]}</span>
-                                        {#if nvl(selectedItem.item_add_option[option.key]) != 0}
-                                            <span class="option1">+{selectedItem.item_add_option[option.key]}</span>
-                                        {/if}
-                                        {#if nvl(selectedItem.item_etc_option[option.key]) != 0}
-                                            <span class="option2">+{selectedItem.item_etc_option[option.key]}</span>
-                                        {/if}
-                                        {#if nvl(selectedItem.item_starforce_option[option.key]) != 0}
-                                            <span class="option3">+{selectedItem.item_starforce_option[option.key]}</span>
-                                        {/if}
-                                        {#if nvl(selectedItem.item_exceptional_option[option.key]) != 0}
-                                            <span class="option4">+{selectedItem.item_exceptional_option[option.key]}</span>
-                                        {/if}
-                                        <span>)</span>
+                                {#if nvl(selectedItem.item_add_option[option.key]) != 0
+                                || nvl(selectedItem.item_etc_option[option.key]) != 0
+                                || nvl(selectedItem.item_starforce_option[option.key]) != 0
+                                || nvl(selectedItem.item_exceptional_option[option.key]) != 0}
+                                    <span>( </span><span class="highlight">{nvl(selectedItem?.item_base_option)[option.key]}</span>
+                                    {#if nvl(selectedItem.item_add_option[option.key]) != 0}
+                                        <span class="option1">+{selectedItem.item_add_option[option.key]}</span>
                                     {/if}
-                                </span>
-                            </div>
-                        {/if}
-                    {/each}
-                {/if}
-                <div>
-                    <span>가위 사용 가능 횟수 : <span class="highlight">{(selectedItem.cuttable_count==255)?0:selectedItem.cuttable_count}</span></span>
-                </div>
-                {#if selectedItem.potential_option_grade}
-                    <div class="divider"></div>
-                    <div>
-                        <div class='{gradeMapper[selectedItem.potential_option_grade]}'>잠재옵션</div>
-                        <div class='cube {gradeMapper[selectedItem.potential_option_grade]}'>{optionParse(selectedItem.potential_option_1)}</div>
-                        <div class='cube {gradeMapper[selectedItem.potential_option_grade]}'>{optionParse(selectedItem.potential_option_2)}</div>
-                        <div class='cube {gradeMapper[selectedItem.potential_option_grade]}'>{optionParse(selectedItem.potential_option_3)}</div>
-                    </div>
-                {/if}
-                {#if selectedItem.additional_potential_option_grade}
-                    <div class="divider"></div>
-                    <div>
-                        <div class='{gradeMapper[selectedItem.additional_potential_option_grade]}'>에디셔널 잠재옵션</div>
-                        <div class='cube {gradeMapper[selectedItem.additional_potential_option_grade]}'>{optionParse(selectedItem.additional_potential_option_1)}</div>
-                        <div class='cube {gradeMapper[selectedItem.additional_potential_option_grade]}'>{optionParse(selectedItem.additional_potential_option_2)}</div>
-                        <div class='cube {gradeMapper[selectedItem.additional_potential_option_grade]}'>{optionParse(selectedItem.additional_potential_option_3)}</div>
-                    </div>
-                {/if}
-                {#if selectedItem.soul_option}
-                    <div class="divider"></div>
-                    <div>
-                        <span>{selectedItem.soul_name}</span>
-                        <span class="highlight">{selectedItem.soul_option}</span>
-                    </div>
-                {/if}
-                {#if selectedItem.item_description}
-                    <div class="divider"></div>
-                    <div class="modal-wrap">
-                        <span>{selectedItem.item_description}</span>
-                    </div>
-                {/if}
+                                    {#if nvl(selectedItem.item_etc_option[option.key]) != 0}
+                                        <span class="option2">+{selectedItem.item_etc_option[option.key]}</span>
+                                    {/if}
+                                    {#if nvl(selectedItem.item_starforce_option[option.key]) != 0}
+                                        <span class="option3">+{selectedItem.item_starforce_option[option.key]}</span>
+                                    {/if}
+                                    {#if nvl(selectedItem.item_exceptional_option[option.key]) != 0}
+                                        <span class="option4">+{selectedItem.item_exceptional_option[option.key]}</span>
+                                    {/if}
+                                    <span>)</span>
+                                {/if}
+                            </span>
+                        </div>
+                    {/if}
+                {/each}
+            {/if}
+            <div>
+                <span>가위 사용 가능 횟수 : <span class="highlight">{(selectedItem.cuttable_count==255)?0:selectedItem.cuttable_count}</span></span>
             </div>
-        </div>
-        <div class="modal-footer">
+            {#if selectedItem.potential_option_grade}
+                <div class="divider"></div>
+                <div>
+                    <div class='{gradeMapper[selectedItem.potential_option_grade]}'>잠재옵션</div>
+                    <div class='cube {gradeMapper[selectedItem.potential_option_grade]}'>{optionParse(selectedItem.potential_option_1)}</div>
+                    <div class='cube {gradeMapper[selectedItem.potential_option_grade]}'>{optionParse(selectedItem.potential_option_2)}</div>
+                    <div class='cube {gradeMapper[selectedItem.potential_option_grade]}'>{optionParse(selectedItem.potential_option_3)}</div>
+                </div>
+            {/if}
+            {#if selectedItem.additional_potential_option_grade}
+                <div class="divider"></div>
+                <div>
+                    <div class='{gradeMapper[selectedItem.additional_potential_option_grade]}'>에디셔널 잠재옵션</div>
+                    <div class='cube {gradeMapper[selectedItem.additional_potential_option_grade]}'>{optionParse(selectedItem.additional_potential_option_1)}</div>
+                    <div class='cube {gradeMapper[selectedItem.additional_potential_option_grade]}'>{optionParse(selectedItem.additional_potential_option_2)}</div>
+                    <div class='cube {gradeMapper[selectedItem.additional_potential_option_grade]}'>{optionParse(selectedItem.additional_potential_option_3)}</div>
+                </div>
+            {/if}
+            {#if selectedItem.soul_option}
+                <div class="divider"></div>
+                <div>
+                    <span>{selectedItem.soul_name}</span>
+                    <span class="highlight">{selectedItem.soul_option}</span>
+                </div>
+            {/if}
+            {#if selectedItem.item_description}
+                <div class="divider"></div>
+                <div class="modal-wrap">
+                    <span>{selectedItem.item_description}</span>
+                </div>
+            {/if}
         </div>
     </div>
-</div>
-<div class="item-modal" class:is-show={isSettingOpen}>
-    <div class="modal-content">
-        <div class="modal-header">
-            <span>설정</span>
-            <button class="btn-close" on:click={settingClose}>
-                <Close/>
-            </button>
-        </div>
-        <div class="modal-body">
+</Modal>
+<Modal bind:modal={settingModal}>
+    <span slot="header">설정</span>
+    <div slot="content">
+        <div class="symbol-info">
             <div class="setting-row">
                 <ul>
                     <li>
@@ -412,19 +385,21 @@
             </div>
         </div>
     </div>
-</div>
+</Modal>
 <script>
     import {calculateOption, inputFloat, nvl, optionParse} from "../js/common";
-    import Close from "./icon/Close.svelte";
     import Refreash from "./icon/Refreash.svelte";
     import Setting from "./icon/Setting.svelte";
     import ItemType1 from "./icon/ItemType1.svelte";
     import ItemType2 from "./icon/ItemType2.svelte";
+    import Modal from "./Modal.svelte";
 
     export let parsedData;
     export let parsedStat;
     export let refresh;
 
+    let equipModal;
+    let settingModal;
     let itemOrderMode = 1;
     let itemOrder1 = [
         '엠블렘',
@@ -550,8 +525,6 @@
         "레전드리": "green",
     }
     let selectedItem = {};
-    let isModalOpen = false;
-    let isSettingOpen = false;
     let atkStatMulti = nvl(localStorage.getItem("atkStatMulti"),4);
     let atkStatMultiXenon = nvl(localStorage.getItem("atkStatMultiXenon"),7);
     let parsedEquip = null;
@@ -591,35 +564,11 @@
 
     function clickItem(item){
         selectedItem = item;
-        modalOpen();
-    }
-
-    function modalOpen(){
-        isModalOpen = true;
-        let body = document.querySelector("body");
-        body.style.overflow = "hidden";
-    }
-
-    function modalClose(){
-        isModalOpen = false;
-        let body = document.querySelector("body");
-        body.style.overflow = "auto";
+        equipModal.show();
     }
 
     function changeDisplayMode(){
         itemOrderMode ^= 1;
-    }
-
-    function settingOpen(){
-        isSettingOpen = true;
-        let body = document.querySelector("body");
-        body.style.overflow = "hidden";
-    }
-
-    function settingClose(){
-        isSettingOpen = false;
-        let body = document.querySelector("body");
-        body.style.overflow = "auto";
     }
 
     function parseEquip(){
