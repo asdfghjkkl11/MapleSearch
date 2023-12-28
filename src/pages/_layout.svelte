@@ -61,6 +61,7 @@
         <slot/>
     </div>
     <div class="footer">
+        <span>Data by NEXON Open API</span>
         <span>Copyright © 2023 asdfghjkkl11</span>
     </div>
 </div>
