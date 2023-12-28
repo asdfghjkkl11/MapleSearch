@@ -10,6 +10,7 @@
         top: 0;
         background: var(--modal-background);
         box-sizing: border-box;
+        z-index: 3;
     }
     .is-show{
         display: flex;
