@@ -31,6 +31,7 @@
     .footer{
         height: 64px;
         display: flex;
+        flex-direction: column;
         align-items: center;
         justify-content: center;
         font-weight: 500;
@@ -47,6 +48,9 @@
     @media (max-width: 1200px) {
         .header{
             height: 48px;
+        }
+        .body {
+            min-height: calc(100vh - 112px);
         }
     }
 </style>
