@@ -52,6 +52,14 @@
         stroke: var(--highlight);
         fill: none;
     }
+    .block-span{
+        min-width: 56px;
+        position: absolute;
+        top: 0;
+        left: 0;
+        text-align: center;
+        font-weight: 500;
+    }
     @media (max-width: 1630px) {
         .union {
             width: 360px;
@@ -70,7 +78,10 @@
         <span class="highlight title">{grade} (<span class="{cssList[index]}">{level}</span>)</span>
         <div class="union-block">
             <div class="block-border">
-            <UnionBorder/>
+                <UnionBorder/>
+                {#each unionBlockList as span,i}
+                    <span class="block-span highlight" style="top: {span.top}px; left: {span.left}px;">{span.name}</span>
+                {/each}
             </div>
             <table class="block" style="width: {x * tileSize}px; height: {y * tileSize}px;">
                 {#each Array(y) as Y, i}
@@ -133,6 +144,7 @@
     let unionOccupiedStat = nvl(parsedData["union-raider"].union_occupied_stat,[]).sort(sortCallback);
     let unionRaiderStat = nvl(parsedData["union-raider"].union_raider_stat,[]).sort();
     let unionBlock = nvl(parsedData["union-raider"].union_block,[]);
+    let unionInnerStat =  nvl(parsedData["union-raider"].union_inner_stat,[]);
     let grade = parsedData.union.union_grade;
     let level = parsedData.union.union_level;
     let gradeList = ["노비스","베테랑","마스터","그랜드 마스터","슈프림"];
@@ -145,6 +157,71 @@
     let y = 20;
     let tileSize = 16;
     let tileSet = new Set();
+    let unionBlockList = [{
+        name: "",
+        top: "85",
+        left: "115"
+    },{
+        name: "",
+        top: "85",
+        left: "180"
+    },{
+        name: "",
+        top: "135",
+        left: "212"
+    },{
+        name: "",
+        top: "165",
+        left: "212"
+    },{
+        name: "",
+        top: "215",
+        left: "180"
+    },{
+        name: "",
+        top: "215",
+        left: "115"
+    },{
+        name: "",
+        top: "135",
+        left: "85"
+    },{
+        name: "",
+        top: "165",
+        left: "85"
+    },{
+        name: "내성",
+        top: "30",
+        left: "115"
+    },{
+        name: "경험치",
+        top: "30",
+        left: "180"
+    },{
+        name: "크확",
+        top: "110",
+        left: "285"
+    },{
+        name: "보공",
+        top: "190",
+        left: "285"
+    },{
+        name: "일몹뎀",
+        top: "270",
+        left: "180"
+    },{
+        name: "벞지",
+        top: "270",
+        left: "115"
+    },{
+        name: "방무",
+        top: "110",
+        left: "10"
+    },{
+        name: "크뎀",
+        top: "190",
+        left: "10"
+    }];
 
     $:{
         valueList = [0,0,0,0,0];
@@ -189,6 +266,10 @@
             let key = keyList[i];
             let value = valueList[i];
             raiderList.push(`${key} ${value}${(key==="크리티컬 확률")?"%":""} 증가`);
+        }
+
+        for(let i = 0; i < unionInnerStat.length; i++) {
+            unionBlockList[i].name = unionInnerStat[i].stat_field_effect.replace("유니온 ","");
         }
 
         raiderList = raiderList.sort(sortCallback);
