@@ -32,9 +32,15 @@
     }
     .grid-col-2{
         display: flex;
+        flex-direction: column;
         align-items: center;
         justify-content: center;
         grid-column: span 2 / auto;
+    }
+    .date-area{
+        display: flex;
+        align-items: center;
+        gap: 8px;
     }
     .ability{
         grid-column: span 2 / auto;
@@ -112,6 +118,17 @@
                     <div class="grid-col-2">
                         <div class="character-img-wrapper">
                             <img class="character-img" src="{parsedData.basic.character_image}">
+                        </div>
+                        <div class="date-area">
+                            <span>검색기준: </span>
+                            <DateInput
+                                value="{date}"
+                                format="yyyy-MM-dd"
+                                placeholder="{date}"
+                                closeOnSelection="{true}"
+                                min="{minDate}"
+                                max="{maxDate}"
+                                on:select={selectDate}/>
                         </div>
                     </div>
                     <div>{parsedData.basic.character_level}</div>
@@ -200,6 +217,8 @@
     import Hskill from "../../component/Hskill.svelte";
     import Symbol from "../../component/Symbol.svelte";
     import Union from "../../component/Union.svelte";
+    import dayjs from "dayjs";
+    import DateInput from "../../component/datePicker/DateInput.svelte";
 
     let name = decodeURIComponent($params.name);
     const myHeaders = new Headers();
@@ -207,6 +226,10 @@
     let data = init();
     let parsedData = {}
     let parsedStat = null;
+    let searchDate = dayjs().subtract(1,"day").format("YYYY-MM-DD");
+    let date = dayjs().subtract(1,"day").toDate();
+    let minDate = dayjs("2023-12-21").toDate();
+    let maxDate = dayjs().subtract(1,"day").toDate();
 
     let gradeMapper = {
         "레어": "blue",
@@ -243,13 +266,16 @@
         return {};
     }
 
-    async function getData(){
-        let cache = await get_idb(name);
-        if(cache){
-            let time = new Date(cache.time).getDate();
-            let now = new Date().getDate();
+    function selectDate(e){
+        date = e.detail;
+        searchDate = dayjs(date).format("YYYY-MM-DD");
+        data = getData();
+    }
 
-            if(time === now){
+    async function getData(){
+        let cache = await get_idb(`${name}`);
+        if(cache){
+            if(searchDate === cache.date){
                 parsedData = cache.data;
                 return cache.data;
             }
@@ -261,7 +287,8 @@
         return fetch("https://mapleserver.asdfghjkkl11.com/maple/getInfo",{
             "method": "POST",
             "body": JSON.stringify({
-                "ID": name
+                "ID": name,
+                "date": searchDate
             }),
             headers: myHeaders,
         }).then(async response => {
@@ -269,9 +296,10 @@
 
             if(data.basic) {
                 parsedData = data;
-                await set_idb(name,{
+                await set_idb(`${name}`,{
                     data: data,
-                    time: new Date().getTime()
+                    date: searchDate,
+                    name: name
                 });
                 return data;
             }else{

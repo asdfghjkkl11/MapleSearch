@@ -86,6 +86,14 @@ body[data-theme='light-mode'] {
     --input-text-background: #e9ebf1;
     --scrollbar-thumb: #787878;
     --scrollbar-track: #cdcdcd;
+
+    --date-input-width: 100px;
+    --date-picker-foreground: #f7f7f7;
+    --date-picker-background: #16171c;
+    --date-picker-highlight-border: hsl(var(--deg), 98%, 49%);
+    --date-picker-highlight-shadow: hsla(var(--deg), 98%, 49%, 50%);
+    --date-picker-selected-color: hsl(var(--deg), 100%, 85%);
+    --date-picker-selected-background: hsla(var(--deg), 98%, 49%, 20%);
 }
 
 body[data-theme='dark-mode'] {
@@ -117,6 +125,14 @@ body[data-theme='dark-mode'] {
     --input-text-background: #2e3033;
     --scrollbar-thumb: #2f3542;
     --scrollbar-track: grey;
+
+    --date-input-width: 100px;
+    --date-picker-foreground: #f7f7f7;
+    --date-picker-background: #16171c;
+    --date-picker-highlight-border: hsl(var(--deg), 98%, 49%);
+    --date-picker-highlight-shadow: hsla(var(--deg), 98%, 49%, 50%);
+    --date-picker-selected-color: hsl(var(--deg), 100%, 85%);
+    --date-picker-selected-background: hsla(var(--deg), 98%, 49%, 20%);
 }
 #routify-app{
     display: flex;
