@@ -88,8 +88,8 @@ body[data-theme='light-mode'] {
     --scrollbar-track: #cdcdcd;
 
     --date-input-width: 100px;
-    --date-picker-foreground: #f7f7f7;
-    --date-picker-background: #16171c;
+    --date-picker-foreground: #16171c;
+    --date-picker-background: #f7f7f7;
     --date-picker-highlight-border: hsl(var(--deg), 98%, 49%);
     --date-picker-highlight-shadow: hsla(var(--deg), 98%, 49%, 50%);
     --date-picker-selected-color: hsl(var(--deg), 100%, 85%);
