@@ -45,12 +45,60 @@
         cursor: pointer;
         fill: var(--highlight);
     }
+    #loader-div{
+        position: absolute;
+        z-index: 99999;
+        left: calc(50% - 66px);
+        top: calc(50% - 66px);
+    }
+    #loader-div:before, #loader-div:after {
+        content: "";
+        position: absolute;
+        top: -8vh;
+        width: 100px;
+        height: 100px;
+        border-radius: 100%;
+        border: 16px solid transparent;
+        border-top-color: var(--green);
+    }
+
+    #loader-div:before {
+        z-index: 100;
+        animation: spin 1s infinite;
+    }
+
+    #loader-div:after {
+        border: 16px solid var(--border);
+    }
+
+    .loading-background{
+        width: 100%;
+        height: 100%;
+        opacity: 50%;
+        background-color: #c1c1c1;
+        position: fixed;
+        z-index: 10000;
+    }
     @media (max-width: 1200px) {
         .header{
             height: 48px;
         }
         .body {
             min-height: calc(100vh - 112px);
+        }
+    }
+    @keyframes spin {
+        0% {
+            -webkit-transform: rotate(0deg);
+            -ms-transform: rotate(0deg);
+            -o-transform: rotate(0deg);
+            transform: rotate(0deg);
+        }
+        100% {
+            -webkit-transform: rotate(360deg);
+            -ms-transform: rotate(360deg);
+            -o-transform: rotate(360deg);
+            transform: rotate(360deg);
         }
     }
 </style>
@@ -68,6 +116,9 @@
         <span>Data by NEXON Open API</span>
         <span>Copyright © 2023 asdfghjkkl11</span>
     </div>
+</div>
+<div class="loading-background" style="display: none;">
+    <div id="loader-div"></div>
 </div>
 <script>
     import {afterPageLoad} from "@roxi/routify";

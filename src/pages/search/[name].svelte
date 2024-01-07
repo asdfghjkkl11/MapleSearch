@@ -223,7 +223,7 @@
 </div>
 <script>
     import {params,afterPageLoad} from "@roxi/routify";
-    import {get_idb, inputInt, nvl, parseIntText, set_idb} from "../../js/common";
+    import {g_loading_hide, g_loading_show, get_idb, inputInt, nvl, parseIntText, set_idb} from "../../js/common";
     import Searchbar from "../../component/Searchbar.svelte";
     import Equipment from "../../component/Equipment.svelte";
     import CashEquipment from "../../component/CashEquipment.svelte";
@@ -307,14 +307,21 @@
     }
 
     async function getData(){
-        let cache = await get_idb('search',`${name}`);
-        if(cache){
-            if(searchDate === cache.date){
-                parsedData = cache.data;
-                return cache.data;
+        try {
+            g_loading_show();
+            let cache = await get_idb('search',`${name}`);
+            if(cache){
+                if(searchDate === cache.date){
+                    parsedData = cache.data;
+                    return cache.data;
+                }
             }
+            return getDataFromServer();
+        }catch (e) {
+            console.log(e)
+        }finally {
+            g_loading_hide();
         }
-        return getDataFromServer();
     }
 
     async function getDataFromServer(){
@@ -354,115 +361,128 @@
     }
 
     function refresh(){
-        data = getDataFromServer();
+        try {
+            g_loading_show();
+            data = getDataFromServer();
+        }catch (e) {
+            console.log(e)
+        }finally {
+            g_loading_hide();
+        }
     }
 
     async function makeProfile(){
-        console.log(parsedData)
-        let character = parsedData.basic;
-        let symbols = nvl(parsedData["symbol-equipment"].symbol,[]);
-        let skills = nvl(parsedData.hexamatrix.character_skill,[]);
-        let theme = document.body.dataset.theme;
-        let canvas = document.createElement('canvas');
+        try {
+            g_loading_show();
+            let character = parsedData.basic;
+            let symbols = nvl(parsedData["symbol-equipment"].symbol,[]);
+            let skills = nvl(parsedData.hexamatrix.character_skill,[]);
+            let theme = document.body.dataset.theme;
+            let canvas = document.createElement('canvas');
 
-        let height = parseInt(skills.length/15) * 60;
-        canvas.width = 620;
-        canvas.height = 240 + height;
+            let height = parseInt(skills.length/15) * 60;
+            canvas.width = 620;
+            canvas.height = 240 + height;
 
-        let context = canvas.getContext("2d");
-        context.strokeStyle = (theme==="dark-mode")?"#141517":"#fefefe";
-        context.fillStyle = (theme==="dark-mode")?"#141517":"#fefefe";
-        context.beginPath();
-        context.roundRect(0, 0, canvas.width, canvas.height, 24);
-        context.stroke();
-        context.fill();
+            let context = canvas.getContext("2d");
+            context.strokeStyle = (theme==="dark-mode")?"#141517":"#fefefe";
+            context.fillStyle = (theme==="dark-mode")?"#141517":"#fefefe";
+            context.beginPath();
+            context.roundRect(0, 0, canvas.width, canvas.height, 24);
+            context.stroke();
+            context.fill();
 
-        document.body.appendChild(canvas);
-        let characterImage = await getImage(character.character_image);
-        await addImage(characterImage,10,5);
+            document.body.appendChild(canvas);
+            let characterImage = await getImage(character.character_image);
+            await addImage(characterImage,10,5);
 
-        let worldIcon = await getImage(`https://s3.ap-northeast-2.amazonaws.com/meso.gg/image/${worldMapper[parsedData.basic.world_name]}`);
-        await addImage(worldIcon, 110, 17);
+            let worldIcon = await getImage(`https://s3.ap-northeast-2.amazonaws.com/meso.gg/image/${worldMapper[parsedData.basic.world_name]}`);
+            await addImage(worldIcon, 110, 17);
 
-        context = canvas.getContext("2d");
-        context.strokeStyle = (theme==="dark-mode")?"#ffffff":"#141517";
-        context.fillStyle = (theme==="dark-mode")?"#ffffff":"#141517";
-        context.font = "16px Pretendard bold";
-        context.fillText(`${parsedData.basic.world_name} ${parsedData.basic.character_name} level: ${parsedData.basic.character_level} ${parsedData.basic.character_class} 유니온: ${parsedData.union.union_level}`, 126, 30);
-        context.fillText(`전투력: ${parseIntText(parsedStat['전투력']).slice(0, -4)} 보공: ${parsedStat['보스 몬스터 데미지']}% 방무: ${parsedStat['방어율 무시']}% 크뎀: ${parsedStat['크리티컬 데미지']}%`, 110, 50);
-        context.fillText(`HP: ${inputInt(parsedStat['HP'])} STR: ${inputInt(parsedStat['STR'])} DEX: ${inputInt(parsedStat['DEX'])} INT: ${inputInt(parsedStat['INT'])} LUK: ${inputInt(parsedStat['LUK'])}`, 110, 70);
-        context.fillText(`아케인포스: ${inputInt(parsedStat['아케인포스'])} 어센틱포스: ${inputInt(parsedStat['어센틱포스'])} 무릉: ${parsedData.dojang.dojang_best_floor}층 (${parsedData.dojang.dojang_best_time}초)`, 110, 90);
-        context.fillText(`기준날짜: ${dayjs(date).format("YYYY-MM-DD")}`, canvas.width - 170,  canvas.height - 10);
+            context = canvas.getContext("2d");
+            context.strokeStyle = (theme==="dark-mode")?"#ffffff":"#141517";
+            context.fillStyle = (theme==="dark-mode")?"#ffffff":"#141517";
+            context.font = "16px Pretendard bold";
+            context.fillText(`${parsedData.basic.world_name} ${parsedData.basic.character_name} level: ${parsedData.basic.character_level} ${parsedData.basic.character_class} 유니온: ${parsedData.union.union_level}`, 126, 30);
+            context.fillText(`전투력: ${parseIntText(parsedStat['전투력']).slice(0, -4)} 보공: ${parsedStat['보스 몬스터 데미지']}% 방무: ${parsedStat['방어율 무시']}% 크뎀: ${parsedStat['크리티컬 데미지']}%`, 110, 50);
+            context.fillText(`HP: ${inputInt(parsedStat['HP'])} STR: ${inputInt(parsedStat['STR'])} DEX: ${inputInt(parsedStat['DEX'])} INT: ${inputInt(parsedStat['INT'])} LUK: ${inputInt(parsedStat['LUK'])}`, 110, 70);
+            context.fillText(`아케인포스: ${inputInt(parsedStat['아케인포스'])} 어센틱포스: ${inputInt(parsedStat['어센틱포스'])} 무릉: ${parsedData.dojang.dojang_best_floor}층 (${parsedData.dojang.dojang_best_time}초)`, 110, 90);
+            context.fillText(`기준날짜: ${dayjs(date).format("YYYY-MM-DD")}`, canvas.width - 170,  canvas.height - 10);
 
-        context.strokeStyle = (theme==="dark-mode")?"rgba(0,255,163,.9)":"#141517";
-        context.fillStyle = (theme==="dark-mode")?"rgba(0,255,163,.9)":"#141517";
+            context.strokeStyle = (theme==="dark-mode")?"rgba(0,255,163,.9)":"#141517";
+            context.fillStyle = (theme==="dark-mode")?"rgba(0,255,163,.9)":"#141517";
 
-        for(let i = 0; i < symbols.length; i++){
-            let symbol = symbols[i]
-            let symbolIcon = await getImage(`${symbol.symbol_icon}`);
-            await addImage(symbolIcon, 15 + (40*i), 100);
-            let textWidth =  23 + (40*i) + ((symbol.symbol_level<10)?7:0);
-            context.fillText(`${symbol.symbol_level}`,textWidth, 150);
-        }
-        let dX = 0;
-        let dY = 0;
-        for(let i = 0; i < skills.length; i++){
-            let skill = skills[i]
-            let skillIcon = await getImage(`${skill.skill_icon}`);
-            await addImage(skillIcon, 15 + (40*dX), 160 + (60*dY));
-            let textWidth =  20 + (40*dX) + ((skill.skill_level<10)?7:0);
-            context.fillText(`${skill.skill_level}`,textWidth, 210 + (60*dY));
-            dX++;
-            if(15 + (40*dX) > 600){
-                dX = 0;
-                dY++;
+            for(let i = 0; i < symbols.length; i++){
+                let symbol = symbols[i]
+                let symbolIcon = await getImage(`${symbol.symbol_icon}`);
+                await addImage(symbolIcon, 15 + (40*i), 100);
+                let textWidth =  23 + (40*i) + ((symbol.symbol_level<10)?7:0);
+                context.fillText(`${symbol.symbol_level}`,textWidth, 150);
             }
-        }
-
-        const img = canvas.toDataURL('image/png')
-        download(`${parsedData.basic.character_name}_${dayjs(date).format("YYYY-MM-DD")}.png`,img);
-        document.body.removeChild(canvas);
-
-        async function getImage(src){
-            let cache = await get_idb('url',src);
-            if(cache){
-                return cache;
-            }
-            let url = await (await fetch("https://mapleserver.asdfghjkkl11.com/maple/getUrl", {
-                "method": "POST",
-                "body": JSON.stringify({
-                    "url": src
-                }),
-                headers: myHeaders,
-            })).text();
-            await set_idb("url",src,url);
-            return url;
-        }
-        function addImage(src,x,y,width,height){
-            return new Promise((resolve, reject) => {
-                let img = new Image()
-                if(width)
-                    img.width = width;
-                if(height)
-                    img.height = height;
-                img.crossOrigin = 'Anonymous';
-                img.onload = function(){
-                    let context = canvas.getContext('2d');
-                    context.drawImage(img,x,y);
-                    resolve();
+            let dX = 0;
+            let dY = 0;
+            for(let i = 0; i < skills.length; i++){
+                let skill = skills[i]
+                let skillIcon = await getImage(`${skill.skill_icon}`);
+                await addImage(skillIcon, 15 + (40*dX), 160 + (60*dY));
+                let textWidth =  20 + (40*dX) + ((skill.skill_level<10)?7:0);
+                context.fillText(`${skill.skill_level}`,textWidth, 210 + (60*dY));
+                dX++;
+                if(15 + (40*dX) > 600){
+                    dX = 0;
+                    dY++;
                 }
-                img.onerror = reject
-                img.src = src
-            })
-        }
+            }
 
-        function download(filename, filepath) {
-            let element = document.createElement('a');
-            element.setAttribute('href',filepath);
-            element.setAttribute('download', filename);
-            document.body.appendChild(element);
-            element.click();
-            document.body.removeChild(element);
+            const img = canvas.toDataURL('image/png')
+            download(`${parsedData.basic.character_name}_${dayjs(date).format("YYYY-MM-DD")}.png`,img);
+            document.body.removeChild(canvas);
+
+            async function getImage(src){
+                let cache = await get_idb('url',src);
+                if(cache){
+                    return cache;
+                }
+                let url = await (await fetch("https://mapleserver.asdfghjkkl11.com/maple/getUrl", {
+                    "method": "POST",
+                    "body": JSON.stringify({
+                        "url": src
+                    }),
+                    headers: myHeaders,
+                })).text();
+                await set_idb("url",src,url);
+                return url;
+            }
+            function addImage(src,x,y,width,height){
+                return new Promise((resolve, reject) => {
+                    let img = new Image()
+                    if(width)
+                        img.width = width;
+                    if(height)
+                        img.height = height;
+                    img.crossOrigin = 'Anonymous';
+                    img.onload = function(){
+                        let context = canvas.getContext('2d');
+                        context.drawImage(img,x,y);
+                        resolve();
+                    }
+                    img.onerror = reject
+                    img.src = src
+                })
+            }
+
+            function download(filename, filepath) {
+                let element = document.createElement('a');
+                element.setAttribute('href',filepath);
+                element.setAttribute('download', filename);
+                document.body.appendChild(element);
+                element.click();
+                document.body.removeChild(element);
+            }
+        }catch (e) {
+            console.log(e)
+        }finally {
+            g_loading_hide();
         }
     }
 </script>

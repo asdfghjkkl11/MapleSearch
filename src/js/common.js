@@ -178,3 +178,10 @@ export function inputFloat(str,fixed = null){
 
     return minus + integer + point + float;
 }
+
+export function g_loading_show(){
+    document.querySelector(".loading-background").style.display = "block";
+}
+export function g_loading_hide(){
+    document.querySelector(".loading-background").style.display = "none";
+}
