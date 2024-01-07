@@ -420,7 +420,7 @@
         }
 
         const img = canvas.toDataURL('image/png')
-        download("test.png",img);
+        download(`${parsedData.basic.character_name}_${dayjs(date).format("YYYY-MM-DD")}.png`,img);
         document.body.removeChild(canvas);
 
         async function getImage(src){
