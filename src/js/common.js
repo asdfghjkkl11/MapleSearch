@@ -93,26 +93,35 @@ export function calculateOption(item, main, cls ,atkStatMulti, atkStatMultiXenon
     }
 }
 
-const dbPromise = openDB('maple_search', 1, {
-    upgrade(db) {
-        db.createObjectStore('search');
+const dbPromise = openDB('maple_search', 3, {
+    async upgrade(db) {
+        try {
+            db.createObjectStore('search');
+        }catch (e){
+            console.log(e)
+        }
+        try {
+            db.createObjectStore('url');
+        }catch (e){
+            console.log(e)
+        }
     },
 });
 
-export async function get_idb(key) {
-    return (await dbPromise).get('search', key);
+export async function get_idb(storeName, key) {
+    return (await dbPromise).get(storeName, key);
 }
-export async function set_idb(key, val) {
-    return (await dbPromise).put('search', val, key);
+export async function set_idb(storeName, key, val) {
+    return (await dbPromise).put(storeName, val, key);
 }
-export async function del_idb(key) {
-    return (await dbPromise).delete('search', key);
+export async function del_idb(storeName, key) {
+    return (await dbPromise).delete(storeName, key);
 }
-export async function clear_idb() {
-    return (await dbPromise).clear('search');
+export async function clear_idb(storeName) {
+    return (await dbPromise).clear(storeName);
 }
-export async function keys_idb() {
-    return (await dbPromise).getAllKeys('search');
+export async function keys_idb(storeName) {
+    return (await dbPromise).getAllKeys(storeName);
 }
 
 export function parseIntText(num){

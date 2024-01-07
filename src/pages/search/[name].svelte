@@ -93,6 +93,14 @@
     .btn.active{
         background: var(--btn-background-active);
     }
+    .profile-btn{
+        padding: 4px 8px;
+    }
+    .character .flex{
+        display: flex;
+        align-items: center;
+        gap: 4px;
+    }
     @media (max-width: 1024px) {
         .info {
             flex-direction: column;
@@ -129,11 +137,18 @@
                                 min="{minDate}"
                                 max="{maxDate}"
                                 on:select={selectDate}/>
+                            <button class="btn profile-btn" on:click={makeProfile}>
+                                프로필 만들기
+                            </button>
                         </div>
                     </div>
                     <div>{parsedData.basic.character_level}</div>
                     <div>{parsedData.basic.character_name}</div>
-                    <div>{parsedData.basic.world_name}</div>
+                    <div class="flex">{parsedData.basic.world_name}
+                        {#if worldMapper[parsedData.basic.world_name]}
+                            <img class="world-icon" src="https://s3.ap-northeast-2.amazonaws.com/meso.gg/image/{worldMapper[parsedData.basic.world_name]}">
+                        {/if}
+                    </div>
                     <div>{parsedData.basic.character_class}</div>
                     <div>전투력</div>
                     <div>{parseIntText(parsedStat['전투력'])}</div>
@@ -243,7 +258,26 @@
     let unionIndex = 0;
     let tabList = ["장비","캐시장비","링크스킬","5차스킬","6차스킬","심볼","유니온"]
     let tabIndex = 0;
-
+    let worldMapper = {
+        "리부트": "icon_3.png",
+        "리부트2": "icon_2.png",
+        "오로라": "icon_4.png",
+        "레드": "icon_5.png",
+        "이노시스": "icon_6.png",
+        "유니온": "icon_7.png",
+        "스카니아": "icon_8.png",
+        "루나": "icon_9.png",
+        "제니스": "icon_10.png",
+        "크로아": "icon_11.png",
+        "베라": "icon_12.png",
+        "엘리시움": "icon_13.png",
+        "아케인": "icon_14.png",
+        "노바": "icon_15.png",
+        "버닝": "icon_16.png",
+        "버닝2": "icon_17.png",
+        "버닝3": "icon_18.png",
+        "버닝4": "icon_19.png"
+    }
     $:{
         console.log(parsedData)
         parsedStat = parseStat();
@@ -273,7 +307,7 @@
     }
 
     async function getData(){
-        let cache = await get_idb(`${name}`);
+        let cache = await get_idb('search',`${name}`);
         if(cache){
             if(searchDate === cache.date){
                 parsedData = cache.data;
@@ -296,7 +330,7 @@
 
             if(data.basic) {
                 parsedData = data;
-                await set_idb(`${name}`,{
+                await set_idb('search', `${name}`,{
                     data: data,
                     date: searchDate,
                     name: name
@@ -323,4 +357,112 @@
         data = getDataFromServer();
     }
 
+    async function makeProfile(){
+        console.log(parsedData)
+        let character = parsedData.basic;
+        let symbols = nvl(parsedData["symbol-equipment"].symbol,[]);
+        let skills = nvl(parsedData.hexamatrix.character_skill,[]);
+        let theme = document.body.dataset.theme;
+        let canvas = document.createElement('canvas');
+
+        let height = parseInt(skills.length/15) * 60;
+        canvas.width = 620;
+        canvas.height = 240 + height;
+
+        let context = canvas.getContext("2d");
+        context.strokeStyle = (theme==="dark-mode")?"#141517":"#fefefe";
+        context.fillStyle = (theme==="dark-mode")?"#141517":"#fefefe";
+        context.beginPath();
+        context.roundRect(0, 0, canvas.width, canvas.height, 24);
+        context.stroke();
+        context.fill();
+
+        document.body.appendChild(canvas);
+        let characterImage = await getImage(character.character_image);
+        await addImage(characterImage,10,5);
+
+        let worldIcon = await getImage(`https://s3.ap-northeast-2.amazonaws.com/meso.gg/image/${worldMapper[parsedData.basic.world_name]}`);
+        await addImage(worldIcon, 110, 17);
+
+        context = canvas.getContext("2d");
+        context.strokeStyle = (theme==="dark-mode")?"#ffffff":"#141517";
+        context.fillStyle = (theme==="dark-mode")?"#ffffff":"#141517";
+        context.font = "16px Pretendard bold";
+        context.fillText(`${parsedData.basic.world_name} ${parsedData.basic.character_name} level: ${parsedData.basic.character_level} ${parsedData.basic.character_class} 유니온: ${parsedData.union.union_level}`, 126, 30);
+        context.fillText(`전투력: ${parseIntText(parsedStat['전투력']).slice(0, -4)} 보공: ${parsedStat['보스 몬스터 데미지']}% 방무: ${parsedStat['방어율 무시']}% 크뎀: ${parsedStat['크리티컬 데미지']}%`, 110, 50);
+        context.fillText(`HP: ${inputInt(parsedStat['HP'])} STR: ${inputInt(parsedStat['STR'])} DEX: ${inputInt(parsedStat['DEX'])} INT: ${inputInt(parsedStat['INT'])} LUK: ${inputInt(parsedStat['LUK'])}`, 110, 70);
+        context.fillText(`아케인포스: ${inputInt(parsedStat['아케인포스'])} 어센틱포스: ${inputInt(parsedStat['어센틱포스'])} 무릉: ${parsedData.dojang.dojang_best_floor}층 (${parsedData.dojang.dojang_best_time}초)`, 110, 90);
+        context.fillText(`기준날짜: ${dayjs(date).format("YYYY-MM-DD")}`, canvas.width - 170,  canvas.height - 10);
+
+        context.strokeStyle = (theme==="dark-mode")?"rgba(0,255,163,.9)":"#141517";
+        context.fillStyle = (theme==="dark-mode")?"rgba(0,255,163,.9)":"#141517";
+
+        for(let i = 0; i < symbols.length; i++){
+            let symbol = symbols[i]
+            let symbolIcon = await getImage(`${symbol.symbol_icon}`);
+            await addImage(symbolIcon, 15 + (40*i), 100);
+            let textWidth =  23 + (40*i) + ((symbol.symbol_level<10)?7:0);
+            context.fillText(`${symbol.symbol_level}`,textWidth, 150);
+        }
+        let dX = 0;
+        let dY = 0;
+        for(let i = 0; i < skills.length; i++){
+            let skill = skills[i]
+            let skillIcon = await getImage(`${skill.skill_icon}`);
+            await addImage(skillIcon, 15 + (40*dX), 160 + (60*dY));
+            let textWidth =  20 + (40*dX) + ((skill.skill_level<10)?7:0);
+            context.fillText(`${skill.skill_level}`,textWidth, 210 + (60*dY));
+            dX++;
+            if(15 + (40*dX) > 600){
+                dX = 0;
+                dY++;
+            }
+        }
+
+        const img = canvas.toDataURL('image/png')
+        download("test.png",img);
+        document.body.removeChild(canvas);
+
+        async function getImage(src){
+            let cache = await get_idb('url',src);
+            if(cache){
+                return cache;
+            }
+            let url = await (await fetch("https://mapleserver.asdfghjkkl11.com/maple/getUrl", {
+                "method": "POST",
+                "body": JSON.stringify({
+                    "url": src
+                }),
+                headers: myHeaders,
+            })).text();
+            await set_idb("url",src,url);
+            return url;
+        }
+        function addImage(src,x,y,width,height){
+            return new Promise((resolve, reject) => {
+                let img = new Image()
+                if(width)
+                    img.width = width;
+                if(height)
+                    img.height = height;
+                img.crossOrigin = 'Anonymous';
+                img.onload = function(){
+                    let context = canvas.getContext('2d');
+                    context.drawImage(img,x,y);
+                    resolve();
+                }
+                img.onerror = reject
+                img.src = src
+            })
+        }
+
+        function download(filename, filepath) {
+            let element = document.createElement('a');
+            element.setAttribute('href',filepath);
+            element.setAttribute('download', filename);
+            document.body.appendChild(element);
+            element.click();
+            document.body.removeChild(element);
+        }
+    }
 </script>

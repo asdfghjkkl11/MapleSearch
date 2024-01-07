@@ -29,7 +29,7 @@
         max-width: 32px;
     }
     .item-main-cube, .item-additional-cube{
-        min-width: 280px;
+        min-width: 320px;
         height: 16px;
         display: flex;
         align-items: center;
