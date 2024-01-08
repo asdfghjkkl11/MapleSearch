@@ -491,51 +491,60 @@
             let startY = canvas.height -5;
             let endX = startX + ((canvas.width-48) * gradeObj["레전드리"] / totalSize);
             let endY = canvas.height;
-            context.strokeStyle = (theme==="dark-mode")?"rgba(0,255,163,.9)":"#02d05d";
-            context.fillStyle = (theme==="dark-mode")?"rgba(0,255,163,.9)":"#02d05d";
-            context.beginPath();
-            context.moveTo(startX, startY);
-            context.lineTo(endX, startY);
-            context.lineTo(endX, endY);
-            context.lineTo(startX, endY);
-            context.stroke();
-            context.fill();
+
+            if(startX !== endX) {
+                context.strokeStyle = (theme === "dark-mode") ? "rgba(0,255,163,.9)" : "#02d05d";
+                context.fillStyle = (theme === "dark-mode") ? "rgba(0,255,163,.9)" : "#02d05d";
+                context.beginPath();
+                context.moveTo(startX, startY);
+                context.lineTo(endX, startY);
+                context.lineTo(endX, endY);
+                context.lineTo(startX, endY);
+                context.stroke();
+                context.fill();
+            }
 
             startX = endX;
             endX = startX + ((canvas.width-48) * gradeObj["유니크"] / totalSize);
-            context.strokeStyle = (theme==="dark-mode")?"#e4ce00":"#ffc000";
-            context.fillStyle = (theme==="dark-mode")?"#e4ce00":"#ffc000";
-            context.beginPath();
-            context.moveTo(startX, startY);
-            context.lineTo(endX, startY);
-            context.lineTo(endX, endY);
-            context.lineTo(startX, endY);
-            context.stroke();
-            context.fill();
+            if(startX !== endX) {
+                context.strokeStyle = (theme === "dark-mode") ? "#e4ce00" : "#ffc000";
+                context.fillStyle = (theme === "dark-mode") ? "#e4ce00" : "#ffc000";
+                context.beginPath();
+                context.moveTo(startX, startY);
+                context.lineTo(endX, startY);
+                context.lineTo(endX, endY);
+                context.lineTo(startX, endY);
+                context.stroke();
+                context.fill();
+            }
 
             startX = endX;
             endX = startX + ((canvas.width-48) * gradeObj["에픽"] / totalSize);
-            context.strokeStyle = (theme==="dark-mode")?"#7b53e2":"#e198ff";
-            context.fillStyle = (theme==="dark-mode")?"#7b53e2":"#e198ff";
-            context.beginPath();
-            context.moveTo(startX, startY);
-            context.lineTo(endX, startY);
-            context.lineTo(endX, endY);
-            context.lineTo(startX, endY);
-            context.stroke();
-            context.fill();
+            if(startX !== endX) {
+                context.strokeStyle = (theme === "dark-mode") ? "#7b53e2" : "#e198ff";
+                context.fillStyle = (theme === "dark-mode") ? "#7b53e2" : "#e198ff";
+                context.beginPath();
+                context.moveTo(startX, startY);
+                context.lineTo(endX, startY);
+                context.lineTo(endX, endY);
+                context.lineTo(startX, endY);
+                context.stroke();
+                context.fill();
+            }
 
             startX = endX;
             endX = startX + ((canvas.width-48) * gradeObj["레어"] / totalSize);
-            context.strokeStyle = (theme==="dark-mode")?"#81c3d7":"#0095ff";
-            context.fillStyle = (theme==="dark-mode")?"#81c3d7":"#0095ff";
-            context.beginPath();
-            context.moveTo(startX, startY);
-            context.lineTo(endX, startY);
-            context.lineTo(endX, endY);
-            context.lineTo(startX, endY);
-            context.stroke();
-            context.fill();
+            if(startX !== endX) {
+                context.strokeStyle = (theme === "dark-mode") ? "#81c3d7" : "#0095ff";
+                context.fillStyle = (theme === "dark-mode") ? "#81c3d7" : "#0095ff";
+                context.beginPath();
+                context.moveTo(startX, startY);
+                context.lineTo(endX, startY);
+                context.lineTo(endX, endY);
+                context.lineTo(startX, endY);
+                context.stroke();
+                context.fill();
+            }
 
             const img = canvas.toDataURL('image/png')
             download(`${parsedData.basic.character_name}_${dayjs(date).format("YYYY-MM-DD")}.png`,img);
