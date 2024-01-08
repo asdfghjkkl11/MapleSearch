@@ -42,6 +42,9 @@
         align-items: center;
         gap: 8px;
     }
+    .date-area > *{
+        flex-shrink: 0;
+    }
     .ability{
         grid-column: span 2 / auto;
         display: flex;
@@ -382,7 +385,7 @@
 
             let height = parseInt(skills.length/15) * 60;
             canvas.width = 620;
-            canvas.height = 240 + height;
+            canvas.height = 300 + height;
 
             let context = canvas.getContext("2d");
             context.strokeStyle = (theme==="dark-mode")?"#141517":"#fefefe";
@@ -394,19 +397,52 @@
 
             document.body.appendChild(canvas);
             let characterImage = await getImage(character.character_image);
-            await addImage(characterImage,10,5);
+            await addImage(characterImage,30,30);
 
             let worldIcon = await getImage(`https://s3.ap-northeast-2.amazonaws.com/meso.gg/image/${worldMapper[parsedData.basic.world_name]}`);
-            await addImage(worldIcon, 110, 17);
+            await addImage(worldIcon, 140, 17);
 
             context = canvas.getContext("2d");
             context.strokeStyle = (theme==="dark-mode")?"#ffffff":"#141517";
             context.fillStyle = (theme==="dark-mode")?"#ffffff":"#141517";
             context.font = "16px Pretendard bold";
-            context.fillText(`${parsedData.basic.world_name} ${parsedData.basic.character_name} level: ${parsedData.basic.character_level} ${parsedData.basic.character_class} 유니온: ${parsedData.union.union_level}`, 126, 30);
-            context.fillText(`전투력: ${parseIntText(parsedStat['전투력']).slice(0, -4)} 보공: ${parsedStat['보스 몬스터 데미지']}% 방무: ${parsedStat['방어율 무시']}% 크뎀: ${parsedStat['크리티컬 데미지']}%`, 110, 50);
-            context.fillText(`HP: ${inputInt(parsedStat['HP'])} STR: ${inputInt(parsedStat['STR'])} DEX: ${inputInt(parsedStat['DEX'])} INT: ${inputInt(parsedStat['INT'])} LUK: ${inputInt(parsedStat['LUK'])}`, 110, 70);
-            context.fillText(`아케인포스: ${inputInt(parsedStat['아케인포스'])} 어센틱포스: ${inputInt(parsedStat['어센틱포스'])} 무릉: ${parsedData.dojang.dojang_best_floor}층 (${parsedData.dojang.dojang_best_time}초)`, 110, 90);
+            context.fillText(`${parsedData.basic.world_name}`, 156, 30);
+            context.fillText(`${parsedData.basic.character_name}`, 140, 50);
+            context.fillText(`level: ${parsedData.basic.character_level}`, 140, 70);
+            context.fillText(`${parsedData.basic.character_class}`, 140, 90);
+            context.fillText(`유니온: ${parsedData.union.union_level}`, 140, 110);
+            context.fillText(`무릉: ${parsedData.dojang.dojang_best_floor}층 (${parsedData.dojang.dojang_best_time}초)`, 140, 130);
+
+            context.fillText(`전투력:`, 300, 30);
+            context.fillText(`스공:`, 300, 50);
+            context.fillText(`보공:`, 300, 70);
+            context.fillText(`방무:`, 300, 90);
+            context.fillText(`크뎀:`, 300, 110);
+            context.fillText(`벞지:`, 300, 130);
+            context.fillText(`재사용:`, 300, 150);
+            context.fillText(`${parseIntText(parsedStat['전투력']).slice(0, -4)}`, 357, 30);
+            context.fillText(`${parseIntText(parsedStat['최대 스탯공격력']).slice(0, -4)}`, 357, 50);
+            context.fillText(`${parsedStat['보스 몬스터 데미지']}%`, 357, 70);
+            context.fillText(`${parsedStat['방어율 무시']}%`, 357, 90);
+            context.fillText(`${parsedStat['크리티컬 데미지']}%`, 357, 110);
+            context.fillText(`${parsedStat['버프 지속시간']}%`, 357, 130);
+            context.fillText(`${parsedStat['재사용 대기시간 감소 (초)']}초 / ${parsedStat['재사용 대기시간 감소 (%)']}%`, 357, 150);
+
+            context.fillText(`HP:`, 470, 30);
+            context.fillText(`STR:`, 470, 50);
+            context.fillText(`DEX:`, 470, 70);
+            context.fillText(`INT:`, 470, 90);
+            context.fillText(`LUK:`, 470, 110);
+            context.fillText(`아케인포스:`, 470, 130);
+            context.fillText(`어센틱포스:`, 470, 150);
+            context.fillText(`${inputInt(parsedStat['HP'])}`, 507, 30);
+            context.fillText(`${inputInt(parsedStat['STR'])}`, 507, 50);
+            context.fillText(`${inputInt(parsedStat['DEX'])}`, 507, 70);
+            context.fillText(`${inputInt(parsedStat['INT'])} `, 507, 90);
+            context.fillText(`${inputInt(parsedStat['LUK'])}`, 507, 110);
+            context.fillText(`${inputInt(parsedStat['아케인포스'])}`, 557, 130);
+            context.fillText(`${inputInt(parsedStat['어센틱포스'])}`, 557, 150);
+
             context.fillText(`기준날짜: ${dayjs(date).format("YYYY-MM-DD")}`, canvas.width - 170,  canvas.height - 10);
 
             context.strokeStyle = (theme==="dark-mode")?"rgba(0,255,163,.9)":"#141517";
@@ -415,18 +451,18 @@
             for(let i = 0; i < symbols.length; i++){
                 let symbol = symbols[i]
                 let symbolIcon = await getImage(`${symbol.symbol_icon}`);
-                await addImage(symbolIcon, 15 + (40*i), 100);
+                await addImage(symbolIcon, 15 + (40*i), 160);
                 let textWidth =  23 + (40*i) + ((symbol.symbol_level<10)?7:0);
-                context.fillText(`${symbol.symbol_level}`,textWidth, 150);
+                context.fillText(`${symbol.symbol_level}`,textWidth, 210);
             }
             let dX = 0;
             let dY = 0;
             for(let i = 0; i < skills.length; i++){
                 let skill = skills[i]
                 let skillIcon = await getImage(`${skill.skill_icon}`);
-                await addImage(skillIcon, 15 + (40*dX), 160 + (60*dY));
+                await addImage(skillIcon, 15 + (40*dX), 220 + (60*dY));
                 let textWidth =  20 + (40*dX) + ((skill.skill_level<10)?7:0);
-                context.fillText(`${skill.skill_level}`,textWidth, 210 + (60*dY));
+                context.fillText(`${skill.skill_level}`,textWidth, 270 + (60*dY));
                 dX++;
                 if(15 + (40*dX) > 600){
                     dX = 0;
