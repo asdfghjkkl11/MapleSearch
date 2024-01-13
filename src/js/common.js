@@ -41,6 +41,8 @@ export function optionParse(option){
         } else if (options[0].includes("HP 회복")) {
             options[0] = "HP 회복";
             return options[0];
+        } else if (options[0].includes("모든 스킬레벨")) {
+            options[1] = options[1].split("(")[0];
         }
     }
     return options[0] + ":" + options[1];
