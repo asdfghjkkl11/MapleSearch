@@ -272,18 +272,18 @@
                                 || nvl(selectedItem.item_etc_option[option.key]) != 0
                                 || nvl(selectedItem.item_starforce_option[option.key]) != 0
                                 || nvl(selectedItem.item_exceptional_option[option.key]) != 0}
-                                    <span>( </span><span class="highlight">{nvl(selectedItem?.item_base_option)[option.key]}</span>
+                                    <span>( </span><span class="highlight">{nvl(nvl(selectedItem?.item_base_option)[option.key])}{#if option.per}%{/if}</span>
                                     {#if nvl(selectedItem.item_add_option[option.key]) != 0}
-                                        <span class="option1">+{selectedItem.item_add_option[option.key]}</span>
+                                        <span class="option1">+{selectedItem.item_add_option[option.key]}{#if option.per}%{/if}</span>
                                     {/if}
                                     {#if nvl(selectedItem.item_etc_option[option.key]) != 0}
-                                        <span class="option2">+{selectedItem.item_etc_option[option.key]}</span>
+                                        <span class="option2">+{selectedItem.item_etc_option[option.key]}{#if option.per}%{/if}</span>
                                     {/if}
                                     {#if nvl(selectedItem.item_starforce_option[option.key]) != 0}
-                                        <span class="option3">+{selectedItem.item_starforce_option[option.key]}</span>
+                                        <span class="option3">+{selectedItem.item_starforce_option[option.key]}{#if option.per}%{/if}</span>
                                     {/if}
                                     {#if nvl(selectedItem.item_exceptional_option[option.key]) != 0}
-                                        <span class="option4">+{selectedItem.item_exceptional_option[option.key]}</span>
+                                        <span class="option4">+{selectedItem.item_exceptional_option[option.key]}{#if option.per}%{/if}</span>
                                     {/if}
                                     <span>)</span>
                                 {/if}
