@@ -3,6 +3,11 @@
         display: grid;
         grid-template-columns: repeat(2, 1fr);
     }
+    .summary.skills{
+        min-width: 720px;
+        grid-template-columns: repeat(6, 1fr);
+        gap: 8px;
+    }
     .skill{
         min-width: 360px;
         min-height: 40px;
@@ -17,6 +22,15 @@
         box-sizing: border-box;
         cursor: pointer;
     }
+    .summary .skill{
+        min-width: auto;
+    }
+    .skill .highlight{
+        min-width: 160px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
     .skill-text{
         width: 100%;
         padding: 4px 8px;
@@ -24,6 +38,17 @@
         align-items: center;
         justify-content: space-between;
         box-sizing: border-box;
+    }
+    .flex{
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+    .title{
+        padding: 8px;
+        font-size: 16px;
+        font-weight: 500;
+        text-align: center;
     }
     .skill-info{
         display: flex;
@@ -39,10 +64,31 @@
         align-items: center;
         gap: 8px;
     }
+    .header{
+        padding: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+    .btn{
+        min-width: 24px;
+        height: 24px;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        fill: var(--highlight);
+        stroke: var(--highlight);
+        background: var(--btn-background);
+        border: 1px solid var(--btn-border);
+        cursor: pointer;
+    }
     @media (max-width: 1630px) {
         .skill {
-            width: 360px;
             justify-content: center;
+        }
+        .summary .skill{
+            width: auto;
         }
     }
     @media (max-width: 720px) {
@@ -50,23 +96,55 @@
             grid-auto-flow: row;
             grid-template-columns: 1fr;
         }
+        .summary.skills {
+            min-width: auto;
+            grid-template-columns: repeat(4, 1fr);
+        }
+        .skill-text{
+            flex-direction: column;
+        }
     }
 </style>
 {#if parsedData.basic}
-    <div class="skills">
-        {#each skills as skill,i}
-            <div class="skill" on:click={()=>clickItem(skill)}>
-                <span class="highlight skill-text">
-                    <div>
-                        <img src="{skill.skill_icon}">
+    <div class="flex">
+        <div class="header">
+            <div></div>
+            <button class="btn" on:click={changeDisplayMode}>
+                {#if itemOrderMode === 1}
+                    <ItemType1/>
+                {:else}
+                    <ItemType2/>
+                {/if}
+            </button>
+        </div>
+        <div class="skills" class:summary={itemOrderMode===0}>
+            {#each skills as skill,i}
+                {#if itemOrderMode===0}
+                    <div class="skill" on:click={()=>clickItem(skill)}>
+                        <span class="skill-text">
+                            <div>
+                                <img src="{skill.skill_icon}">
+                            </div>
+                            <span>
+                                <span class="green">{skill.skill_level}</span>
+                            </span>
+                        </span>
                     </div>
-                    <span>{skill.skill_name}</span>
-                    <span>
-                        <span class="green">{skill.skill_level}</span>
-                    </span>
-                </span>
-            </div>
-        {/each}
+                {:else}
+                    <div class="skill" on:click={()=>clickItem(skill)}>
+                        <span class="highlight skill-text">
+                            <div>
+                                <img src="{skill.skill_icon}">
+                            </div>
+                            <span>{skill.skill_name}</span>
+                            <span>
+                                <span class="green">{skill.skill_level}</span>
+                            </span>
+                        </span>
+                    </div>
+                {/if}
+            {/each}
+        </div>
     </div>
 {/if}
 <Modal bind:modal={skillModal}>
@@ -89,6 +167,8 @@
 <script>
     import {nvl} from "../js/common";
     import Modal from "./Modal.svelte";
+    import ItemType1 from "./icon/ItemType1.svelte";
+    import ItemType2 from "./icon/ItemType2.svelte";
 
     export let parsedData;
 
@@ -101,9 +181,13 @@
         "skill_effect": "",
         "skill_icon": ""
     };
+    let itemOrderMode = 0;
 
     function clickItem(item){
         selectedItem = item;
         skillModal.show();
+    }
+    function changeDisplayMode(){
+        itemOrderMode ^= 1;
     }
 </script>
