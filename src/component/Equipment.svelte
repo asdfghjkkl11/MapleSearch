@@ -75,6 +75,26 @@
         border: 1px solid var(--btn-border);
         cursor: pointer;
     }
+    .preset-btn{
+        width: 20px;
+        height: 20px;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 14px;
+        font-weight: 500;
+        fill: var(--highlight);
+        stroke: var(--highlight);
+        background: var(--btn-background);
+        color: var(--highlight);
+        border: 1px solid var(--btn-border);
+        border-radius: 10px;
+        cursor: pointer;
+    }
+    .preset-btn.active{
+        background: var(--btn-background-active);
+    }
     .btn-close{
         width: 32px;
         height: 32px;
@@ -165,6 +185,11 @@
 {#if parsedData.basic}
     <div class="item-list">
         <div class="btn-area">
+            {#if equipPreset}
+                <button class="preset-btn" class:active={equipPreset===1} on:click={()=>{equipPreset=1; parsedEquip = parsedEquip;}}>1</button>
+                <button class="preset-btn" class:active={equipPreset===2} on:click={()=>{equipPreset=2; parsedEquip = parsedEquip;}}>2</button>
+                <button class="preset-btn" class:active={equipPreset===3} on:click={()=>{equipPreset=3; parsedEquip = parsedEquip;}}>3</button>
+            {/if}
             <button class="btn" on:click={refresh}>
                 <Refreash/>
             </button>
@@ -488,6 +513,7 @@
     let atkStatMulti = nvl(localStorage.getItem("atkStatMulti"),4);
     let atkStatMultiXenon = nvl(localStorage.getItem("atkStatMultiXenon"),7);
     let parsedEquip = null;
+    let equipPreset = parsedData['item-equipment'].preset_no;
 
     $:{
         atkStatMulti = inputFloat(atkStatMulti,2);
@@ -534,6 +560,10 @@
     function parseEquip(){
         let result = {};
         let equip = nvl(parsedData['item-equipment']?.item_equipment,[]);
+
+        if(equipPreset){
+            equip = nvl(parsedData['item-equipment'][`item_equipment_preset${equipPreset}`],equip);
+        }
 
         for(let i = 0; i < equip.length; i++){
             result[equip[i].item_equipment_slot] = equip[i];
