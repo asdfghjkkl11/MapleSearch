@@ -11,6 +11,8 @@
         flex-direction: column;
         align-items: center;
         justify-content: center;
+        white-space: pre-line;
+        text-align: center;
         gap: 4px;
         font-size: 14px;
         box-shadow: inset 0 -1px 0 0 var(--border);
@@ -109,6 +111,14 @@
                 </div>
             {/each}
         </div>
+        <span class="highlight title">아티펙트 효과</span>
+        <div class="unions">
+            {#each unionArtifact as artifact, i}
+                <div class="union">
+                    <span>{artifact.name.replace(",","\n")}</span>
+                </div>
+            {/each}
+        </div>
     </div>
 {/if}
 <script>
@@ -145,6 +155,7 @@
     let unionRaiderStat = nvl(parsedData["union-raider"].union_raider_stat,[]).sort();
     let unionBlock = nvl(parsedData["union-raider"].union_block,[]);
     let unionInnerStat =  nvl(parsedData["union-raider"].union_inner_stat,[]);
+    let unionArtifact =  nvl(parsedData["union-artifact"].union_artifact_effect,[]);
     let grade = parsedData.union.union_grade;
     let level = parsedData.union.union_level;
     let gradeList = ["노비스","베테랑","마스터","그랜드 마스터","슈프림"];
