@@ -105,6 +105,26 @@
         justify-content: space-between;
         gap: 8px;
     }
+    .preset-btn{
+        width: 20px;
+        height: 20px;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 14px;
+        font-weight: 500;
+        fill: var(--highlight);
+        stroke: var(--highlight);
+        background: var(--btn-background);
+        color: var(--highlight);
+        border: 1px solid var(--btn-border);
+        border-radius: 10px;
+        cursor: pointer;
+    }
+    .preset-btn.active{
+        background: var(--btn-background-active);
+    }
     @media (max-width: 1630px) {
         .item {
             width: 360px;
@@ -123,11 +143,11 @@
     <div class="item-list">
         <div class="btn-area">
             <div>
-                {#each presetList as preset, i}
-                    <button class="btn" class:active={presetIndex === i} on:click={()=>{presetIndex = i}}>
-                        <span>프리셋{preset}</span>
-                    </button>
-                {/each}
+                {#if equipPreset}
+                    <button class="preset-btn" class:active={equipPreset===1} on:click={()=>{equipPreset=1; parsedEquip = parsedEquip;}}>1</button>
+                    <button class="preset-btn" class:active={equipPreset===2} on:click={()=>{equipPreset=2; parsedEquip = parsedEquip;}}>2</button>
+                    <button class="preset-btn" class:active={equipPreset===3} on:click={()=>{equipPreset=3; parsedEquip = parsedEquip;}}>3</button>
+                {/if}
             </div>
             <div>
                 <button class="btn" on:click={refresh}>
@@ -224,14 +244,14 @@
             {#if itemOrderMode === 1}
                 <div class="items">
                     {#each itemOrder1 as key, i}
-                        {#if parsedEquip[`cash_item_equipment_preset_${presetList[presetIndex]}`][key]}
+                        {#if parsedEquip.base[key]}
                             <div class="item" style="order: {itemOrder1[i]}">
                                 <div class="item-img-wrapper">
-                                    <img class="item-img" src="{parsedEquip[`cash_item_equipment_preset_${presetList[presetIndex]}`][key].cash_item_icon}">
+                                    <img class="item-img" src="{parsedEquip.base[key].cash_item_icon}">
                                 </div>
                                 <div class="item-name" >
                                     <span>
-                                        <span>{parsedEquip[`cash_item_equipment_preset_${presetList[presetIndex]}`][key].cash_item_name}</span>
+                                        <span>{parsedEquip.base[key].cash_item_name}</span>
                                     </span>
                                 </div>
                             </div>
@@ -240,14 +260,14 @@
                 </div>
                 <div class="items">
                     {#each itemOrder1 as key, i}
-                        {#if parsedEquip[`additional_cash_item_equipment_preset_${presetList[presetIndex]}`][key]}
+                        {#if parsedEquip.additional[key]}
                             <div class="item" style="order: {itemOrder1[i]}">
                                 <div class="item-img-wrapper">
-                                    <img class="item-img" src="{parsedEquip[`additional_cash_item_equipment_preset_${presetList[presetIndex]}`][key].cash_item_icon}">
+                                    <img class="item-img" src="{parsedEquip.additional[key].cash_item_icon}">
                                 </div>
                                 <div class="item-name" >
                                     <span>
-                                        <span>{parsedEquip[`additional_cash_item_equipment_preset_${presetList[presetIndex]}`][key].cash_item_name}</span>
+                                        <span>{parsedEquip.additional[key].cash_item_name}</span>
                                     </span>
                                 </div>
                             </div>
@@ -257,10 +277,10 @@
             {:else}
                 <div class="simple-items">
                     {#each itemOrder2 as key, i}
-                        {#if parsedEquip[`cash_item_equipment_preset_${presetList[presetIndex]}`][key]}
+                        {#if parsedEquip.base[key]}
                             <div class="item" style="order: {i}">
                                 <div class="item-img-wrapper">
-                                    <img class="item-img" src="{parsedEquip[`cash_item_equipment_preset_${presetList[presetIndex]}`][key].cash_item_icon}">
+                                    <img class="item-img" src="{parsedEquip.base[key].cash_item_icon}">
                                 </div>
                             </div>
                         {:else if key !== ""}
@@ -270,10 +290,10 @@
                 </div>
                 <div class="simple-items">
                     {#each itemOrder2 as key, i}
-                        {#if parsedEquip[`additional_cash_item_equipment_preset_${presetList[presetIndex]}`][key]}
+                        {#if parsedEquip.additional[key]}
                             <div class="item" style="order: {i}">
                                 <div class="item-img-wrapper">
-                                    <img class="item-img" src="{parsedEquip[`additional_cash_item_equipment_preset_${presetList[presetIndex]}`][key].cash_item_icon}">
+                                    <img class="item-img" src="{parsedEquip.additional[key].cash_item_icon}">
                                 </div>
                             </div>
                         {:else if key !== ""}
@@ -286,12 +306,10 @@
     </div>
 {/if}
 <script>
-    import {calculateOption, inputFloat, nvl, optionParse} from "../js/common";
-    import Close from "./icon/Close.svelte";
     import Refreash from "./icon/Refreash.svelte";
-    import Setting from "./icon/Setting.svelte";
     import ItemType1 from "./icon/ItemType1.svelte";
     import ItemType2 from "./icon/ItemType2.svelte";
+    import {nvl} from "../js/common";
 
     export let parsedData;
     export let refresh;
@@ -345,11 +363,15 @@
         'empty',
         'empty',
     ];
-    let parsedEquip = null;
-    let presetList = [1,2,3];
-    let presetIndex = 0;
+    let parsedEquip = {
+        base: {},
+        additional: {}
+    };
+    let equipPreset = parsedData['cashitem-equipment'].preset_no;
+
     $:{
         parsedEquip = parseEquip();
+        console.log(parsedEquip)
     }
 
     function changeDisplayMode(){
@@ -357,16 +379,23 @@
     }
 
     function parseEquip(){
-        let result = {};
-        let data = parsedData['cashitem-equipment'];
-        let keys = Object.keys(data);
+        let result = {
+            base: {},
+            additional: {}
+        };
+        let base = parsedData['cashitem-equipment'].cash_item_equipment_base;
+        let additional = parsedData['cashitem-equipment'].additional_cash_item_equipment_base;
 
-        for(let i = 0; i < keys.length; i++) {
-            let equip = nvl(data[keys[i]], {});
-            result[keys[i]] = {};
-            for (let j = 0; j < equip.length; j++) {
-                result[keys[i]][equip[j].cash_item_equipment_slot] = equip[j];
-            }
+        if(equipPreset){
+            base = nvl(parsedData['cashitem-equipment'][`cash_item_equipment_preset_${equipPreset}`],base);
+            additional =  nvl(parsedData['cashitem-equipment'][`additional_cash_item_equipment_preset_${equipPreset}`],additional);
+        }
+
+        for(let i = 0; i < base.length; i++){
+            result.base[base[i].cash_item_equipment_slot] = base[i];
+        }
+        for(let i = 0; i < additional.length; i++){
+            result.additional[additional[i].cash_item_equipment_slot] = additional[i];
         }
 
         return result;
