@@ -222,11 +222,11 @@
                             <div class="ability-header">
                                 <span class='{gradeMapper[parsedData.ability[`ability_preset_${abilityPreset}`].ability_preset_grade]}'>{parsedData.ability.ability_grade}
                                     어빌리티</span>
-                                    <div class="preset-list">
-                                        <button class="preset-btn" class:active={abilityPreset===1} on:click={()=>{abilityPreset=1}}>1</button>
-                                        <button class="preset-btn" class:active={abilityPreset===2} on:click={()=>{abilityPreset=2}}>2</button>
-                                        <button class="preset-btn" class:active={abilityPreset===3} on:click={()=>{abilityPreset=3}}>3</button>
-                                    </div>
+                                <div class="preset-list">
+                                    <button class="preset-btn" class:active={abilityPreset===1} on:click={()=>{abilityPreset=1}}>1</button>
+                                    <button class="preset-btn" class:active={abilityPreset===2} on:click={()=>{abilityPreset=2}}>2</button>
+                                    <button class="preset-btn" class:active={abilityPreset===3} on:click={()=>{abilityPreset=3}}>3</button>
+                                </div>
                             </div>
                             <span>{parsedData.ability[`ability_preset_${abilityPreset}`].ability_info[0].ability_value}</span>
                             <span>{parsedData.ability[`ability_preset_${abilityPreset}`].ability_info[1].ability_value}</span>
@@ -329,7 +329,6 @@
     let abilityPreset = null;
     $:{
         console.log(parsedData)
-        console.log(abilityPreset)
         parsedStat = parseStat();
 
         if(parsedData.union?.union_grade) {
