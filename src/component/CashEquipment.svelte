@@ -371,7 +371,6 @@
 
     $:{
         parsedEquip = parseEquip();
-        console.log(parsedEquip)
     }
 
     function changeDisplayMode(){
