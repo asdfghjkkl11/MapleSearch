@@ -51,6 +51,16 @@
         flex-direction: column;
         gap: 4px;
     }
+    .ability-header{
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+    .preset-list{
+        display: flex;
+        align-items: center;
+        gap: 4px;
+    }
     .character-img-wrapper{
         width: 120px;
         height: 120px;
@@ -94,6 +104,26 @@
         padding: 0 8px;
     }
     .btn.active{
+        background: var(--btn-background-active);
+    }
+    .preset-btn{
+        width: 20px;
+        height: 20px;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 14px;
+        font-weight: 500;
+        fill: var(--highlight);
+        stroke: var(--highlight);
+        background: var(--btn-background);
+        color: var(--highlight);
+        border: 1px solid var(--btn-border);
+        border-radius: 10px;
+        cursor: pointer;
+    }
+    .preset-btn.active{
         background: var(--btn-background-active);
     }
     .profile-btn{
@@ -188,11 +218,26 @@
                     <div>어센틱포스</div>
                     <div>{inputInt(parsedStat['어센틱포스'])}</div>
                     <div class="ability">
-                        <span class='{gradeMapper[parsedData.ability.ability_grade]}'>{parsedData.ability.ability_grade}
-                            어빌리티</span>
-                        <span>{parsedData.ability.ability_info[0].ability_value}</span>
-                        <span>{parsedData.ability.ability_info[1].ability_value}</span>
-                        <span>{parsedData.ability.ability_info[2].ability_value}</span>
+                        {#if abilityPreset}
+                            <div class="ability-header">
+                                <span class='{gradeMapper[parsedData.ability[`ability_preset_${abilityPreset}`].ability_preset_grade]}'>{parsedData.ability.ability_grade}
+                                    어빌리티</span>
+                                    <div class="preset-list">
+                                        <button class="preset-btn" class:active={abilityPreset===1} on:click={()=>{abilityPreset=1}}>1</button>
+                                        <button class="preset-btn" class:active={abilityPreset===2} on:click={()=>{abilityPreset=2}}>2</button>
+                                        <button class="preset-btn" class:active={abilityPreset===3} on:click={()=>{abilityPreset=3}}>3</button>
+                                    </div>
+                            </div>
+                            <span>{parsedData.ability[`ability_preset_${abilityPreset}`].ability_info[0].ability_value}</span>
+                            <span>{parsedData.ability[`ability_preset_${abilityPreset}`].ability_info[1].ability_value}</span>
+                            <span>{parsedData.ability[`ability_preset_${abilityPreset}`].ability_info[2].ability_value}</span>
+                        {:else}
+                            <span class='{gradeMapper[parsedData.ability.ability_grade]}'>{parsedData.ability.ability_grade}
+                                어빌리티</span>
+                            <span>{parsedData.ability.ability_info[0].ability_value}</span>
+                            <span>{parsedData.ability.ability_info[1].ability_value}</span>
+                            <span>{parsedData.ability.ability_info[2].ability_value}</span>
+                        {/if}
                     </div>
                     <div>무릉</div>
                     <div>{parsedData.dojang.dojang_best_floor}층 ({parsedData.dojang.dojang_best_time}초)</div>
@@ -281,8 +326,10 @@
         "버닝3": "icon_18.png",
         "버닝4": "icon_19.png"
     }
+    let abilityPreset = null;
     $:{
         console.log(parsedData)
+        console.log(abilityPreset)
         parsedStat = parseStat();
 
         if(parsedData.union?.union_grade) {
@@ -316,6 +363,7 @@
             if(cache){
                 if(searchDate === cache.date){
                     parsedData = cache.data;
+                    abilityPreset = parsedData.ability.preset_no;
                     return cache.data;
                 }
             }
@@ -340,6 +388,7 @@
 
             if(data.basic) {
                 parsedData = data;
+                abilityPreset = parsedData.ability.preset_no;
                 await set_idb('search', `${name}`,{
                     data: data,
                     date: searchDate,
