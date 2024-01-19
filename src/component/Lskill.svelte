@@ -83,6 +83,31 @@
         border: 1px solid var(--btn-border);
         cursor: pointer;
     }
+    .preset-btn{
+        width: 20px;
+        height: 20px;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 14px;
+        font-weight: 500;
+        fill: var(--highlight);
+        stroke: var(--highlight);
+        background: var(--btn-background);
+        color: var(--highlight);
+        border: 1px solid var(--btn-border);
+        border-radius: 10px;
+        cursor: pointer;
+    }
+    .preset-btn.active{
+        background: var(--btn-background-active);
+    }
+    .preset-list{
+        display: flex;
+        align-items: center;
+        gap: 4px;
+    }
     @media (max-width: 1630px) {
         .skill {
             justify-content: center;
@@ -108,7 +133,11 @@
 {#if parsedData.basic}
     <div class="flex">
         <div class="header">
-            <div></div>
+            <div class="preset-list">
+                <button class="preset-btn" class:active={skillPreset===1} on:click={()=>{skillPreset=1; changePreset()}}>1</button>
+                <button class="preset-btn" class:active={skillPreset===2} on:click={()=>{skillPreset=2; changePreset()}}>2</button>
+                <button class="preset-btn" class:active={skillPreset===3} on:click={()=>{skillPreset=3; changePreset()}}>3</button>
+            </div>
             <button class="btn" on:click={changeDisplayMode}>
                 {#if itemOrderMode === 1}
                     <ItemType1/>
@@ -207,6 +236,7 @@
     };
 
     let itemOrderMode = 0;
+    let skillPreset = null;
 
     function clickItem(item){
         selectedItem = item;
@@ -214,5 +244,12 @@
     }
     function changeDisplayMode(){
         itemOrderMode ^= 1;
+    }
+
+    function changePreset() {
+        skillPreset
+        ownSkill = nvl(parsedData['link-skill'][`character_owned_link_skill_preset_${skillPreset}`],parsedData['link-skill'].character_owned_link_skill);
+        skills = nvl(parsedData['link-skill'][`character_link_skill_preset_${skillPreset}`],parsedData['link-skill'].character_link_skill);
+
     }
 </script>
