@@ -1,8 +1,8 @@
 <style>
     .items{
         display: grid;
-        grid-auto-flow: column;
-        grid-template-rows: repeat(14, 1fr);
+        grid-auto-flow: row;
+        grid-template-columns: repeat(2, 1fr);
     }
     .item{
         min-width: 360px;
@@ -54,12 +54,13 @@
 {#if parsedData.basic}
     <div class="item-list">
         <div class="items">
-            {#each itemOrder1 as key, i}
-                {#if parsedEquip[key]}
-                    <div class="item" style="order: {itemOrder1[i]}">
+            {#each parsedEquip as equip, i}
+                {#if equip}
+                    <div class="item">
+<!--                    <div class="item" style="order: {itemOrder1[i]}">-->
                         <div class="item-name">
                             <span>
-                                <span>{parsedEquip[key].item_name}</span>
+                                <span>{equip.item_name}</span>
                             </span>
                         </div>
                     </div>
@@ -74,33 +75,6 @@
     export let parsedData;
 
     let itemOrder1 = [
-        "EyeAcc_Cash 눈장식",
-        "SubWeapon 보조무기",
-        "Cap 모자",
-        "Weapon_Cash 무기",
-        "LongCoat 한벌옷",
-        "Ring 반지",
-        "Forehead 얼굴장식",
-        "Gloves 장갑",
-        "Shoes 신발",
-        "Belt 벨트",
-        "Cape 망토",
-        "Shoulder 어깨",
-        "Chair 의자",
-        "Weapon 무기",
-        "Ring_Cash 반지",
-        "EyeAcc 눈장식",
-        "Vehicle 탈것",
-        "EarAcc 귀고리",
-        "Pendant 목걸이",
-        "Title 칭호",
-        "Medal 훈장",
-        "Cap_Cash 모자",
-        "Shoes_Cash 신발",
-        "LongCoat_Cash 한벌옷",
-        "Gloves_Cash 장갑",
-        "Cape_Cash 망토",
-        "Forehead_Cash 얼굴장식"
     ];
 
     let parsedEquip = null;
@@ -113,9 +87,9 @@
         let result = {};
         let equip = nvl(parsedData['item-equipment']?.item_equipment,[]);
 
-        for(let i = 0; i < equip.length; i++){
-            result[equip[i].item_equipment_page_name] = equip[i];
-        }
+        result = equip.sort((a,b)=>{
+            return (a.item_equipment_slot_name < b.item_equipment_slot_name) ? -1 : 1;
+        });
 
         return result;
     }
