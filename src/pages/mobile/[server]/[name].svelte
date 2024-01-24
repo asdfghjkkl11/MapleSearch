@@ -38,6 +38,23 @@
         align-items: center;
         gap: 4px;
     }
+    .search_area{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+    }
+    .select{
+        width: 132px;
+        height: 40px;
+        padding: 8px 24px 8px 16px;
+        font-size: 16px;
+        box-sizing: border-box;
+        background: var(--layer);
+        color: var(--highlight);
+        border: none;
+        box-shadow: 1px 1px 0 0 var(--border),inset 1px 1px 0 0 var(--border);
+    }
     @media (max-width: 1024px) {
         .info {
             flex-direction: column;
@@ -46,7 +63,7 @@
     }
 </style>
 <div class="main">
-    <div>
+    <div class="search_area">
         <Searchbar url="{url}"/>
         <select class="select" bind:value={selectedServer}>
             {#each serverList as server,i}
