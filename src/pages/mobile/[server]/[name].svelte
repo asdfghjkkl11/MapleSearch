@@ -38,7 +38,7 @@
         align-items: center;
         gap: 4px;
     }
-    .search_area{
+    .search-area{
         display: flex;
         align-items: center;
         justify-content: center;
@@ -63,7 +63,7 @@
     }
 </style>
 <div class="main">
-    <div class="search_area">
+    <div class="search-area">
         <Searchbar url="{url}"/>
         <select class="select" bind:value={selectedServer}>
             {#each serverList as server,i}

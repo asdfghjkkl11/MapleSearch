@@ -104,7 +104,7 @@
 </style>
 <div class="layer">
     <div class="header">
-        <a class="title" href="/search">MESO.GG</a>
+        <a class="title" href="/">MESO.GG</a>
         <div class="icon" on:click={changeMode}>
             <Darkmode/>
         </div>

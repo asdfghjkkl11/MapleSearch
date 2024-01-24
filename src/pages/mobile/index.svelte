@@ -13,7 +13,7 @@
         font-weight: 700;
         color: var(--highlight);
     }
-    .search_area{
+    .search-area{
         display: flex;
         align-items: center;
         justify-content: center;
@@ -33,7 +33,7 @@
 </style>
 <div class="main">
     <span>메이플M 캐릭터 검색</span>
-    <div class="search_area">
+    <div class="search-area">
         <Searchbar url="{url}"/>
         <select class="select" bind:value={selectedServer}>
             {#each serverList as server,i}
