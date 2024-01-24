@@ -16,7 +16,7 @@
 </style>
 <div class="main">
     <span>메이플 캐릭터 검색</span>
-    <Searchbar/>
+    <Searchbar url="/search"/>
 </div>
 <script>
     import Searchbar from "../../component/Searchbar.svelte";

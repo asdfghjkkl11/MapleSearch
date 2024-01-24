@@ -50,6 +50,7 @@
 <script>
     import {afterPageLoad, goto} from "@roxi/routify";
     import Search from "./icon/Search.svelte";
+    export let url;
     let is_focus = false;
     let name = "";
 
@@ -64,6 +65,6 @@
     }
 
     function search(){
-        $goto(`/search/${name}`);
+        $goto(`${url}/${name}`);
     }
 </script>

@@ -142,7 +142,7 @@
     }
 </style>
 <div class="main">
-    <Searchbar/>
+    <Searchbar url="/search"/>
     <div class="btn-area">
         {#each tabList as tab, i}
             <button class="btn" class:active={tabIndex === i} on:click={()=>{tabIndex = i}}>
