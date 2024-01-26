@@ -4,22 +4,30 @@
         display: flex;
         justify-content: center;
         flex-wrap: wrap;
-        gap: 4px;
+        gap: 8px;
+    }
+    .guilds.one-line{
+        width: 100%;
+        max-width: 480px;
+        flex-direction: column;
+        flex-wrap: nowrap;
     }
     .guild{
-        min-width: 240px;
+        min-width: 280px;
         width: fit-content;
-        padding: 8px;
+        padding: 8px 16px;
         display: flex;
         align-items: center;
         justify-content: space-between;
-        flex-wrap: wrap;
         gap: 4px;
         font-size: 14px;
         border-radius: 16px;
         box-shadow: inset -1px -1px 0 0 var(--border), -1px -1px 0 0 var(--border);
         box-sizing: border-box;
         cursor: pointer;
+    }
+    .one-line .guild{
+        width: 100%;
     }
     .guild-list{
         display: flex;
@@ -31,9 +39,23 @@
         width: 88%;
         padding: 8px;
         display: flex;
+        flex-direction: column;
         align-items: center;
         justify-content: center;
+        gap: 8px;
         box-shadow: inset 0 -1px 0 0 var(--border);
+    }
+    .guild-title span{
+        flex-shrink: 0;
+    }
+    .flex{
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+    .guild-title .flex{
+        justify-content: center;
     }
     .character-img-wrapper{
         width: 64px;
@@ -48,6 +70,12 @@
     .info{
         display: flex;
         flex-direction: column;
+    }
+    .one-line .info{
+        gap: 4px;
+    }
+    .one-line .flex{
+        gap: 4px;
     }
     .btn-area{
         width: 90%;
@@ -86,6 +114,13 @@
 {#if parsedData.guild}
     <div class="btn-area">
         <div class="sort-list">
+            <button class="btn" on:click={changeDisplayMode}>
+                {#if itemOrderMode===1}
+                    <ItemType2/>
+                {:else}
+                    <ItemType1/>
+                {/if}
+            </button>
             <button class="btn" on:click={downloadCsv}>EXCEL</button>
         </div>
         <div class="sort-list">
@@ -108,29 +143,58 @@
     <div class="guild-list">
         <div class="guild-title">
             <span class="highlight">길드원 ({parsedMember.length}명)</span>
+            <div class="flex">
+                <span class="highlight">평균레벨: {nvl(inputInt(parseInt(totalLevel/parsedMember.length)),0)}</span>
+                <span class="highlight">전투력 합계: {nvl(parseIntText(totalCombatPower),0)}</span>
+                <span class="highlight">평균전투력: {nvl(parseIntText(parseInt(totalCombatPower/parsedMember.length)),0)}</span>
+            </div>
         </div>
-        <div class="guilds">
+        <div class="guilds" class:one-line={itemOrderMode!==1}>
             {#each parsedMember as member, i}
                 <div class="guild" on:click={searchCharacter(member.character_name)}>
-                    <div class="info">
-                        <span><span class="highlight">{member.character_name}</span>&nbsp; LV: {member.character_level}</span>
-                        <span>전투력: {nvl(parseIntText(member["전투력"]),0)}</span>
-                        <span>무릉: {member.dojang_best_floor}층</span>
-                    </div>
-                    <div class="character-img-wrapper">
-                        <img class="character-img" src="{member.character_image}">
-                    </div>
+                    {#if itemOrderMode===1}
+                        <div class="info">
+                            <span class="highlight">{member.character_name}</span>
+                            <div class="flex">
+                                <span>LV: {member.character_level}</span>
+                                <span>{member.character_class}</span>
+                            </div>
+                            <span>전투력: {nvl(parseIntText(member["전투력"]),0)}</span>
+                            <span>무릉: {member.dojang_best_floor}층</span>
+                        </div>
+                        <div class="character-img-wrapper">
+                            <img class="character-img" src="{member.character_image}">
+                        </div>
+                    {:else}
+                        <div class="info">
+                            <div class="flex">
+                                <span class="highlight">{member.character_name}</span>
+                                <span>LV: {member.character_level}</span>
+                                <span>{member.character_class}</span>
+                            </div>
+                            <div class="flex">
+                                <span>전투력: {nvl(parseIntText(member["전투력"]), 0)}</span>
+                                <span>무릉: {member.dojang_best_floor}층</span>
+                                <span>유니온: {member.union_level}</span>
+                            </div>
+                        </div>
+                        <div class="character-img-wrapper">
+                            <img class="character-img" src="{member.character_image}">
+                        </div>
+                    {/if}
                 </div>
             {/each}
         </div>
     </div>
 {/if}
 <script>
-    import {nvl, parseIntText} from "../js/common";
+    import {inputInt, nvl, parseIntText} from "../js/common";
     import ArrowUp from "./icon/ArrowUp.svelte";
     import ArrowDown from "./icon/ArrowDown.svelte";
     import {goto} from "@roxi/routify";
     import ExcelJS from 'exceljs';
+    import ItemType1 from "./icon/ItemType1.svelte";
+    import ItemType2 from "./icon/ItemType2.svelte";
 
     export let parsedData;
 
@@ -138,11 +202,21 @@
     let sortOptions = [0,0,0,0];
     let sortColumns = ["이름","레벨","전투력","무릉"];
     let orderOption = ["none","desc","asc"];
+    let totalCombatPower = 0;
+    let totalLevel = 0;
+    let itemOrderMode = 1;
 
     $:{
         sortOptions = sortOptions;
         parsedMember = parseMember();
         parsedMember.sort(compare);
+        totalCombatPower = 0;
+        totalLevel = 0;
+        for(let i = 0; i < parsedMember.length; i++){
+            totalCombatPower += Number(nvl(parsedMember[i]["전투력"],0));
+            totalLevel += Number(nvl(parsedMember[i].character_level,0));
+        }
+        console.log(parsedMember)
     }
 
     function parseMember(){
@@ -194,6 +268,10 @@
 
     function searchCharacter(character_name){
         $goto(`/search/${character_name}`);
+    }
+
+    function changeDisplayMode(){
+        itemOrderMode ^= 1;
     }
 
     function downloadCsv(){
