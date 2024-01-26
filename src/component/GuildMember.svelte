@@ -143,7 +143,6 @@
         sortOptions = sortOptions;
         parsedMember = parseMember();
         parsedMember.sort(compare);
-        console.log(parsedMember)
     }
 
     function parseMember(){
