@@ -17,7 +17,8 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        gap: 8px;
+        flex-wrap: wrap;
+        gap: 16px;
     }
     .select{
         width: 132px;

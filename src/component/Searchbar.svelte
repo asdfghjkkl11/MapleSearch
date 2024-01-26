@@ -16,7 +16,7 @@
     }
 
     .selectbar > [type="text"]{
-        width: 320px;
+        max-width: 240px;
         padding: 8px 16px;
         font-size: 18px;
         background: var(--layer);
