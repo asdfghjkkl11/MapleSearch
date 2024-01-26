@@ -151,7 +151,6 @@
                 result[equip[i].item_equipment_page_name] = {};
             }
             result[equip[i].item_equipment_page_name][equip[i].item_equipment_slot_name] = equip[i];
-            console.log(`${equip[i].item_equipment_page_name},${equip[i].item_equipment_slot_name}`)
         }
 
         return result;

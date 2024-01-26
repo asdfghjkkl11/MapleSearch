@@ -12,28 +12,49 @@
     }
     .info{
         display: flex;
-        align-items: flex-start;
+        flex-direction: column;
+        align-items: center;
         gap: 16px;
     }
     .error{
         font-size: 24px;
     }
-    .character{
+    .guild{
         display: grid;
         grid-template-columns: 1fr 1fr;
         flex-direction: column;
         font-size: 14px;
     }
-    .character > div{
+    .guild > div{
         min-width: 140px;
         padding: 4px 8px;
         box-shadow: 1px 1px 0 0 var(--border),inset 1px 1px 0 0 var(--border);
         box-sizing: border-box;
     }
+    .grid-col-2{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        grid-column: span 2 / auto;
+    }
+    .character-img-wrapper{
+        width: 80px;
+        height: 80px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .character-img{
+        height: 80px;
+    }
+    .guild-img{
+        height: 24px;
+    }
     .date-area > *{
         flex-shrink: 0;
     }
-    .character .flex{
+    .guild .flex{
         display: flex;
         align-items: center;
         gap: 4px;
@@ -71,50 +92,49 @@
                 <option value="{server}">{server}</option>
             {/each}
         </select>
-        <div class="date-area">
-            <span>검색기준: </span>
-            <DateInput
-                    value="{date}"
-                    format="yyyy-MM-dd"
-                    placeholder="{date}"
-                    closeOnSelection="{true}"
-                    min="{minDate}"
-                    max="{maxDate}"
-                    on:select={selectDate}/>
-        </div>
     </div>
     <div class="info">
         {#await data}
             <p>...Loading</p>
         {:then parsedData}
-            {#if parsedData.basic}
-                <div class="character">
-                    <div>{parsedData.basic.character_level}</div>
-                    <div>{parsedData.basic.character_name}</div>
-                    <div class="flex">{parsedData.basic.world_name}
-                        {#if worldMapper[parsedData.basic.world_name]}
-                            <img class="world-icon" src="https://s3.ap-northeast-2.amazonaws.com/meso.gg/image/{worldMapper[parsedData.basic.world_name]}">
+            {#if parsedData.guild}
+                <div class="guild">
+                    <div class="flex highlight">
+                        <img class="guild-img" src="data:image/png;base64,{parsedData.guild.guild_mark_custom}">
+                        <span>{parsedData.guild.guild_name}</span>
+                        <span>LV{parsedData.guild.guild_level}</span>
+                    </div>
+                    <div class="flex highlight">
+                        <span>{parsedData.guild.world_name}</span>
+                        {#if worldMapper[parsedData.guild.world_name]}
+                            <img class="world-icon" src="https://s3.ap-northeast-2.amazonaws.com/meso.gg/image/{worldMapper[parsedData.guild.world_name]}">
                         {/if}
                     </div>
-                    <div>{parsedData.basic.character_job_name}</div>
-                    <div>길드</div>
-                    <div>{nvl(parsedData.guild.guild_name)}</div>
-                    <div>전투력</div>
-                    <div>{parseIntText(parsedStat['전투력'])}</div>
-                    <div>HP</div>
-                    <div>{inputInt(parsedStat['HP'])}</div>
-                    <div>MP</div>
-                    <div>{inputInt(parsedStat['MP'])}</div>
-                    <div>물리 공격력</div>
-                    <div>{inputInt(parsedStat['물리 공격력'])}</div>
-                    <div>마법 방어력</div>
-                    <div>{inputInt(parsedStat['마법 공격력'])}</div>
-                    <div>물리 공격력</div>
-                    <div>{inputInt(parsedStat['물리 방어력'])}</div>
-                    <div>마법 방어력</div>
-                    <div>{inputInt(parsedStat['마법 방어력'])}</div>
+                    <div class="grid-col-2">
+                        <div>길드장</div>
+                        <div class="character-img-wrapper">
+                            <img class="character-img" src="{parsedData.member_list[parsedData.guild.guild_master_name].basic.character_image}">
+                        </div>
+                        <div class="flex">
+                            <span>{parsedData.guild.guild_master_name}</span>
+                            <span>LV{parsedData.member_list[parsedData.guild.guild_master_name].basic.character_level}</span>
+                        </div>
+                    </div>
+                    <div class="grid-col-2">
+                        <div class="date-area flex">
+                            <span>검색기준: </span>
+                            <DateInput
+                                    value="{date}"
+                                    format="yyyy-MM-dd"
+                                    placeholder="{date}"
+                                    closeOnSelection="{true}"
+                                    min="{minDate}"
+                                    max="{maxDate}"
+                                    on:select={selectDate}/>
+                        </div>
+                    </div>
                 </div>
-                <MobileEquipment parsedData="{parsedData}"/>
+                <GuildMember parsedData="{parsedData}"/>
             {/if}
         {:catch error}
             {console.log(error)}
@@ -126,10 +146,10 @@
     import {params,afterPageLoad} from "@roxi/routify";
     import {g_loading_hide, g_loading_show, get_idb, inputInt, nvl, parseIntText, set_idb} from "../../../js/common";
     import Searchbar from "../../../component/Searchbar.svelte";
-    import MobileEquipment from "../../../component/MobileEquipment.svelte";
     import {apiServer, pcServerList, worldMapper} from "../../../js/mapper";
     import dayjs from "dayjs";
     import {DateInput} from "../../../component/datePicker";
+    import GuildMember from "../../../component/GuildMember.svelte";
 
     let server = decodeURIComponent($params.server);
     let name = decodeURIComponent($params.name);
