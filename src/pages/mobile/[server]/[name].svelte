@@ -86,7 +86,7 @@
                     </div>
                     <div>{parsedData.basic.character_job_name}</div>
                     <div>길드</div>
-                    <div>{parsedData.guild.guild_name}</div>
+                    <div>{nvl(parsedData.guild.guild_name)}</div>
                     <div>전투력</div>
                     <div>{parseIntText(parsedStat['전투력'])}</div>
                     <div>HP</div>
@@ -105,7 +105,6 @@
                 <MobileEquipment parsedData="{parsedData}"/>
             {/if}
         {:catch error}
-            {console.log(error)}
             <p class="error">오류가 발생했습니다.</p>
         {/await}
     </div>
