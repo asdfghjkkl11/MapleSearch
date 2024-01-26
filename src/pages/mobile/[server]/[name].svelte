@@ -96,9 +96,9 @@
                     <div>{inputInt(parsedStat['MP'])}</div>
                     <div>물리 공격력</div>
                     <div>{inputInt(parsedStat['물리 공격력'])}</div>
-                    <div>마법 방어력</div>
+                    <div>마법 공격력</div>
                     <div>{inputInt(parsedStat['마법 공격력'])}</div>
-                    <div>물리 공격력</div>
+                    <div>물리 방어력</div>
                     <div>{inputInt(parsedStat['물리 방어력'])}</div>
                     <div>마법 방어력</div>
                     <div>{inputInt(parsedStat['마법 방어력'])}</div>
