@@ -282,7 +282,7 @@
     import Union from "../../component/Union.svelte";
     import dayjs from "dayjs";
     import DateInput from "../../component/datePicker/DateInput.svelte";
-    import {gradeMapper, unionCssList, unionGradeList, worldMapper} from "../../js/mapper";
+    import {apiServer, gradeMapper, unionCssList, unionGradeList, worldMapper} from "../../js/mapper";
 
     let name = decodeURIComponent($params.name);
     const myHeaders = new Headers();
@@ -348,7 +348,7 @@
     }
 
     async function getDataFromServer(){
-        return fetch("https://mapleserver.asdfghjkkl11.com/maple/getInfo",{
+        return fetch(apiServer + "/maple/getInfo",{
             "method": "POST",
             "body": JSON.stringify({
                 "ID": name,
@@ -576,7 +576,7 @@
                 if(cache){
                     return cache;
                 }
-                let url = await (await fetch("https://mapleserver.asdfghjkkl11.com/maple/getUrl", {
+                let url = await (await fetch(apiServer + "/maple/getUrl", {
                     "method": "POST",
                     "body": JSON.stringify({
                         "url": src

@@ -95,7 +95,7 @@ export function calculateOption(item, main, cls ,atkStatMulti, atkStatMultiXenon
     }
 }
 
-const dbPromise = openDB('maple_search', 4, {
+const dbPromise = openDB('maple_search', 5, {
     async upgrade(db) {
         try {
             db.createObjectStore('search');
@@ -109,6 +109,11 @@ const dbPromise = openDB('maple_search', 4, {
         }
         try {
             db.createObjectStore('searchM');
+        }catch (e){
+            console.log(e)
+        }
+        try {
+            db.createObjectStore('guild');
         }catch (e){
             console.log(e)
         }

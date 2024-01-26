@@ -60,12 +60,6 @@
         border: 1px solid var(--btn-border);
         cursor: pointer;
     }
-    .btn span{
-        padding: 0 8px;
-    }
-    .btn.active{
-        background: var(--btn-background-active);
-    }
     .simple-items{
         display: grid;
         grid-template-columns: repeat(5, 1fr);

@@ -115,7 +115,7 @@
     import {g_loading_hide, g_loading_show, get_idb, inputInt, nvl, parseIntText, set_idb} from "../../../js/common";
     import Searchbar from "../../../component/Searchbar.svelte";
     import MobileEquipment from "../../../component/MobileEquipment.svelte";
-    import {mobileServerList, worldMapper} from "../../../js/mapper";
+    import {apiServer, mobileServerList, worldMapper} from "../../../js/mapper";
 
     let server = decodeURIComponent($params.server);
     let name = decodeURIComponent($params.name);
@@ -162,7 +162,7 @@
     }
 
     async function getDataFromServer(){
-        return fetch("https://mapleserver.asdfghjkkl11.com/maple/mobile/getInfo",{
+        return fetch(apiServer + "/maple/mobile/getInfo",{
             "method": "POST",
             "body": JSON.stringify({
                 "ID": name,

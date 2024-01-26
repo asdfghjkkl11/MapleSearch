@@ -16,13 +16,6 @@
         box-shadow: inset 0 -1px 0 0 var(--border);
         box-sizing: border-box;
     }
-    .simple-items .item{
-        width: 60px !important;
-        height: 60px;
-        min-width: auto;
-        justify-content: center;
-        box-shadow: 1px 1px 0 0 var(--border), inset 1px 1px 0 0 var(--border);
-    }
     .item-list{
         display: flex;
         flex-direction: column;

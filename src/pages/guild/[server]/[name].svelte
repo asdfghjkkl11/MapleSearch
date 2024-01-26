@@ -71,6 +71,17 @@
                 <option value="{server}">{server}</option>
             {/each}
         </select>
+        <div class="date-area">
+            <span>검색기준: </span>
+            <DateInput
+                    value="{date}"
+                    format="yyyy-MM-dd"
+                    placeholder="{date}"
+                    closeOnSelection="{true}"
+                    min="{minDate}"
+                    max="{maxDate}"
+                    on:select={selectDate}/>
+        </div>
     </div>
     <div class="info">
         {#await data}
@@ -106,6 +117,7 @@
                 <MobileEquipment parsedData="{parsedData}"/>
             {/if}
         {:catch error}
+            {console.log(error)}
             <p class="error">오류가 발생했습니다.</p>
         {/await}
     </div>
@@ -115,7 +127,9 @@
     import {g_loading_hide, g_loading_show, get_idb, inputInt, nvl, parseIntText, set_idb} from "../../../js/common";
     import Searchbar from "../../../component/Searchbar.svelte";
     import MobileEquipment from "../../../component/MobileEquipment.svelte";
-    import {pcServerList, worldMapper} from "../../../js/mapper";
+    import {apiServer, pcServerList, worldMapper} from "../../../js/mapper";
+    import dayjs from "dayjs";
+    import {DateInput} from "../../../component/datePicker";
 
     let server = decodeURIComponent($params.server);
     let name = decodeURIComponent($params.name);
@@ -127,6 +141,10 @@
     let data = init();
     let parsedData = {}
     let parsedStat = null;
+    let searchDate = dayjs().subtract(1,"day").format("YYYY-MM-DD");
+    let date = dayjs().subtract(1,"day").toDate();
+    let minDate = dayjs("2023-12-21").toDate();
+    let maxDate = dayjs().subtract(1,"day").toDate();
 
     $:{
         console.log(parsedData)
@@ -146,13 +164,13 @@
     async function getData(){
         try {
             g_loading_show();
-            // let cache = await get_idb('searchM',`${server}_${name}`);
-            // if(cache){
-            //     if(searchDate === cache.date){
-            //         parsedData = cache.data;
-            //         return cache.data;
-            //     }
-            // }
+            let cache = await get_idb('guild',`${server}_${name}`);
+            if(cache){
+                if(searchDate === cache.date){
+                    parsedData = cache.data;
+                    return cache.data;
+                }
+            }
             return getDataFromServer();
         }catch (e) {
             console.log(e)
@@ -162,24 +180,25 @@
     }
 
     async function getDataFromServer(){
-        return fetch("https://mapleserver.asdfghjkkl11.com/maple/mobile/getInfo",{
+        return fetch(apiServer + "/maple/getGuildInfo",{
             "method": "POST",
             "body": JSON.stringify({
-                "ID": name,
-                "server": server
+                "guild": name,
+                "server": server,
+                "date": searchDate
             }),
             headers: myHeaders,
         }).then(async response => {
             let data = await response.json();
 
-            if(data.basic) {
+            if(data.guild) {
                 parsedData = data;
-                // await set_idb('searchM', `${server}_${name}`,{
-                //     data: data,
-                //     date: searchDate,
-                //     name: name,
-                //     server: server
-                // });
+                await set_idb('guild', `${server}_${name}`,{
+                    data: data,
+                    date: searchDate,
+                    name: name,
+                    server: server
+                });
                 return data;
             }else{
                 throw new Error(data);
@@ -195,5 +214,11 @@
             result[stat[i].stat_name] = stat[i].stat_value;
         }
         return result;
+    }
+
+    function selectDate(e){
+        date = e.detail;
+        searchDate = dayjs(date).format("YYYY-MM-DD");
+        data = getData();
     }
 </script>

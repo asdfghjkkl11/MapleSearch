@@ -1,3 +1,5 @@
+export const apiServer = "https://mapleserver.asdfghjkkl11.com";
+
 export const pcServerList = [
     "리부트",
     "리부트2",
