@@ -65,6 +65,6 @@
     }
 
     function search(){
-        $goto(`${url}/${name}`);
+        $goto(`${url}/${name.trim()}`);
     }
 </script>
