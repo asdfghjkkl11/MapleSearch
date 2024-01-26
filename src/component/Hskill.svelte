@@ -185,19 +185,14 @@
     import Modal from "./Modal.svelte";
     import ItemType1 from "./icon/ItemType1.svelte";
     import ItemType2 from "./icon/ItemType2.svelte";
+    import {skillSelectedItem} from "../js/mapper";
 
     export let parsedData;
 
     let skillModal;
     let skills = nvl(parsedData.hexamatrix.character_skill,[]);
     let stats = nvl(parsedData["hexamatrix-stat"].character_hexa_stat_core,[]);
-    let selectedItem = {
-        "skill_name": "",
-        "skill_description": "",
-        "skill_level": 0,
-        "skill_effect": "",
-        "skill_icon": ""
-    };
+    let selectedItem = skillSelectedItem;
     let itemOrderMode = 0;
 
     function clickItem(item){

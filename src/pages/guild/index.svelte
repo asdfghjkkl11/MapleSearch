@@ -33,11 +33,11 @@
     }
 </style>
 <div class="main">
-    <span>메이플M 캐릭터 검색</span>
+    <span>메이플 길드 검색</span>
     <div class="search-area">
         <Searchbar url="{url}"/>
         <select class="select" bind:value={selectedServer}>
-            {#each mobileServerList as server,i}
+            {#each pcServerList as server,i}
                 <option value="{server}">{server}</option>
             {/each}
         </select>
@@ -45,7 +45,7 @@
 </div>
 <script>
     import Searchbar from "../../component/Searchbar.svelte";
-    import {mobileServerList} from "../../js/mapper";
+    import {pcServerList} from "../../js/mapper";
     let selectedServer = "스카니아";
     $: url = `/mobile/${selectedServer}`;
 </script>

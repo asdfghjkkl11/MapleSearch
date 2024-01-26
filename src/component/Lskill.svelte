@@ -221,19 +221,14 @@
     import Modal from "./Modal.svelte";
     import ItemType1 from "./icon/ItemType1.svelte";
     import ItemType2 from "./icon/ItemType2.svelte";
+    import {skillSelectedItem} from "../js/mapper";
 
     export let parsedData;
 
     let skillModal;
     let ownSkill = nvl(parsedData['link-skill'].character_owned_link_skill, {});
     let skills = nvl(parsedData['link-skill'].character_link_skill,[]);
-    let selectedItem = {
-        "skill_name": "",
-        "skill_description": "",
-        "skill_level": 0,
-        "skill_effect": "",
-        "skill_icon": ""
-    };
+    let selectedItem = skillSelectedItem;
 
     let itemOrderMode = 0;
     let skillPreset = null;

@@ -310,59 +310,14 @@
     import ItemType1 from "./icon/ItemType1.svelte";
     import ItemType2 from "./icon/ItemType2.svelte";
     import {nvl} from "../js/common";
+    import {pcCashItemOrder1, pcCashItemOrder2} from "../js/mapper";
 
     export let parsedData;
     export let refresh;
 
     let itemOrderMode = 1;
-    let itemOrder1 = [
-        '무기',
-        '모자',
-        '상의',
-        '하의',
-        '망토',
-        '장갑',
-        '신발',
-        '눈장식',
-        '얼굴장식',
-        '귀고리',
-        '반지4',
-        '반지3',
-        '반지2',
-        '반지1'
-    ];
-    let itemOrder2 = [
-        '반지4',
-        'empty',
-        '모자',
-        'empty',
-        'empty',
-        '반지3',
-        'empty',
-        '얼굴장식',
-        'empty',
-        'empty',
-        '반지2',
-        'empty',
-        '눈장식',
-        '귀고리',
-        'empty',
-        '반지1',
-        '무기',
-        '상의',
-        'empty',
-        'empty',
-        'empty',
-        'empty',
-        '하의',
-        '장갑',
-        '망토',
-        'empty',
-        'empty',
-        '신발',
-        'empty',
-        'empty',
-    ];
+    let itemOrder1 = pcCashItemOrder1;
+    let itemOrder2 = pcCashItemOrder2;
     let parsedEquip = {
         base: {},
         additional: {}

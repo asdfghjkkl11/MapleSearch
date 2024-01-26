@@ -287,7 +287,7 @@
         </div>
         <div class="stat">
             {#if selectedItem.item_total_option}
-                {#each itemOptionOrder1 as option,i}
+                {#each itemOptionOrder as option,i}
                     {#if nvl(selectedItem.item_total_option[option.key]) != 0}
                         <div>
                             <span>
@@ -378,6 +378,7 @@
     import ItemType1 from "./icon/ItemType1.svelte";
     import ItemType2 from "./icon/ItemType2.svelte";
     import Modal from "./Modal.svelte";
+    import {gradeMapper, itemOptionOrder, pcItemOrder1, pcItemOrder2} from "../js/mapper";
 
     export let parsedData;
     export let parsedStat;
@@ -386,129 +387,9 @@
     let equipModal;
     let settingModal;
     let itemOrderMode = 1;
-    let itemOrder1 = [
-        '엠블렘',
-        '무기',
-        '보조무기',
-        '모자',
-        '상의',
-        '하의',
-        '망토',
-        '장갑',
-        '신발',
-        '어깨장식',
-        '눈장식',
-        '얼굴장식',
-        '벨트',
-        '귀고리',
-        '펜던트2',
-        '펜던트',
-        '반지4',
-        '반지3',
-        '반지2',
-        '반지1',
-        '뱃지',
-        '훈장',
-        '포켓 아이템',
-        '기계 심장'
-    ];
-    let itemOrder2 = [
-        '반지1',
-        'empty',
-        '모자',
-        'empty',
-        '엠블렘',
-        '반지2',
-        '펜던트2',
-        '얼굴장식',
-        'empty',
-        '뱃지',
-        '반지3',
-        '펜던트',
-        '눈장식',
-        '귀고리',
-        '훈장',
-        '반지4',
-        '무기',
-        '상의',
-        '어깨장식',
-        '보조무기',
-        '포켓 아이템',
-        '벨트',
-        '하의',
-        '장갑',
-        '망토',
-        'empty',
-        'empty',
-        '신발',
-        'empty',
-        '기계 심장'
-    ];
-    let itemOptionOrder1 = [
-        {
-            key: "str",
-            value: "STR"
-        },
-        {
-            key: "dex",
-            value: "DEX"
-        },
-        {
-            key: "int",
-            value: "INT"
-        },
-        {
-            key: "luk",
-            value: "LUK"
-        },
-        {
-            key: "max_hp",
-            value: "MaxHP"
-        },
-        {
-            key: "max_mp",
-            value: "MaxMP"
-        },
-        {
-            key: "attack_power",
-            value: "공격력"
-        },
-        {
-            key: "magic_power",
-            value: "마력"
-        },
-        {
-            key: "armor",
-            value: "물리방어력"
-        },
-        {
-            key: "boss_damage",
-            value: "보스 몬스터공격 시 데미지",
-            per: true
-        },
-        {
-            key: "ignore_monster_armor",
-            value: "몬스터 방어력 무시",
-            per: true
-        },
-        {
-            key: "damage",
-            value: "데미지",
-            per: true
-        },
-        {
-            key: "all_stat",
-            value: "올스탯",
-            per: true
-        }
-    ];
+    let itemOrder1 = pcItemOrder1;
+    let itemOrder2 = pcItemOrder2;
     let main = "STR";
-    let gradeMapper = {
-        "레어": "blue",
-        "에픽": "purple",
-        "유니크": "yellow",
-        "레전드리": "green",
-    }
     let selectedItem = {};
     let atkStatMulti = nvl(localStorage.getItem("atkStatMulti"),4);
     let atkStatMultiXenon = nvl(localStorage.getItem("atkStatMultiXenon"),7);

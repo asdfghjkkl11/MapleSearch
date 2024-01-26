@@ -77,11 +77,11 @@
 </style>
 {#if parsedData.basic}
     <div class="flex">
-        <span class="highlight title">{grade} (<span class="{cssList[index]}">{level}</span>)</span>
+        <span class="highlight title">{grade} (<span class="{unionCssList[index]}">{level}</span>)</span>
         <div class="union-block">
             <div class="block-border">
                 <UnionBorder/>
-                {#each unionBlockList as span,i}
+                {#each blockList as span,i}
                     <span class="block-span highlight" style="top: {span.top}px; left: {span.left}px;">{span.name}</span>
                 {/each}
             </div>
@@ -124,33 +124,10 @@
 <script>
     import {nvl} from "../js/common";
     import UnionBorder from "./icon/UnionBorder.svelte";
+    import {unionBlockList, unionCssList, unionGradeList, unionOrderMapper} from "../js/mapper";
 
     export let parsedData;
-
-    let orderMapper = {
-        "STR": 1,
-        "DEX": 2,
-        "INT": 3,
-        "LUK": 4,
-        "공격력": 5,
-        "마력": 6,
-        "공격력/마력": 7,
-        "크리티컬 확률": 8,
-        "크리티컬 데미지": 9,
-        "보스 몬스터 공격 시 데미지": 10,
-        "방어율 무시": 11,
-        "공격 시 20%의 확률로 데미지": 12,
-        "경험치 획득량": 13,
-        "메소 획득량": 14,
-        "버프 지속시간": 15,
-        "스킬 재사용 대기시간": 16,
-        "소환수 지속시간": 17,
-        "상태 이상 내성": 18,
-        "최대 HP": 19,
-        "최대 MP": 20,
-        "적 공격마다 70%의 확률로 순수 HP의": 21,
-        "적 공격마다 70%의 확률로 순수 MP의": 22
-    }
+    let blockList = unionBlockList;
     let unionOccupiedStat = nvl(parsedData["union-raider"].union_occupied_stat,[]).sort(sortCallback);
     let unionRaiderStat = nvl(parsedData["union-raider"].union_raider_stat,[]).sort();
     let unionBlock = nvl(parsedData["union-raider"].union_block,[]);
@@ -158,8 +135,6 @@
     let unionArtifact =  nvl(parsedData["union-artifact"].union_artifact_effect,[]);
     let grade = parsedData.union.union_grade;
     let level = parsedData.union.union_level;
-    let gradeList = ["노비스","베테랑","마스터","그랜드 마스터","슈프림"];
-    let cssList = ["novice","veteran","master","grand-master","supreme"];
     let index = 0;
     let raiderList;
     let keyList = ["STR","DEX","INT","LUK","크리티컬 확률"];
@@ -168,71 +143,6 @@
     let y = 20;
     let tileSize = 16;
     let tileSet = new Set();
-    let unionBlockList = [{
-        name: "",
-        top: "85",
-        left: "115"
-    },{
-        name: "",
-        top: "85",
-        left: "180"
-    },{
-        name: "",
-        top: "135",
-        left: "212"
-    },{
-        name: "",
-        top: "165",
-        left: "212"
-    },{
-        name: "",
-        top: "215",
-        left: "180"
-    },{
-        name: "",
-        top: "215",
-        left: "115"
-    },{
-        name: "",
-        top: "165",
-        left: "85"
-    },{
-        name: "",
-        top: "135",
-        left: "85"
-    },{
-        name: "내성",
-        top: "30",
-        left: "115"
-    },{
-        name: "경험치",
-        top: "30",
-        left: "180"
-    },{
-        name: "크확",
-        top: "110",
-        left: "285"
-    },{
-        name: "보공",
-        top: "190",
-        left: "285"
-    },{
-        name: "일몹뎀",
-        top: "270",
-        left: "180"
-    },{
-        name: "벞지",
-        top: "270",
-        left: "115"
-    },{
-        name: "방무",
-        top: "190",
-        left: "10"
-    },{
-        name: "크뎀",
-        top: "110",
-        left: "10"
-    }];
 
     $:{
         valueList = [0,0,0,0,0];
@@ -247,8 +157,8 @@
             }
         }
 
-        for(let i = 0; i < gradeList.length; i++){
-            if(grade.includes(gradeList[i])){
+        for(let i = 0; i < unionGradeList.length; i++){
+            if(grade.includes(unionGradeList[i])){
                 index = i;
             }
         }
@@ -280,7 +190,7 @@
         }
 
         for(let i = 0; i < unionInnerStat.length; i++) {
-            unionBlockList[i].name = unionInnerStat[i].stat_field_effect.replace("유니온 ","");
+            blockList[i].name = unionInnerStat[i].stat_field_effect.replace("유니온 ","");
         }
 
         raiderList = raiderList.sort(sortCallback);
@@ -295,6 +205,6 @@
         b1.pop();
         let a2 = a1.join(" ");
         let b2 = b1.join(" ");
-        return orderMapper[a2] - orderMapper[b2];
+        return unionOrderMapper[a2] - unionOrderMapper[b2];
     }
 </script>

@@ -62,16 +62,22 @@
         <Searchbar url="/search"/>
     </div>
     <div class="content-area">
-        <a href="/">메이플 길드 검색</a>
-        <span class="ready">준비중입니다.</span>
-<!--        <Searchbar url="/search"/>-->
+        <a href="/guild">메이플 길드 검색</a>
+        <div class="search-area">
+            <Searchbar url="{pcGuildUrl}"/>
+            <select class="select" bind:value={selectedPcGuildServer}>
+                {#each pcServerList as server,i}
+                    <option value="{server}">{server}</option>
+                {/each}
+            </select>
+        </div>
     </div>
     <div class="content-area">
         <a href="/mobile">메이플M 캐릭터 검색</a>
         <div class="search-area">
-            <Searchbar url="{url}"/>
-            <select class="select" bind:value={selectedServer}>
-                {#each serverList as server,i}
+            <Searchbar url="{mbileUrl}"/>
+            <select class="select" bind:value={selectedMobileServer}>
+                {#each mobileServerList as server,i}
                     <option value="{server}">{server}</option>
                 {/each}
             </select>
@@ -83,7 +89,10 @@
 </div>
 <script>
     import Searchbar from "../component/Searchbar.svelte";
-    let serverList = ["아케인", "크로아", "엘리시움", "루나", "스카니아", "유니온", "제니스"];
-    let selectedServer = "스카니아";
-    $: url = `/mobile/${selectedServer}`;
+    import {mobileServerList, pcServerList} from "../js/mapper";
+
+    let selectedMobileServer = "스카니아";
+    let selectedPcGuildServer = "스카니아";
+    $: mbileUrl = `/mobile/${selectedMobileServer}`;
+    $: pcGuildUrl = `/guild/${selectedPcGuildServer}`;
 </script>

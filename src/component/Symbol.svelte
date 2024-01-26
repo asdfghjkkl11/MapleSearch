@@ -180,25 +180,13 @@
     import Modal from "./Modal.svelte";
     import ItemType1 from "./icon/ItemType1.svelte";
     import ItemType2 from "./icon/ItemType2.svelte";
+    import {symbolSelectedItem} from "../js/mapper";
 
     export let parsedData;
     export let parsedStat;
     let symbolModal;
     let symbols = nvl(parsedData["symbol-equipment"].symbol,[]);
-    let selectedItem = {
-        "symbol_name": "",
-        "symbol_icon": "",
-        "symbol_description": "",
-        "symbol_force": "0",
-        "symbol_level": 0,
-        "symbol_str": "0",
-        "symbol_dex": "0",
-        "symbol_int": "",
-        "symbol_luk": "0",
-        "symbol_hp": "0",
-        "symbol_growth_count": 0,
-        "symbol_require_growth_count": 0
-    };
+    let selectedItem = symbolSelectedItem;
     let itemOrderMode = 0;
 
     function clickItem(item){

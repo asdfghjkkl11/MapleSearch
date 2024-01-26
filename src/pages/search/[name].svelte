@@ -243,7 +243,7 @@
                     <div>{parsedData.dojang.dojang_best_floor}층 ({parsedData.dojang.dojang_best_time}초)</div>
                     <div>유니온</div>
                     <div>
-                        <span class="{cssList[unionIndex]}">{parsedData.union.union_level}</span>
+                        <span class="{unionCssList[unionIndex]}">{parsedData.union.union_level}</span>
                     </div>
                 </div>
                 {#if tabIndex === 0}
@@ -282,6 +282,7 @@
     import Union from "../../component/Union.svelte";
     import dayjs from "dayjs";
     import DateInput from "../../component/datePicker/DateInput.svelte";
+    import {gradeMapper, unionCssList, unionGradeList, worldMapper} from "../../js/mapper";
 
     let name = decodeURIComponent($params.name);
     const myHeaders = new Headers();
@@ -294,46 +295,18 @@
     let minDate = dayjs("2023-12-21").toDate();
     let maxDate = dayjs().subtract(1,"day").toDate();
 
-    let gradeMapper = {
-        "레어": "blue",
-        "에픽": "purple",
-        "유니크": "yellow",
-        "레전드리": "green",
-    }
-
-    let gradeList = ["노비스","베테랑","마스터","그랜드 마스터","슈프림"];
-    let cssList = ["novice","veteran","master","grand-master","supreme"];
     let unionIndex = 0;
     let tabList = ["장비","캐시장비","링크스킬","5차스킬","6차스킬","심볼","유니온"]
     let tabIndex = 0;
-    let worldMapper = {
-        "리부트": "icon_3.png",
-        "리부트2": "icon_2.png",
-        "오로라": "icon_4.png",
-        "레드": "icon_5.png",
-        "이노시스": "icon_6.png",
-        "유니온": "icon_7.png",
-        "스카니아": "icon_8.png",
-        "루나": "icon_9.png",
-        "제니스": "icon_10.png",
-        "크로아": "icon_11.png",
-        "베라": "icon_12.png",
-        "엘리시움": "icon_13.png",
-        "아케인": "icon_14.png",
-        "노바": "icon_15.png",
-        "버닝": "icon_16.png",
-        "버닝2": "icon_17.png",
-        "버닝3": "icon_18.png",
-        "버닝4": "icon_19.png"
-    }
     let abilityPreset = null;
+
     $:{
         console.log(parsedData)
         parsedStat = parseStat();
 
         if(parsedData.union?.union_grade) {
-            for (let i = 0; i < gradeList.length; i++) {
-                if (parsedData.union.union_grade.includes(gradeList[i])) {
+            for (let i = 0; i < unionGradeList.length; i++) {
+                if (parsedData.union.union_grade.includes(unionGradeList[i])) {
                     unionIndex = i;
                 }
             }

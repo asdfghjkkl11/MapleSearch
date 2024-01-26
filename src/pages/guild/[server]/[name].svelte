@@ -67,7 +67,7 @@
     <div class="search-area">
         <Searchbar url="{url}"/>
         <select class="select" bind:value={selectedServer}>
-            {#each mobileServerList as server,i}
+            {#each pcServerList as server,i}
                 <option value="{server}">{server}</option>
             {/each}
         </select>
@@ -115,12 +115,12 @@
     import {g_loading_hide, g_loading_show, get_idb, inputInt, nvl, parseIntText, set_idb} from "../../../js/common";
     import Searchbar from "../../../component/Searchbar.svelte";
     import MobileEquipment from "../../../component/MobileEquipment.svelte";
-    import {mobileServerList, worldMapper} from "../../../js/mapper";
+    import {pcServerList, worldMapper} from "../../../js/mapper";
 
     let server = decodeURIComponent($params.server);
     let name = decodeURIComponent($params.name);
     let selectedServer = server;
-    $: url = `/mobile/${selectedServer}`;
+    $: url = `/guild/${selectedServer}`;
 
     const myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
