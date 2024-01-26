@@ -106,6 +106,16 @@
     .btn.active{
         background: var(--btn-background-active);
     }
+    .btn-link{
+        padding: 2px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        fill: var(--highlight);
+        background: var(--btn-background);
+        border: 1px solid var(--btn-border);
+        cursor: pointer;
+    }
     .preset-btn{
         width: 20px;
         height: 20px;
@@ -183,6 +193,13 @@
                         {/if}
                     </div>
                     <div>{parsedData.basic.character_class}</div>
+                    <div>길드</div>
+                    <div class="flex">
+                        <span>{parsedData.basic.character_guild_name}</span>
+                        <button class="btn-link" on:click={searchGuild}>
+                            <Link/>
+                        </button>
+                    </div>
                     <div>전투력</div>
                     <div>{parseIntText(parsedStat['전투력'])}</div>
                     <div>스탯공격력</div>
@@ -270,7 +287,7 @@
     </div>
 </div>
 <script>
-    import {params,afterPageLoad} from "@roxi/routify";
+    import {params, afterPageLoad, goto} from "@roxi/routify";
     import {g_loading_hide, g_loading_show, get_idb, inputInt, nvl, parseIntText, set_idb} from "../../js/common";
     import Searchbar from "../../component/Searchbar.svelte";
     import Equipment from "../../component/Equipment.svelte";
@@ -283,6 +300,7 @@
     import dayjs from "dayjs";
     import DateInput from "../../component/datePicker/DateInput.svelte";
     import {apiServer, gradeMapper, unionCssList, unionGradeList, worldMapper} from "../../js/mapper";
+    import Link from "../../component/icon/Link.svelte";
 
     let name = decodeURIComponent($params.name);
     const myHeaders = new Headers();
@@ -290,7 +308,7 @@
     let data = init();
     let parsedData = {}
     let parsedStat = null;
-    let searchDate = dayjs().subtract(1,"day").format("YYYY-MM-DD");
+    let searchDate = dayjs().subtract(1,"day").subtract(1,"hour").format("YYYY-MM-DD");
     let date = dayjs().subtract(1,"day").toDate();
     let minDate = dayjs("2023-12-21").toDate();
     let maxDate = dayjs().subtract(1,"day").toDate();
@@ -393,6 +411,10 @@
         }finally {
             g_loading_hide();
         }
+    }
+
+    function searchGuild(){
+        $goto(`/guild/${parsedData.basic.world_name}/${parsedData.basic.character_guild_name}`);
     }
 
     async function makeProfile(){

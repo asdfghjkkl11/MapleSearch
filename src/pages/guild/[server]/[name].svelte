@@ -77,6 +77,9 @@
         border: none;
         box-shadow: 1px 1px 0 0 var(--border),inset 1px 1px 0 0 var(--border);
     }
+    .pointer{
+        cursor: pointer;
+    }
     @media (max-width: 1024px) {
         .info {
             flex-direction: column;
@@ -110,7 +113,7 @@
                             <img class="world-icon" src="https://s3.ap-northeast-2.amazonaws.com/meso.gg/image/{worldMapper[parsedData.guild.world_name]}">
                         {/if}
                     </div>
-                    <div class="grid-col-2">
+                    <div class="grid-col-2 pointer" on:click={searchCharacter(parsedData.guild.guild_master_name)}>
                         <div>길드장</div>
                         <div class="character-img-wrapper">
                             <img class="character-img" src="{parsedData.member_list[parsedData.guild.guild_master_name].basic.character_image}">
@@ -143,7 +146,7 @@
     </div>
 </div>
 <script>
-    import {params,afterPageLoad} from "@roxi/routify";
+    import {params, afterPageLoad, goto} from "@roxi/routify";
     import {g_loading_hide, g_loading_show, get_idb, inputInt, nvl, parseIntText, set_idb} from "../../../js/common";
     import Searchbar from "../../../component/Searchbar.svelte";
     import {apiServer, pcServerList, worldMapper} from "../../../js/mapper";
@@ -161,7 +164,7 @@
     let data = init();
     let parsedData = {}
     let parsedStat = null;
-    let searchDate = dayjs().subtract(1,"day").format("YYYY-MM-DD");
+    let searchDate = dayjs().subtract(1,"day").subtract(1,"hour").format("YYYY-MM-DD");
     let date = dayjs().subtract(1,"day").toDate();
     let minDate = dayjs("2023-12-21").toDate();
     let maxDate = dayjs().subtract(1,"day").toDate();
@@ -240,5 +243,9 @@
         date = e.detail;
         searchDate = dayjs(date).format("YYYY-MM-DD");
         data = getData();
+    }
+
+    function searchCharacter(character_name){
+        $goto(`/search/${character_name}`);
     }
 </script>
