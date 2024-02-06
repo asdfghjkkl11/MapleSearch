@@ -443,7 +443,7 @@
         let equip = nvl(parsedData['item-equipment']?.item_equipment,[]);
 
         if(equipPreset){
-            equip = nvl(parsedData['item-equipment'][`item_equipment_preset${equipPreset}`],equip);
+            equip = nvl(parsedData['item-equipment'][`item_equipment_preset_${equipPreset}`],equip);
         }
 
         for(let i = 0; i < equip.length; i++){
