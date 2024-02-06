@@ -1,8 +1,10 @@
 <style>
     .items{
+        min-width: 360px;
+        height: fit-content;
         display: grid;
-        grid-auto-flow: column;
-        grid-template-rows: repeat(14, 1fr);
+        grid-auto-flow: row;
+        grid-template-rows: repeat(1, 1fr);
     }
     .item{
         min-width: 360px;
@@ -61,6 +63,8 @@
         cursor: pointer;
     }
     .simple-items{
+        width: 300px;
+        height: fit-content;
         display: grid;
         grid-template-columns: repeat(5, 1fr);
     }
@@ -73,6 +77,7 @@
         cursor: pointer;
     }
     .simple-items .empty{
+        min-height: 60px;
         box-shadow: 1px 1px 0 0 var(--border), inset 1px 1px 0 0 var(--border);
     }
     .item-list{
@@ -82,8 +87,9 @@
     }
     .cash-items{
         display: flex;
-        justify-content: center;
+        justify-content: space-evenly;
         flex-wrap: wrap;
+        gap: 8px;
     }
     .beauty{
         min-width: 360px;
@@ -119,6 +125,12 @@
     .preset-btn.active{
         background: var(--btn-background-active);
     }
+    .flex-col{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+    }
     @media (max-width: 1630px) {
         .item {
             width: 360px;
@@ -126,10 +138,9 @@
         }
     }
     @media (max-width: 720px) {
-        .items{
-            grid-auto-flow: row;
-            grid-template-columns: 1fr;
-            grid-template-rows: none;
+        .cash-items{
+            flex-direction: column;
+            gap: 16px;
         }
     }
 </style>
@@ -236,65 +247,163 @@
         </div>
         <div class="cash-items">
             {#if itemOrderMode === 1}
-                <div class="items">
-                    {#each itemOrder1 as key, i}
-                        {#if parsedEquip.base[key]}
-                            <div class="item" style="order: {itemOrder1[i]}">
-                                <div class="item-img-wrapper">
-                                    <img class="item-img" src="{parsedEquip.base[key].cash_item_icon}">
-                                </div>
-                                <div class="item-name" >
-                                    <span>
-                                        <span>{parsedEquip.base[key].cash_item_name}</span>
-                                    </span>
-                                </div>
-                            </div>
-                        {/if}
-                    {/each}
-                </div>
-                <div class="items">
-                    {#each itemOrder1 as key, i}
-                        {#if parsedEquip.additional[key]}
-                            <div class="item" style="order: {itemOrder1[i]}">
-                                <div class="item-img-wrapper">
-                                    <img class="item-img" src="{parsedEquip.additional[key].cash_item_icon}">
-                                </div>
-                                <div class="item-name" >
-                                    <span>
-                                        <span>{parsedEquip.additional[key].cash_item_name}</span>
-                                    </span>
-                                </div>
-                            </div>
-                        {/if}
-                    {/each}
-                </div>
+                {#if Object.keys(parsedEquip.base).length > 0}
+                    <div class="flex-col">
+                        <div class="highlight">베이스 아이템</div>
+                        <div class="items">
+                            {#each itemOrder1 as key, i}
+                                {#if parsedEquip.base[key]}
+                                    <div class="item" style="order: {itemOrder1[i]}">
+                                        <div class="item-img-wrapper">
+                                            <img class="item-img" src="{parsedEquip.base[key].cash_item_icon}">
+                                        </div>
+                                        <div class="item-name" >
+                                            <span>
+                                                <span>{parsedEquip.base[key].cash_item_name}</span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                {/if}
+                            {/each}
+                        </div>
+                    </div>
+                {/if}
+                {#if Object.keys(parsedEquip.preset).length > 0}
+                    <div class="flex-col">
+                        <div class="highlight">프리셋 아이템</div>
+                        <div class="items">
+                            {#each itemOrder1 as key, i}
+                                {#if parsedEquip.preset[key]}
+                                    <div class="item" style="order: {itemOrder1[i]}">
+                                        <div class="item-img-wrapper">
+                                            <img class="item-img" src="{parsedEquip.preset[key].cash_item_icon}">
+                                        </div>
+                                        <div class="item-name" >
+                                            <span>
+                                                <span>{parsedEquip.preset[key].cash_item_name}</span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                {/if}
+                            {/each}
+                        </div>
+                    </div>
+                {/if}
+                {#if Object.keys(parsedEquip.additional).length > 0}
+                    <div class="flex-col">
+                        <div class="highlight">에디셔널 아이템</div>
+                        <div class="items">
+                            {#each itemOrder1 as key, i}
+                                {#if parsedEquip.additional[key]}
+                                    <div class="item" style="order: {itemOrder1[i]}">
+                                        <div class="item-img-wrapper">
+                                            <img class="item-img" src="{parsedEquip.additional[key].cash_item_icon}">
+                                        </div>
+                                        <div class="item-name" >
+                                            <span>
+                                                <span>{parsedEquip.additional[key].cash_item_name}</span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                {/if}
+                            {/each}
+                        </div>
+                    </div>
+                {/if}
+                {#if Object.keys(parsedEquip.additionalPreset).length > 0}
+                    <div class="flex-col">
+                        <div class="highlight">에디셔널 프리셋 아이템</div>
+                        <div class="items">
+                            {#each itemOrder1 as key, i}
+                                {#if parsedEquip.additionalPreset[key]}
+                                    <div class="item" style="order: {itemOrder1[i]}">
+                                        <div class="item-img-wrapper">
+                                            <img class="item-img" src="{parsedEquip.additionalPreset[key].cash_item_icon}">
+                                        </div>
+                                        <div class="item-name" >
+                                            <span>
+                                                <span>{parsedEquip.additionalPreset[key].cash_item_name}</span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                {/if}
+                            {/each}
+                        </div>
+                    </div>
+                {/if}
             {:else}
-                <div class="simple-items">
-                    {#each itemOrder2 as key, i}
-                        {#if parsedEquip.base[key]}
-                            <div class="item" style="order: {i}">
-                                <div class="item-img-wrapper">
-                                    <img class="item-img" src="{parsedEquip.base[key].cash_item_icon}">
-                                </div>
-                            </div>
-                        {:else if key !== ""}
-                            <div class="empty" style="order: {i}"></div>
-                        {/if}
-                    {/each}
-                </div>
-                <div class="simple-items">
-                    {#each itemOrder2 as key, i}
-                        {#if parsedEquip.additional[key]}
-                            <div class="item" style="order: {i}">
-                                <div class="item-img-wrapper">
-                                    <img class="item-img" src="{parsedEquip.additional[key].cash_item_icon}">
-                                </div>
-                            </div>
-                        {:else if key !== ""}
-                            <div class="empty" style="order: {i}"></div>
-                        {/if}
-                    {/each}
-                </div>
+                {#if Object.keys(parsedEquip.base).length > 0}
+                    <div class="flex-col">
+                        <div class="highlight">베이스 아이템</div>
+                        <div class="simple-items">
+                            {#each itemOrder2 as key, i}
+                                {#if parsedEquip.base[key]}
+                                    <div class="item" style="order: {i}">
+                                        <div class="item-img-wrapper">
+                                            <img class="item-img" src="{parsedEquip.base[key].cash_item_icon}">
+                                        </div>
+                                    </div>
+                                {:else if key !== ""}
+                                    <div class="empty" style="order: {i}"></div>
+                                {/if}
+                            {/each}
+                        </div>
+                    </div>
+                {/if}
+                {#if Object.keys(parsedEquip.preset).length > 0}
+                    <div class="flex-col">
+                        <div class="highlight">프리셋 아이템</div>
+                        <div class="simple-items">
+                            {#each itemOrder2 as key, i}
+                                {#if parsedEquip.preset[key]}
+                                    <div class="item" style="order: {i}">
+                                        <div class="item-img-wrapper">
+                                            <img class="item-img" src="{parsedEquip.preset[key].cash_item_icon}">
+                                        </div>
+                                    </div>
+                                {:else if key !== ""}
+                                    <div class="empty" style="order: {i}"></div>
+                                {/if}
+                            {/each}
+                        </div>
+                    </div>
+                {/if}
+                {#if Object.keys(parsedEquip.additional).length > 0}
+                    <div class="flex-col">
+                        <div class="highlight">에디셔널 아이템</div>
+                        <div class="simple-items">
+                            {#each itemOrder2 as key, i}
+                                {#if parsedEquip.additional[key]}
+                                    <div class="item" style="order: {i}">
+                                        <div class="item-img-wrapper">
+                                            <img class="item-img" src="{parsedEquip.additional[key].cash_item_icon}">
+                                        </div>
+                                    </div>
+                                {:else if key !== ""}
+                                    <div class="empty" style="order: {i}"></div>
+                                {/if}
+                            {/each}
+                        </div>
+                    </div>
+                {/if}
+                {#if Object.keys(parsedEquip.additionalPreset).length > 0}
+                    <div class="flex-col">
+                        <div class="highlight">에디셔널 프리셋 아이템</div>
+                        <div class="simple-items">
+                            {#each itemOrder2 as key, i}
+                                {#if parsedEquip.additionalPreset[key]}
+                                    <div class="item" style="order: {i}">
+                                        <div class="item-img-wrapper">
+                                            <img class="item-img" src="{parsedEquip.additionalPreset[key].cash_item_icon}">
+                                        </div>
+                                    </div>
+                                {:else if key !== ""}
+                                    <div class="empty" style="order: {i}"></div>
+                                {/if}
+                            {/each}
+                        </div>
+                    </div>
+                {/if}
             {/if}
         </div>
     </div>
@@ -314,7 +423,9 @@
     let itemOrder2 = pcCashItemOrder2;
     let parsedEquip = {
         base: {},
-        additional: {}
+        preset: {},
+        additional: {},
+        additionalPreset: {},
     };
     let equipPreset = parsedData['cashitem-equipment'].preset_no;
 
@@ -329,14 +440,18 @@
     function parseEquip(){
         let result = {
             base: {},
-            additional: {}
+            preset: {},
+            additional: {},
+            additionalPreset: {}
         };
         let base = parsedData['cashitem-equipment'].cash_item_equipment_base;
         let additional = parsedData['cashitem-equipment'].additional_cash_item_equipment_base;
+        let preset = {};
+        let additionalPreset = {};
 
         if(equipPreset){
-            base = nvl(parsedData['cashitem-equipment'][`cash_item_equipment_preset_${equipPreset}`],base);
-            additional =  nvl(parsedData['cashitem-equipment'][`additional_cash_item_equipment_preset_${equipPreset}`],additional);
+            preset = parsedData['cashitem-equipment'][`cash_item_equipment_preset_${equipPreset}`];
+            additionalPreset =  parsedData['cashitem-equipment'][`additional_cash_item_equipment_preset_${equipPreset}`];
         }
 
         for(let i = 0; i < base.length; i++){
@@ -344,6 +459,12 @@
         }
         for(let i = 0; i < additional.length; i++){
             result.additional[additional[i].cash_item_equipment_slot] = additional[i];
+        }
+        for(let i = 0; i < preset.length; i++){
+            result.preset[preset[i].cash_item_equipment_slot] = preset[i];
+        }
+        for(let i = 0; i < additionalPreset.length; i++){
+            result.additionalPreset[additionalPreset[i].cash_item_equipment_slot] = additionalPreset[i];
         }
 
         return result;
