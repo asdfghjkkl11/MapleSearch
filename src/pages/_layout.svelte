@@ -129,7 +129,7 @@
     $: {
         if (typeof gtag !== "undefined"){
             gtag("config", "G-H9HGG3QL6F", {
-                page_path: $page.path
+                page_location: $page.path
             });
         }
     }
