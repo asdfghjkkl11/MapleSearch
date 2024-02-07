@@ -124,6 +124,15 @@
     import {afterPageLoad} from "@roxi/routify";
     import {nvl} from "../js/common";
     import Darkmode from "../component/icon/Darkmode.svelte";
+    import { page } from '@roxi/routify';
+
+    $: {
+        if (typeof gtag !== "undefined"){
+            gtag("config", "G-H9HGG3QL6F", {
+                page_path: $page.path
+            });
+        }
+    }
 
     $afterPageLoad(()=>{
         let mode = nvl(localStorage.getItem("mode"),"dark-mode");
