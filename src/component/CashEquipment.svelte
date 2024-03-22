@@ -73,6 +73,7 @@
         cursor: pointer;
     }
     .simple-items .empty{
+        height: 60px;
         box-shadow: 1px 1px 0 0 var(--border), inset 1px 1px 0 0 var(--border);
     }
     .item-list{
@@ -84,6 +85,7 @@
         display: flex;
         justify-content: center;
         flex-wrap: wrap;
+        gap: 16px;
     }
     .beauty{
         min-width: 360px;
@@ -254,14 +256,14 @@
                 </div>
                 <div class="items">
                     {#each itemOrder1 as key, i}
-                        {#if parsedEquip.additional[key]}
+                        {#if parsedEquip.preset[key]}
                             <div class="item" style="order: {itemOrder1[i]}">
                                 <div class="item-img-wrapper">
-                                    <img class="item-img" src="{parsedEquip.additional[key].cash_item_icon}">
+                                    <img class="item-img" src="{parsedEquip.preset[key].cash_item_icon}">
                                 </div>
                                 <div class="item-name" >
                                     <span>
-                                        <span>{parsedEquip.additional[key].cash_item_name}</span>
+                                        <span>{parsedEquip.preset[key].cash_item_name}</span>
                                     </span>
                                 </div>
                             </div>
@@ -284,10 +286,73 @@
                 </div>
                 <div class="simple-items">
                     {#each itemOrder2 as key, i}
+                        {#if parsedEquip.preset[key]}
+                            <div class="item" style="order: {i}">
+                                <div class="item-img-wrapper">
+                                    <img class="item-img" src="{parsedEquip.preset[key].cash_item_icon}">
+                                </div>
+                            </div>
+                        {:else if key !== ""}
+                            <div class="empty" style="order: {i}"></div>
+                        {/if}
+                    {/each}
+                </div>
+            {/if}
+        </div>
+        <div class="cash-items">
+            {#if itemOrderMode === 1}
+                <div class="items">
+                    {#each itemOrder1 as key, i}
+                        {#if parsedEquip.additional[key]}
+                            <div class="item" style="order: {itemOrder1[i]}">
+                                <div class="item-img-wrapper">
+                                    <img class="item-img" src="{parsedEquip.additional[key].cash_item_icon}">
+                                </div>
+                                <div class="item-name">
+                                    <span>
+                                        <span>{parsedEquip.additional[key].cash_item_name}</span>
+                                    </span>
+                                </div>
+                            </div>
+                        {/if}
+                    {/each}
+                </div>
+                <div class="items">
+                    {#each itemOrder1 as key, i}
+                        {#if parsedEquip.additional_preset[key]}
+                            <div class="item" style="order: {itemOrder1[i]}">
+                                <div class="item-img-wrapper">
+                                    <img class="item-img" src="{parsedEquip.additional_preset[key].cash_item_icon}">
+                                </div>
+                                <div class="item-name" >
+                                    <span>
+                                        <span>{parsedEquip.additional_preset[key].cash_item_name}</span>
+                                    </span>
+                                </div>
+                            </div>
+                        {/if}
+                    {/each}
+                </div>
+            {:else}
+                <div class="simple-items">
+                    {#each itemOrder2 as key, i}
                         {#if parsedEquip.additional[key]}
                             <div class="item" style="order: {i}">
                                 <div class="item-img-wrapper">
                                     <img class="item-img" src="{parsedEquip.additional[key].cash_item_icon}">
+                                </div>
+                            </div>
+                        {:else if key !== ""}
+                            <div class="empty" style="order: {i}"></div>
+                        {/if}
+                    {/each}
+                </div>
+                <div class="simple-items">
+                    {#each itemOrder2 as key, i}
+                        {#if parsedEquip.additional_preset[key]}
+                            <div class="item" style="order: {i}">
+                                <div class="item-img-wrapper">
+                                    <img class="item-img" src="{parsedEquip.additional_preset[key].cash_item_icon}">
                                 </div>
                             </div>
                         {:else if key !== ""}
@@ -314,7 +379,9 @@
     let itemOrder2 = pcCashItemOrder2;
     let parsedEquip = {
         base: {},
-        additional: {}
+        additional: {},
+        preset: {},
+        additional_preset: {},
     };
     let equipPreset = parsedData['cashitem-equipment'].preset_no;
 
@@ -329,14 +396,17 @@
     function parseEquip(){
         let result = {
             base: {},
-            additional: {}
+            additional: {},
+            preset: {},
+            additional_preset: {},
         };
         let base = parsedData['cashitem-equipment'].cash_item_equipment_base;
         let additional = parsedData['cashitem-equipment'].additional_cash_item_equipment_base;
-
+        let preset = [];
+        let additional_preset = [];
         if(equipPreset){
-            base = nvl(parsedData['cashitem-equipment'][`cash_item_equipment_preset_${equipPreset}`],base);
-            additional =  nvl(parsedData['cashitem-equipment'][`additional_cash_item_equipment_preset_${equipPreset}`],additional);
+            preset = nvl(parsedData['cashitem-equipment'][`cash_item_equipment_preset_${equipPreset}`],[]);
+            additional_preset =  nvl(parsedData['cashitem-equipment'][`additional_cash_item_equipment_preset_${equipPreset}`],[]);
         }
 
         for(let i = 0; i < base.length; i++){
@@ -344,6 +414,13 @@
         }
         for(let i = 0; i < additional.length; i++){
             result.additional[additional[i].cash_item_equipment_slot] = additional[i];
+        }
+
+        for(let i = 0; i < preset.length; i++){
+            result.preset[preset[i].cash_item_equipment_slot] = preset[i];
+        }
+        for(let i = 0; i < additional.length; i++){
+            result.additional_preset[additional_preset[i].cash_item_equipment_slot] = additional_preset[i];
         }
 
         return result;

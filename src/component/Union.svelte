@@ -62,6 +62,37 @@
         text-align: center;
         font-weight: 500;
     }
+    .header{
+        padding: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+    .preset-btn{
+        width: 20px;
+        height: 20px;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 14px;
+        font-weight: 500;
+        fill: var(--highlight);
+        stroke: var(--highlight);
+        background: var(--btn-background);
+        color: var(--highlight);
+        border: 1px solid var(--btn-border);
+        border-radius: 10px;
+        cursor: pointer;
+    }
+    .preset-btn.active{
+        background: var(--btn-background-active);
+    }
+    .preset-list{
+        display: flex;
+        align-items: center;
+        gap: 4px;
+    }
     @media (max-width: 1630px) {
         .union {
             width: 360px;
@@ -77,6 +108,16 @@
 </style>
 {#if parsedData.basic}
     <div class="flex">
+        <div class="header">
+            <div class="preset-list">
+                <button class="preset-btn" class:active={unionPreset===null} on:click={()=>{unionPreset=null; changePreset()}}>E</button>
+                <button class="preset-btn" class:active={unionPreset===1} on:click={()=>{unionPreset=1; changePreset()}}>1</button>
+                <button class="preset-btn" class:active={unionPreset===2} on:click={()=>{unionPreset=2; changePreset()}}>2</button>
+                <button class="preset-btn" class:active={unionPreset===3} on:click={()=>{unionPreset=3; changePreset()}}>3</button>
+                <button class="preset-btn" class:active={unionPreset===4} on:click={()=>{unionPreset=4; changePreset()}}>4</button>
+                <button class="preset-btn" class:active={unionPreset===5} on:click={()=>{unionPreset=5; changePreset()}}>5</button>
+            </div>
+        </div>
         <span class="highlight title">{grade} (<span class="{unionCssList[index]}">{level}</span>)</span>
         <div class="union-block">
             <div class="block-border">
@@ -143,6 +184,7 @@
     let y = 20;
     let tileSize = 16;
     let tileSet = new Set();
+    let unionPreset = null;
 
     $:{
         valueList = [0,0,0,0,0];
@@ -156,6 +198,7 @@
                 tileSet.add(set);
             }
         }
+        tileSet = tileSet;
 
         for(let i = 0; i < unionGradeList.length; i++){
             if(grade.includes(unionGradeList[i])){
@@ -192,7 +235,7 @@
         for(let i = 0; i < unionInnerStat.length; i++) {
             blockList[i].name = unionInnerStat[i].stat_field_effect.replace("유니온 ","");
         }
-
+        console.log(parsedData)
         raiderList = raiderList.sort(sortCallback);
     }
 
@@ -206,5 +249,12 @@
         let a2 = a1.join(" ");
         let b2 = b1.join(" ");
         return unionOrderMapper[a2] - unionOrderMapper[b2];
+    }
+
+    function changePreset() {
+        unionOccupiedStat = nvl(nvl(parsedData["union-raider"][`union_raider_preset_${unionPreset}`],parsedData["union-raider"]).union_occupied_stat).sort(sortCallback);
+        unionRaiderStat = nvl(nvl(parsedData["union-raider"][`union_raider_preset_${unionPreset}`],parsedData["union-raider"]).union_raider_stat).sort();
+        unionBlock = nvl(nvl(parsedData["union-raider"][`union_raider_preset_${unionPreset}`],parsedData["union-raider"]).union_block);
+        unionInnerStat =  nvl(nvl(parsedData["union-raider"][`union_raider_preset_${unionPreset}`],parsedData["union-raider"]).union_inner_stat);
     }
 </script>

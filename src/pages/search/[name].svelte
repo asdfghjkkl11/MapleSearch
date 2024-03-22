@@ -308,10 +308,10 @@
     let data = init();
     let parsedData = {}
     let parsedStat = null;
-    let searchDate = dayjs().subtract(1,"day").subtract(1,"hour").format("YYYY-MM-DD");
-    let date = dayjs().subtract(1,"day").toDate();
+    let searchDate = dayjs().format("YYYY-MM-DD");
+    let date = dayjs().toDate();
     let minDate = dayjs("2023-12-21").toDate();
-    let maxDate = dayjs().subtract(1,"day").toDate();
+    let maxDate = dayjs().toDate();
 
     let unionIndex = 0;
     let tabList = ["장비","캐시장비","링크스킬","5차스킬","6차스킬","심볼","유니온"]
@@ -366,11 +366,12 @@
     }
 
     async function getDataFromServer(){
+        let date = (dayjs().format("YYYY-MM-DD") === searchDate)?undefined:searchDate;
         return fetch(apiServer + "/maple/getInfo",{
             "method": "POST",
             "body": JSON.stringify({
                 "ID": name,
-                "date": searchDate
+                "date": date
             }),
             headers: myHeaders,
         }).then(async response => {

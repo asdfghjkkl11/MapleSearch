@@ -134,6 +134,7 @@
     <div class="flex">
         <div class="header">
             <div class="preset-list">
+                <button class="preset-btn" class:active={skillPreset===null} on:click={()=>{skillPreset=null; changePreset()}}>E</button>
                 <button class="preset-btn" class:active={skillPreset===1} on:click={()=>{skillPreset=1; changePreset()}}>1</button>
                 <button class="preset-btn" class:active={skillPreset===2} on:click={()=>{skillPreset=2; changePreset()}}>2</button>
                 <button class="preset-btn" class:active={skillPreset===3} on:click={()=>{skillPreset=3; changePreset()}}>3</button>
@@ -242,9 +243,7 @@
     }
 
     function changePreset() {
-        skillPreset
         ownSkill = nvl(parsedData['link-skill'][`character_owned_link_skill_preset_${skillPreset}`],parsedData['link-skill'].character_owned_link_skill);
         skills = nvl(parsedData['link-skill'][`character_link_skill_preset_${skillPreset}`],parsedData['link-skill'].character_link_skill);
-
     }
 </script>

@@ -186,9 +186,9 @@
     <div class="item-list">
         <div class="btn-area">
             {#if equipPreset}
-                <button class="preset-btn" class:active={equipPreset===1} on:click={()=>{equipPreset=1; parsedEquip = parsedEquip;}}>1</button>
-                <button class="preset-btn" class:active={equipPreset===2} on:click={()=>{equipPreset=2; parsedEquip = parsedEquip;}}>2</button>
-                <button class="preset-btn" class:active={equipPreset===3} on:click={()=>{equipPreset=3; parsedEquip = parsedEquip;}}>3</button>
+                <button class="preset-btn" class:active={equipPreset===1} on:click={()=>{equipPreset=1; parseEquip();}}>1</button>
+                <button class="preset-btn" class:active={equipPreset===2} on:click={()=>{equipPreset=2; parseEquip();}}>2</button>
+                <button class="preset-btn" class:active={equipPreset===3} on:click={()=>{equipPreset=3; parseEquip();}}>3</button>
             {/if}
             <button class="btn" on:click={refresh}>
                 <Refreash/>
@@ -426,7 +426,7 @@
                 main = "luk";
             }
         }
-        parsedEquip = parseEquip();
+        parseEquip();
     }
 
     function clickItem(item){
@@ -443,13 +443,13 @@
         let equip = nvl(parsedData['item-equipment']?.item_equipment,[]);
 
         if(equipPreset){
-            equip = nvl(parsedData['item-equipment'][`item_equipment_preset${equipPreset}`],equip);
+            equip = nvl(parsedData['item-equipment'][`item_equipment_preset_${equipPreset}`],equip);
         }
 
         for(let i = 0; i < equip.length; i++){
             result[equip[i].item_equipment_slot] = equip[i];
         }
 
-        return result;
+        parsedEquip = result;
     }
 </script>

@@ -223,35 +223,35 @@
         let result = [];
         let memberList = nvl(parsedData.member_list, {});
         let keys = Object.keys(memberList);
+            for(let i = 0; i < keys.length; i++){
+                let key = keys[i];
+                let member = memberList[key];
+                if(member.basic) {
+                    let basic = member.basic;
+                    let stat = member.stat;
+                    let union = member.union;
+                    let dojang = member.dojang;
+                    let data = {
+                        character_name: basic.character_name,
+                        character_level: basic.character_level,
+                        character_image: basic.character_image,
+                        character_gender: basic.character_gender,
+                        character_class: basic.character_class,
+                        dojang_best_floor: nvl(dojang?.dojang_best_floor,0),
+                        dojang_best_time: nvl(dojang?.dojang_best_time,0),
+                        union_level: nvl(union?.union_level,0),
+                        artifact_level: nvl(union?.artifact_level,0)
+                    };
 
-        for(let i = 0; i < keys.length; i++){
-            let key = keys[i];
-            let member = memberList[key];
-            if(member.basic) {
-                let basic = member.basic;
-                let stat = member.stat;
-                let union = member.union;
-                let dojang = member.dojang;
-                let data = {
-                    character_name: basic.character_name,
-                    character_level: basic.character_level,
-                    character_image: basic.character_image,
-                    character_gender: basic.character_gender,
-                    character_class: basic.character_class,
-                    dojang_best_floor: dojang.dojang_best_floor,
-                    dojang_best_time: dojang.dojang_best_time,
-                    union_level: union.union_level,
-                    artifact_level: union.artifact_level
-                };
+                    let final_stat = nvl(stat?.final_stat,[]);
 
-                let final_stat = nvl(stat?.final_stat,[]);
-
-                for(let j = 0; j < final_stat.length; j++){
-                    data[final_stat[j].stat_name] = final_stat[j].stat_value;
+                    for(let j = 0; j < final_stat.length; j++){
+                        data[final_stat[j].stat_name] = final_stat[j].stat_value;
+                    }
+                    result.push(data);
                 }
-                result.push(data);
             }
-        }
+
 
         return result;
     }
