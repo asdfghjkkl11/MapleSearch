@@ -1,8 +1,8 @@
 export const apiServer = "https://mapleserver.asdfghjkkl11.com";
 
 export const pcServerList = [
-    "리부트",
-    "리부트2",
+    "에오스",
+    "핼리오스",
     "오로라",
     "레드",
     "이노시스",
@@ -15,17 +15,17 @@ export const pcServerList = [
     "엘리시움",
     "아케인",
     "노바",
-    "버닝",
-    "버닝2",
-    "버닝3",
-    "버닝4"
+    "챌린저스",
+    "챌린저스2",
+    "챌린저스3",
+    "챌린저스4"
 ];
 
 export const mobileServerList = ["아케인", "크로아", "엘리시움", "루나", "스카니아", "유니온", "제니스"];
 
 export const worldMapper = {
-    "리부트": "icon_3.png",
-    "리부트2": "icon_2.png",
+    "에오스": "icon_2.png",
+    "핼리오스": "icon_3.png",
     "오로라": "icon_4.png",
     "레드": "icon_5.png",
     "이노시스": "icon_6.png",
@@ -38,10 +38,10 @@ export const worldMapper = {
     "엘리시움": "icon_13.png",
     "아케인": "icon_14.png",
     "노바": "icon_15.png",
-    "버닝": "icon_16.png",
-    "버닝2": "icon_17.png",
-    "버닝3": "icon_18.png",
-    "버닝4": "icon_19.png"
+    "챌린저스": "icon_20.png",
+    "챌린저스2": "icon_20.png",
+    "챌린저스3": "icon_20.png",
+    "챌린저스4": "icon_20.png"
 };
 
 export const gradeMapper = {
