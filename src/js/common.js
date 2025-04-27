@@ -9,43 +9,37 @@ export function optionParse(option){
     if(!option){
         return "";
     }
-    let options = option.split(":")
     if(option.length > 0) {
-        if (options[0].includes("보스 몬스터 공격 시 데미지")) {
-            options[0] = "보공";
-        } else if (options[0].includes("몬스터 방어율 무시")) {
-            options[0] = "방무";
-        } else if (options[0].includes("크리티컬 데미지")) {
-            options[0] = "크뎀";
-        } else if (options[0].includes("아이템 드롭률")) {
-            options[0] = "아획";
-        } else if (options[0].includes("메소 획득량")) {
-            options[0] = "메획";
-        } else if (options[0].includes("HP 회복 아이템 및 회복 스킬 효율")) {
-            options[0] = "회복 효율";
-        } else if (options[0].includes("모든 스킬의 MP 소모")) {
-            options[0] = "MP 소모";
-        } else if (options[0].includes("모든 스킬의 재사용 대기시간")) {
-            options[0] = "쿨감";
-            options[1] = options[1].split("(")[0];
-        } else if (options[0].includes("캐릭터 기준 9레벨 당")) {
-            options[0] = options[0].replace("캐릭터 기준 ", "");
-        } else if (options[0].includes("스킬 사용 가능")) {
-            options[0] = options[0].split(" 스킬 사용 가능")[0];
-            return options[0];
-        } else if (options[0].includes("확률로")) {
-            options[0] = options[0].split("확률로 ")[1];
-            return options[0];
-        } else if (options[0].includes("최대")) {
-            options[0] = options[0].replace("최대", "");
-        } else if (options[0].includes("HP 회복")) {
-            options[0] = "HP 회복";
-            return options[0];
-        } else if (options[0].includes("모든 스킬레벨")) {
-            options[1] = options[1].split("(")[0];
+        if (option.includes("보스 몬스터 데미지")) {
+            option = option.replace("보스 몬스터 데미지","보공");
+        } else if (option.includes("몬스터 방어율 무시")) {
+            option = option.replace("몬스터 방어율 무시","방무");
+        } else if (option.includes("크리티컬 데미지")) {
+            option = option.replace("크리티컬 데미지","크뎀");
+        } else if (option.includes("아이템 드롭률")) {
+            option = option.replace("아이템 드롭률","아획");
+        } else if (option.includes("메소 획득량")) {
+            option = option.replace("메소 획득량","메획");
+        } else if (option.includes("HP 회복 아이템 및 회복 스킬 효율")) {
+            option = option.replace("HP 회복 아이템 및 회복 스킬 효율","회복 효율");
+        } else if (option.includes("모든 스킬의 MP 소모")) {
+            option = option.replace("모든 스킬의 MP 소모","MP 소모");
+        } else if (option.includes("스킬 재사용 대기시간")) {
+            option = option.replace("스킬 재사용 대기시간","쿨감");
+        } else if (option.includes("캐릭터 기준 ")) {
+            option = option.replace("캐릭터 기준 ", "");
+        } else if (option.includes("스킬 사용 가능")) {
+            option = option.replace(" 스킬 사용 가능", "");
+        } else if (option.includes("확률로")) {
+            option = option.split("확률로 ")[1];
+        } else if (option.includes("최대")) {
+            option = option.replace("최대", "");
+        } else if (option.includes("HP 회복")) {
+            option = "HP 회복";
+        } else if (option.includes("모든 스킬레벨")) {
         }
     }
-    return options[0] + ":" + options[1];
+    return option;
 }
 
 export function uc(str) {
